@@ -1,0 +1,5 @@
+package domein;
+
+public enum MediaType {
+	LINK, VIDEO, YOUTUBEVIDEO, AFBEELDING, EXCEL, WORD, PDF, POWERPOINT, ZIP, ANDERDOCUMENT
+}
