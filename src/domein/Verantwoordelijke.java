@@ -1,5 +1,9 @@
 package domein;
 
-public class Verantwoordelijke {
+import java.util.*;
+
+public class Verantwoordelijke extends Gebruiker {
+
+	private Collection<Sessie> beheerdeSessies;
 
 }
