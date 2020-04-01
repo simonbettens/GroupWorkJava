@@ -6,10 +6,25 @@ public class SessieAankondiging extends Aankondiging {
 
 	private Sessie sessie;
 	private int sessieId;
-	public SessieAankondiging(Verantwoordelijke verantwoordelijke, int aankondigingId, LocalDateTime gepost,
-			String inhoud, AankondigingPrioriteit prioriteit) {
-		super(verantwoordelijke, aankondigingId, gepost, inhoud, prioriteit);
-		// TODO Auto-generated constructor stub
+	//voor jpa
+	public SessieAankondiging() {
+		super();
 	}
+	//voor instanties
+	public SessieAankondiging(Verantwoordelijke verantwoordelijke, LocalDateTime gepost,String inhoud, AankondigingPrioriteit prioriteit,Sessie sessie) {
+		super(verantwoordelijke, gepost, inhoud, prioriteit);
+		setSessie(sessie);
+		this.sessieId = sessie.getSessieId();
+	}
+	public Sessie getSessie() {
+		return sessie;
+	}
+	private void setSessie(Sessie sessie) {
+		this.sessie = sessie;
+	}
+	public int getSessieId() {
+		return sessieId;
+	}
+	
 
 }

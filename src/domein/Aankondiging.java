@@ -9,13 +9,15 @@ public class Aankondiging {
 	private LocalDateTime gepost;
 	private String inhoud;
 	private AankondigingPrioriteit prioriteit;
-	public Aankondiging(Verantwoordelijke verantwoordelijke, int aankondigingId, LocalDateTime gepost, String inhoud,
-			AankondigingPrioriteit prioriteit) {
-		this.verantwoordelijke = verantwoordelijke;
-		this.aankondigingId = aankondigingId;
-		this.gepost = gepost;
-		this.inhoud = inhoud;
-		this.prioriteit = prioriteit;
+	
+	//voor jpa
+	public Aankondiging() {}
+	//voor nieuwe instanties
+	public Aankondiging(Verantwoordelijke verantwoordelijke, LocalDateTime gepost, String inhoud, AankondigingPrioriteit prioriteit) {
+		setVerantwoordelijke(verantwoordelijke);
+		setGepost(gepost);
+		setInhoud(inhoud);
+		setPrioriteit(prioriteit);
 	}
 	public Verantwoordelijke getVerantwoordelijke() {
 		return verantwoordelijke;
@@ -36,9 +38,15 @@ public class Aankondiging {
 		this.verantwoordelijke = verantwoordelijke;
 	}
 	private void setGepost(LocalDateTime gepost) {
+		if(gepost.isBefore(LocalDateTime.now())) {
+			throw new IllegalArgumentException("tijd gepost is in het verleden.");
+		}
 		this.gepost = gepost;
 	}
 	private void setInhoud(String inhoud) {
+		if(inhoud == null || inhoud.equals("")) {
+			throw new IllegalArgumentException("Inhoud van de aankondiging moet ingevuld zijn");
+		}
 		this.inhoud = inhoud;
 	}
 	private void setPrioriteit(AankondigingPrioriteit prioriteit) {

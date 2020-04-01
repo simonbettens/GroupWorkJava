@@ -3,23 +3,28 @@ package domein;
 import java.util.*;
 
 public class Gebruiker {
-
-	private List<SessieGebruiker> sessieGebruikers;
+	// bv sb12356
+	private String userName;
+	//de asp.net guid
+	private String gebruikerId;
 	private Long idNumber;
-	private String voornaam;
-	private String achternaam;
+	private String voornaam, achternaam;
 	private GebruikerType type;
 	private StatusType status;
-	public Gebruiker( String voornaam, String achternaam,
-			GebruikerType type, StatusType status) {
-		this.sessieGebruikers = new ArrayList<SessieGebruiker>();
-		this.voornaam = voornaam;
-		this.achternaam = achternaam;
-		this.type = type;
-		this.status = status;
+	private List<SessieGebruiker> inschrijvingen;
+	
+	//voor jpa 
+	public Gebruiker() {}
+	//voor nieuwe instantie
+	public Gebruiker( String voornaam, String achternaam,GebruikerType type, StatusType status) {
+		this.inschrijvingen = new ArrayList<SessieGebruiker>();
+		setVoornaam(voornaam);
+		setAchternaam(achternaam);
+		setType(type);
+		setStatus(status);
 	}
-	public List<SessieGebruiker> getSessieGebruikers() {
-		return sessieGebruikers;
+	public List<SessieGebruiker> getInschrijvingen() {
+		return inschrijvingen;
 	}
 	public Long getIdNumber() {
 		return idNumber;
@@ -36,13 +41,26 @@ public class Gebruiker {
 	public StatusType getStatus() {
 		return status;
 	}
-	private void setSessieGebruikers(List<SessieGebruiker> sessieGebruikers) {
-		this.sessieGebruikers = sessieGebruikers;
+	public String getUserName() {
+		return userName;
+	}
+	public String getGebruikerId() {
+		return gebruikerId;
+	}
+	
+	private void setSessieGebruikers(List<SessieGebruiker> inschrijvingen) {
+		this.inschrijvingen = inschrijvingen;
 	}
 	private void setVoornaam(String voornaam) {
+		if(voornaam == null || voornaam.equals("")) {
+			throw new IllegalArgumentException("voornaam van de gebruiker moet ingevuld zijn.");
+		}
 		this.voornaam = voornaam;
 	}
 	private void setAchternaam(String achternaam) {
+		if(achternaam == null || achternaam.equals("")) {
+			throw new IllegalArgumentException("achternaam van de gebruiker moet ingevuld zijn.");
+		}
 		this.achternaam = achternaam;
 	}
 	private void setType(GebruikerType type) {

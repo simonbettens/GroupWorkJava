@@ -4,21 +4,20 @@ import java.time.LocalDateTime;
 
 public class Feedback {
 
-	private int id;
-	private String username;
-	private int aantalSterren;
-	private String inhoud;
-	private String voornaam;
-	private String achternaam;
+	private int id, aantalSterren;
+	private String inhoud, voornaam, achternaam, username;
 	private LocalDateTime tijdToegevoegd;
-	public Feedback( String username, int aantalSterren, String inhoud, String voornaam, String achternaam,
+	//voor jpa
+	public Feedback() {}
+	//voor nieuwe instaties
+	public Feedback(String username, int aantalSterren, String inhoud, String voornaam, String achternaam,
 			LocalDateTime tijdToegevoegd) {
-		this.username = username;
-		this.aantalSterren = aantalSterren;
-		this.inhoud = inhoud;
-		this.voornaam = voornaam;
-		this.achternaam = achternaam;
-		this.tijdToegevoegd = tijdToegevoegd;
+		setUsername(username);
+		setAantalSterren(aantalSterren);
+		setInhoud(inhoud);
+		setVoornaam(voornaam);
+		setAchternaam(achternaam);
+		setTijdToegevoegd(tijdToegevoegd);
 	}
 	public int getId() {
 		return id;
@@ -42,21 +41,36 @@ public class Feedback {
 		return tijdToegevoegd;
 	}
 	public void setUsername(String username) {
+		if(username == null|| username.equals("")) {
+			throw new IllegalArgumentException("username moet ingevuld zijn");
+		}
 		this.username = username;
 	}
 	public void setAantalSterren(int aantalSterren) {
+		if(aantalSterren<=0 || aantalSterren>5) {
+			throw new IllegalArgumentException("aantalsterren moet tussen 0 en 5 liggen");
+		}
 		this.aantalSterren = aantalSterren;
 	}
 	public void setInhoud(String inhoud) {
 		this.inhoud = inhoud;
 	}
 	public void setVoornaam(String voornaam) {
+		if(voornaam == null|| voornaam.equals("")) {
+			throw new IllegalArgumentException("voornaam moet ingevuld zijn");
+		}
 		this.voornaam = voornaam;
 	}
 	public void setAchternaam(String achternaam) {
+		if(achternaam == null|| achternaam.equals("")) {
+			throw new IllegalArgumentException("achternaam moet ingevuld zijn");
+		}
 		this.achternaam = achternaam;
 	}
 	public void setTijdToegevoegd(LocalDateTime tijdToegevoegd) {
+		if(tijdToegevoegd.isBefore(LocalDateTime.now())){
+			throw new IllegalArgumentException("tijd mag niet in het verleden liggen");
+		}
 		this.tijdToegevoegd = tijdToegevoegd;
 	}
 	

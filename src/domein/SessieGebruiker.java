@@ -2,28 +2,28 @@ package domein;
 
 public class SessieGebruiker {
 
+	private Long idNumber;
+	private String username, voornaam, achternaam;
+	private boolean aanwezig, aanwezigheidBevestigd;
+	
 	private Gebruiker gebruiker;
 	private Sessie sessie;
 	private String gebruikerId;
 	private int sessieId;
-	private Long idNumber;
-	private String username;
-	private String voornaam;
-	private String achternaam;
-	private boolean aanwezig;
-	private boolean aanwezigheidBevestigd;
-	public SessieGebruiker(Gebruiker gebruiker, Sessie sessie, String gebruikerId, int sessieId, Long idNumber,
-			String username, String voornaam, String achternaam, boolean aanwezig, boolean aanwezigheidBevestigd) {
-		this.gebruiker = gebruiker;
-		this.sessie = sessie;
-		this.gebruikerId = gebruikerId;
-		this.sessieId = sessieId;
-		this.idNumber = idNumber;
-		this.username = username;
-		this.voornaam = voornaam;
-		this.achternaam = achternaam;
-		this.aanwezig = aanwezig;
-		this.aanwezigheidBevestigd = aanwezigheidBevestigd;
+	//voor jpa
+	public SessieGebruiker() {}
+	//nieuwe instanties
+	public SessieGebruiker(Gebruiker gebruiker, Sessie sessie, boolean aanwezig, boolean aanwezigBev) {
+		setGebruiker(gebruiker);
+		setSessie(sessie);
+		this.gebruikerId = gebruiker.getGebruikerId();
+		this.sessieId = sessie.getSessieId();
+		this.idNumber = gebruiker.getIdNumber();
+		this.username = gebruiker.getUserName();
+		this.voornaam = gebruiker.getUserName();
+		this.achternaam = gebruiker.getAchternaam();
+		setAanwezig(aanwezig);
+		setAanwezigheidBevestigd(aanwezigBev);
 	}
 	public Gebruiker getGebruiker() {
 		return gebruiker;
@@ -56,9 +56,15 @@ public class SessieGebruiker {
 		return aanwezigheidBevestigd;
 	}
 	private void setGebruiker(Gebruiker gebruiker) {
+		if(gebruiker ==null) {
+			throw new IllegalArgumentException("Gebruiker bestaat niet");
+		}
 		this.gebruiker = gebruiker;
 	}
 	private void setSessie(Sessie sessie) {
+		if(sessie == null) {
+			throw new IllegalArgumentException("Sessie bestaat niet");
+		}
 		this.sessie = sessie;
 	}
 	private void setUsername(String username) {

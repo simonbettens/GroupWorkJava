@@ -5,65 +5,67 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class Sessie {
-
-	private List<SessieGebruiker> gebruikersIngeschreven;
-	private Verantwoordelijke verantwoordelijke;
-	private List<Media> media;
-	private List<SessieAankondiging> aankondigingen;
-	private List<Feedback> feedback;
-	private String naam;
+	
 	private int sessieId;
-	private LocalDateTime startDatum;
-	private LocalDateTime eindDatum;
-	private boolean gesloten;
 	private int maxCap;
 	private int aantalAanwezigeGebruikers;
 	private int aantalIngeschrevenGebruikers;
 	private int aantalResterend;
-	private String lokaal;
-	private String beschrijving;
-	private boolean staatOpen;
-	private boolean kanNogInschrijven;
+	
+	private String naam, lokaal, beschrijving;
+	private boolean bezig, staatOpen, kanNogInschrijven, gesloten;
+	
 	private Duration duur;
-	private boolean bezig;
+	private LocalDateTime startDatum, eindDatum;
+	private Verantwoordelijke verantwoordelijke;
+	
+	private List<SessieGebruiker> gebruikersIngeschreven;
+	private List<Media> media;
+	private List<SessieAankondiging> aankondigingen;
+	private List<Feedback> feedback;
+	
+	//nodig voor jpa
+	public Sessie() {}
+	
+	//algemene constructor voor nieuwe instanties
 	public Sessie(Verantwoordelijke verantwoordelijke, String naam, LocalDateTime startDatum, LocalDateTime eindDatum,
-			boolean gesloten, int maxCap, int aantalAanwezigeGebruikers, int aantalIngeschrevenGebruikers,
-			int aantalResterend, String lokaal, String beschrijving, boolean staatOpen, boolean kanNogInschrijven,
-			Duration duur, boolean bezig) {
-		this.verantwoordelijke = verantwoordelijke;
-		this.naam = naam;
-		this.startDatum = startDatum;
-		this.eindDatum = eindDatum;
-		this.gesloten = gesloten;
-		this.maxCap = maxCap;
-		this.aantalAanwezigeGebruikers = aantalAanwezigeGebruikers;
-		this.aantalIngeschrevenGebruikers = aantalIngeschrevenGebruikers;
-		this.aantalResterend = aantalResterend;
-		this.lokaal = lokaal;
-		this.beschrijving = beschrijving;
-		this.staatOpen = staatOpen;
-		this.kanNogInschrijven = kanNogInschrijven;
-		this.duur = duur;
-		this.bezig = bezig;
+			boolean gesloten, int maxCap,String lokaal, String beschrijving) {
+		setVerantwoordelijke(verantwoordelijke);
+		setNaam(naam);
+		setStartDatum(startDatum);
+		setEindDatum(eindDatum);
+		setGesloten(false);
+		setMaxCap(maxCap);
+		setAantalAanwezigeGebruikers(0);
+		setAantalIngeschrevenGebruikers(0);
+		setAantalResterend(maxCap);
+		setLokaal(lokaal);
+		setBeschrijving(beschrijving);
+		setStaatOpen(false);
+		setKanNogInschrijven(true);
+		setDuur(Duration.between(startDatum, eindDatum));
+		setBezig(false);
 		this.gebruikersIngeschreven = new ArrayList<SessieGebruiker>();
 		this.media = new ArrayList<Media>();
 		this.aankondigingen = new ArrayList<SessieAankondiging>();
 		this.feedback = new ArrayList<Feedback>();
 	}
+	
+	// ----------  getters
 	public List<SessieGebruiker> getGebruikersIngeschreven() {
-		return gebruikersIngeschreven;
+		return Collections.unmodifiableList(gebruikersIngeschreven);
 	}
 	public Verantwoordelijke getVerantwoordelijke() {
 		return verantwoordelijke;
 	}
 	public List<Media> getMedia() {
-		return media;
+		return Collections.unmodifiableList(media);
 	}
 	public List<SessieAankondiging> getAankondigingen() {
-		return aankondigingen;
+		return Collections.unmodifiableList(aankondigingen);
 	}
 	public List<Feedback> getFeedback() {
-		return feedback;
+		return Collections.unmodifiableList(feedback);
 	}
 	public String getNaam() {
 		return naam;
@@ -110,6 +112,8 @@ public class Sessie {
 	public boolean isBezig() {
 		return bezig;
 	}
+	
+	// ------- setters
 	private void setGebruikersIngeschreven(List<SessieGebruiker> gebruikersIngeschreven) {
 		this.gebruikersIngeschreven = gebruikersIngeschreven;
 	}
@@ -126,6 +130,9 @@ public class Sessie {
 		this.feedback = feedback;
 	}
 	private void setNaam(String naam) {
+		if(naam == null || naam.equals("")) {
+			throw new IllegalArgumentException("Naam moet ingevuld zijn.");
+		}
 		this.naam = naam;
 	}
 	private void setStartDatum(LocalDateTime startDatum) {
@@ -159,9 +166,13 @@ public class Sessie {
 		this.aantalResterend = aantalResterend;
 	}
 	private void setLokaal(String lokaal) {
+		if(lokaal == null || lokaal.equals("")) {
+			throw new IllegalArgumentException("Lokaal moet ingevuld zijn.");
+		}
 		this.lokaal = lokaal;
 	}
 	private void setBeschrijving(String beschrijving) {
+		// mag en kan null zijn
 		this.beschrijving = beschrijving;
 	}
 	private void setStaatOpen(boolean staatOpen) {
@@ -178,6 +189,33 @@ public class Sessie {
 	}
 	private void setBezig(boolean bezig) {
 		this.bezig = bezig;
+	}
+	
+	// ----- lijst operatie's
+	
+	public void addMediaItem(Media nieuwMedia) {
+		media.add(nieuwMedia);
+	}
+	public void addAankondiging(SessieAankondiging nieuwAankondiging) {
+		aankondigingen.add(nieuwAankondiging);
+	}
+	public void removeMediaItem(Media teVerwijderenMedia) {
+		media.remove(teVerwijderenMedia);
+	}
+	public void removeAankondiging(SessieAankondiging teVerwijderenAankondiging) {
+		aankondigingen.remove(teVerwijderenAankondiging);
+	}
+	public Media getMediaByIndex(int index) {
+		return media.get(index);
+	}
+	public SessieAankondiging getAankondigingByIndex(int index) {
+		return aankondigingen.get(index);
+	}
+	public SessieGebruiker getInschrijvingByIndex(int index) {
+		return gebruikersIngeschreven.get(index);
+	}
+	public Feedback getFeedbackByIndex(int index) {
+		return feedback.get(index);
 	}
 	
 

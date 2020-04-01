@@ -6,10 +6,15 @@ public class Verantwoordelijke extends Gebruiker {
 
 	private List<Sessie> beheerdeSessies;
 
-	public Verantwoordelijke( String voornaam, String achternaam,
-			GebruikerType type, StatusType status) {
-		super( voornaam, achternaam, type, status);
+	//jpa
+	public Verantwoordelijke() {
+		super();
+	}
+	//voor nieuwe instanties
+	public Verantwoordelijke(String voornaam, String achternaam, GebruikerType type, StatusType status) {
+		super(voornaam, achternaam, type, status);
 		// TODO Auto-generated constructor stub
+		beheerdeSessies = new ArrayList<>();
 	}
 
 	public List<Sessie> getBeheerdeSessies() {
@@ -19,6 +24,5 @@ public class Verantwoordelijke extends Gebruiker {
 	private void setBeheerdeSessies(List<Sessie> beheerdeSessies) {
 		this.beheerdeSessies = beheerdeSessies;
 	}
-	
 
 }
