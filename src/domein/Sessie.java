@@ -129,15 +129,24 @@ public class Sessie {
 		this.naam = naam;
 	}
 	private void setStartDatum(LocalDateTime startDatum) {
+		if(startDatum.isBefore(LocalDateTime.now()))  {
+			throw new IllegalArgumentException("Datum is in het verleden.");
+		}
 		this.startDatum = startDatum;
 	}
 	private void setEindDatum(LocalDateTime eindDatum) {
+		if(startDatum.isBefore(LocalDateTime.now())) {
+			throw new IllegalArgumentException("Datum is in het verleden.");
+		}
 		this.eindDatum = eindDatum;
 	}
 	private void setGesloten(boolean gesloten) {
 		this.gesloten = gesloten;
 	}
 	private void setMaxCap(int maxCap) {
+		if(maxCap <= 0) {
+			throw new IllegalArgumentException("MaxCap moet groter dan 0 zijn.");
+		}
 		this.maxCap = maxCap;
 	}
 	private void setAantalAanwezigeGebruikers(int aantalAanwezigeGebruikers) {
@@ -162,6 +171,9 @@ public class Sessie {
 		this.kanNogInschrijven = kanNogInschrijven;
 	}
 	private void setDuur(Duration duur) {
+		if(duur.isNegative() || duur.isZero()) {
+			throw new IllegalArgumentException("Duur mag niet 0 of negatief zijn.");
+		}
 		this.duur = duur;
 	}
 	private void setBezig(boolean bezig) {
