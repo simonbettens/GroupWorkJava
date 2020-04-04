@@ -1,14 +1,27 @@
 package domein;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity(name="SessieGebruiker")
+@Table(name = "SessieGebruiker")
 public class SessieGebruiker {
 
-	private Long idNumber;
-	private String username, voornaam, achternaam;
-	private boolean aanwezig, aanwezigheidBevestigd;
-	
+	@Column(name="Aanwezig")
+	private boolean aanwezig;
+	@Column(name="AanwezigheidBevestigd")
+	private boolean aanwezigheidBevestigd;
+	@ManyToOne
 	private Gebruiker gebruiker;
+	@ManyToOne
 	private Sessie sessie;
-	private String gebruikerId;
+	@Column(name="GebruikerId")
+	private UUID gebruikerId;
+	@Column(name="SessieId")
 	private int sessieId;
 	//voor jpa
 	public SessieGebruiker() {}
@@ -16,12 +29,8 @@ public class SessieGebruiker {
 	public SessieGebruiker(Gebruiker gebruiker, Sessie sessie, boolean aanwezig, boolean aanwezigBev) {
 		setGebruiker(gebruiker);
 		setSessie(sessie);
-		this.gebruikerId = gebruiker.getGebruikerId();
+		this.gebruikerId = gebruiker.getId();
 		this.sessieId = sessie.getSessieId();
-		this.idNumber = gebruiker.getIdNumber();
-		this.username = gebruiker.getUserName();
-		this.voornaam = gebruiker.getUserName();
-		this.achternaam = gebruiker.getAchternaam();
 		setAanwezig(aanwezig);
 		setAanwezigheidBevestigd(aanwezigBev);
 	}
@@ -31,23 +40,11 @@ public class SessieGebruiker {
 	public Sessie getSessie() {
 		return sessie;
 	}
-	public String getGebruikerId() {
+	public UUID getGebruikerId() {
 		return gebruikerId;
 	}
 	public int getSessieId() {
 		return sessieId;
-	}
-	public Long getIdNumber() {
-		return idNumber;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public String getVoornaam() {
-		return voornaam;
-	}
-	public String getAchternaam() {
-		return achternaam;
 	}
 	public boolean isAanwezig() {
 		return aanwezig;
@@ -67,22 +64,11 @@ public class SessieGebruiker {
 		}
 		this.sessie = sessie;
 	}
-	private void setUsername(String username) {
-		this.username = username;
-	}
-	private void setVoornaam(String voornaam) {
-		this.voornaam = voornaam;
-	}
-	private void setAchternaam(String achternaam) {
-		this.achternaam = achternaam;
-	}
 	private void setAanwezig(boolean aanwezig) {
 		this.aanwezig = aanwezig;
 	}
 	private void setAanwezigheidBevestigd(boolean aanwezigheidBevestigd) {
 		this.aanwezigheidBevestigd = aanwezigheidBevestigd;
 	}
-	
-
 	
 }

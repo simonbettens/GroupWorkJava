@@ -1,13 +1,57 @@
 package domein;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Media {
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
+@Entity(name="Media")
+@Table(name = "Media")
+public class Media implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="Id")
 	private int id;
-	private String adress, naam;
+	@Column(name="Adress")
+	private String adress;
+	@Column(name="Naam")
+	private String naam;
+	@Column(name="TijdToegevoegd")
 	private LocalDateTime tijdToegevoegd;
+	
+	@Basic
+	@Column(name="MediaType")
+    private int mediaTypeValue;
+    @Transient
 	private MediaType mediaType;
+	
+	@PostLoad
+    private void fillTransientPriorieteit(){
+        if (mediaTypeValue > 0) {
+            this.mediaType = mediaType.of(mediaTypeValue);
+        }
+    }
+ 
+    @PrePersist
+    private void fillPersistentPriorieteit() {
+        if (mediaType != null) {
+            this.mediaTypeValue = mediaType.getMediaTypeValue();
+        }
+    }
 	
 	//voor jpa
 	public Media() {}
@@ -54,6 +98,10 @@ public class Media {
 	private void setMediaType(MediaType mediaType) {
 		this.mediaType = mediaType;
 	}
-	
 
+	@Override
+	public String toString() {
+		return "Media [id=" + id + ", adress=" + adress + ", naam=" + naam + ", tijdToegevoegd=" + tijdToegevoegd
+				+ ", mediaTypeValue=" + mediaTypeValue + ", mediaType=" + mediaType + "]";
+	}	
 }

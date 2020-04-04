@@ -8,7 +8,6 @@ public class StartUpUI {
 		
 		// Console omgeving om te testen
 		ConsoleApp consoleApp = new ConsoleApp();
-		
 	}
 
 }
