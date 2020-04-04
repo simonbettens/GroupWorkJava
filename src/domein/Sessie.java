@@ -12,7 +12,9 @@ public class Sessie {
 	private int aantalIngeschrevenGebruikers;
 	private int aantalResterend;
 	
-	private String naam, lokaal, beschrijving;
+	private String naam;
+	private String lokaal;
+	private String beschrijving;
 	private boolean bezig, staatOpen, kanNogInschrijven, gesloten;
 	
 	private Duration duur;
