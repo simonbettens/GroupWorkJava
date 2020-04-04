@@ -15,22 +15,21 @@ public class Sessie {
 	private String naam;
 	private String lokaal;
 	private String beschrijving;
-	private boolean bezig, staatOpen, kanNogInschrijven, gesloten;
+	private boolean bezig, staatOpen, gesloten;
 	
 	private Duration duur;
 	private LocalDateTime startDatum, eindDatum;
-	private Verantwoordelijke verantwoordelijke;
+	private Gebruiker verantwoordelijke;
 	
 	private List<SessieGebruiker> gebruikersIngeschreven;
 	private List<Media> media;
 	private List<SessieAankondiging> aankondigingen;
-	private List<Feedback> feedback;
 	
 	//nodig voor jpa
 	public Sessie() {}
 	
 	//algemene constructor voor nieuwe instanties
-	public Sessie(Verantwoordelijke verantwoordelijke, String naam, LocalDateTime startDatum, LocalDateTime eindDatum,
+	public Sessie(Gebruiker verantwoordelijke, String naam, LocalDateTime startDatum, LocalDateTime eindDatum,
 			boolean gesloten, int maxCap,String lokaal, String beschrijving) {
 		setVerantwoordelijke(verantwoordelijke);
 		setNaam(naam);
@@ -44,20 +43,18 @@ public class Sessie {
 		setLokaal(lokaal);
 		setBeschrijving(beschrijving);
 		setStaatOpen(false);
-		setKanNogInschrijven(true);
 		setDuur(Duration.between(startDatum, eindDatum));
 		setBezig(false);
 		this.gebruikersIngeschreven = new ArrayList<SessieGebruiker>();
 		this.media = new ArrayList<Media>();
 		this.aankondigingen = new ArrayList<SessieAankondiging>();
-		this.feedback = new ArrayList<Feedback>();
 	}
 	
 	// ----------  getters
 	public List<SessieGebruiker> getGebruikersIngeschreven() {
 		return Collections.unmodifiableList(gebruikersIngeschreven);
 	}
-	public Verantwoordelijke getVerantwoordelijke() {
+	public Gebruiker getVerantwoordelijke() {
 		return verantwoordelijke;
 	}
 	public List<Media> getMedia() {
@@ -65,9 +62,6 @@ public class Sessie {
 	}
 	public List<SessieAankondiging> getAankondigingen() {
 		return Collections.unmodifiableList(aankondigingen);
-	}
-	public List<Feedback> getFeedback() {
-		return Collections.unmodifiableList(feedback);
 	}
 	public String getNaam() {
 		return naam;
@@ -105,9 +99,6 @@ public class Sessie {
 	public boolean isStaatOpen() {
 		return staatOpen;
 	}
-	public boolean isKanNogInschrijven() {
-		return kanNogInschrijven;
-	}
 	public Duration getDuur() {
 		return duur;
 	}
@@ -119,7 +110,7 @@ public class Sessie {
 	private void setGebruikersIngeschreven(List<SessieGebruiker> gebruikersIngeschreven) {
 		this.gebruikersIngeschreven = gebruikersIngeschreven;
 	}
-	private void setVerantwoordelijke(Verantwoordelijke verantwoordelijke) {
+	private void setVerantwoordelijke(Gebruiker verantwoordelijke) {
 		this.verantwoordelijke = verantwoordelijke;
 	}
 	private void setMedia(List<Media> media) {
@@ -127,9 +118,6 @@ public class Sessie {
 	}
 	private void setAankondigingen(List<SessieAankondiging> aankondigingen) {
 		this.aankondigingen = aankondigingen;
-	}
-	private void setFeedback(List<Feedback> feedback) {
-		this.feedback = feedback;
 	}
 	private void setNaam(String naam) {
 		if(naam == null || naam.equals("")) {
@@ -180,9 +168,6 @@ public class Sessie {
 	private void setStaatOpen(boolean staatOpen) {
 		this.staatOpen = staatOpen;
 	}
-	private void setKanNogInschrijven(boolean kanNogInschrijven) {
-		this.kanNogInschrijven = kanNogInschrijven;
-	}
 	private void setDuur(Duration duur) {
 		if(duur.isNegative() || duur.isZero()) {
 			throw new IllegalArgumentException("Duur mag niet 0 of negatief zijn.");
@@ -215,9 +200,6 @@ public class Sessie {
 	}
 	public SessieGebruiker getInschrijvingByIndex(int index) {
 		return gebruikersIngeschreven.get(index);
-	}
-	public Feedback getFeedbackByIndex(int index) {
-		return feedback.get(index);
 	}
 	
 
