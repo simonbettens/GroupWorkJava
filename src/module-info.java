@@ -16,4 +16,5 @@ open module JpaEnJavaFXEnTesten {
 	exports main;
 	exports domein;
 	exports repository;
+	exports controllers;
 }
