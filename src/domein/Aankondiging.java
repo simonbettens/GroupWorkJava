@@ -40,7 +40,7 @@ public class Aankondiging implements Serializable{
     @Transient
 	private AankondigingPrioriteit prioriteit;
     @Transient
-	private Verantwoordelijke verantwoordelijke;
+	private Gebruiker verantwoordelijke;
 	
 	@PostLoad
     private void fillTransientPriorieteit(){
@@ -59,14 +59,14 @@ public class Aankondiging implements Serializable{
 	//voor jpa
 	public Aankondiging() {}
 	//voor nieuwe instanties
-	public Aankondiging(Verantwoordelijke verantwoordelijke, LocalDateTime gepost, String inhoud, AankondigingPrioriteit prioriteit) {
+	public Aankondiging(Gebruiker verantwoordelijke, LocalDateTime gepost, String inhoud, AankondigingPrioriteit prioriteit) {
 		setVerantwoordelijke(verantwoordelijke);
 		setGepost(gepost);
 		setInhoud(inhoud);
 		setPrioriteit(prioriteit);
 	}
 	
-	public Verantwoordelijke getVerantwoordelijke() {
+	public Gebruiker getVerantwoordelijke() {
 		return verantwoordelijke;
 	}
 	
@@ -82,7 +82,7 @@ public class Aankondiging implements Serializable{
 	public AankondigingPrioriteit getPrioriteit() {
 		return prioriteit;
 	}
-	private void setVerantwoordelijke(Verantwoordelijke verantwoordelijke) {
+	private void setVerantwoordelijke(Gebruiker verantwoordelijke) {
 		this.verantwoordelijke = verantwoordelijke;
 	}
 	private void setGepost(LocalDateTime gepost) {

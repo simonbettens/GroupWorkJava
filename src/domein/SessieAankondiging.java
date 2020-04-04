@@ -11,7 +11,7 @@ public class SessieAankondiging extends Aankondiging {
 		super();
 	}
 	//voor instanties
-	public SessieAankondiging(Verantwoordelijke verantwoordelijke, LocalDateTime gepost,String inhoud, AankondigingPrioriteit prioriteit,Sessie sessie) {
+	public SessieAankondiging(Gebruiker verantwoordelijke, LocalDateTime gepost,String inhoud, AankondigingPrioriteit prioriteit,Sessie sessie) {
 		super(verantwoordelijke, gepost, inhoud, prioriteit);
 		setSessie(sessie);
 		this.sessieId = sessie.getSessieId();
