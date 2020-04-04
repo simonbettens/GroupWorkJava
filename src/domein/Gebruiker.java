@@ -2,16 +2,70 @@ package domein;
 
 import java.util.*;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity(name="AspNetUsers")
+@Table(name = "AspNetUsers")
 public class Gebruiker {
+	
+	@Id
+	@Column(name="Id")
+	private UUID id;
 	// bv sb12356
+	@Column(name="UserName")
 	private String userName;
 	//de asp.net guid
-	private String gebruikerId;
+	@Column(name="IdNumber")
 	private Long idNumber;
-	private String voornaam, achternaam;
-	private GebruikerType type;
-	private StatusType status;
+	@Column(name="Voornaam")
+	private String voornaam;
+	@Column(name="Achternaam")
+	private String achternaam;
+	
+	@OneToMany
 	private List<SessieGebruiker> inschrijvingen;
+	
+	@Basic
+	@Column(name="Type")
+    private int gebruikersTypeValue;
+    @Transient
+	private GebruikerType gebruikersType;
+	
+    @Basic
+	@Column(name="Status")
+    private int statusTypeValue;
+    @Transient
+	private StatusType statusType;
+    
+	@PostLoad
+    private void fillTransientEnums(){
+        if (gebruikersTypeValue > 0) {
+            this.gebruikersType = gebruikersType.of(gebruikersTypeValue);
+        }
+        
+        if (statusTypeValue > 0) {
+            this.statusType = statusType.of(statusTypeValue);
+        }
+    }
+ 
+    @PrePersist
+    private void fillPersistentEnums() {
+        if (gebruikersType != null) {
+            this.gebruikersTypeValue = gebruikersType.getGebruikersTypeValue();
+        }
+        
+        if (gebruikersType != null) {
+            this.statusTypeValue = statusType.getStatusTypeValue();
+        }
+    }
 	
 	//voor jpa 
 	public Gebruiker() {}
@@ -36,18 +90,22 @@ public class Gebruiker {
 		return achternaam;
 	}
 	public GebruikerType getType() {
-		return type;
+		return gebruikersType;
 	}
 	public StatusType getStatus() {
-		return status;
+		return statusType;
 	}
 	public String getUserName() {
 		return userName;
 	}
-	public String getGebruikerId() {
-		return gebruikerId;
+	public UUID getId() {
+		return id;
 	}
 	
+	
+	public void setId(UUID id) {
+		this.id = id;
+	}
 	private void setSessieGebruikers(List<SessieGebruiker> inschrijvingen) {
 		this.inschrijvingen = inschrijvingen;
 	}
@@ -64,10 +122,10 @@ public class Gebruiker {
 		this.achternaam = achternaam;
 	}
 	private void setType(GebruikerType type) {
-		this.type = type;
+		this.gebruikersType = type;
 	}
 	private void setStatus(StatusType status) {
-		this.status = status;
+		this.statusType = status;
 	}
 
 	

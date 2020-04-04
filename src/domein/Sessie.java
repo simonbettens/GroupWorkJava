@@ -1,28 +1,61 @@
 package domein;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Sessie {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity(name="Sessie")
+@Table(name = "Sessie")
+public class Sessie implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="SessieId")
 	private int sessieId;
+	@Column(name="MaxCap")
 	private int maxCap;
-	private int aantalAanwezigeGebruikers;
-	private int aantalIngeschrevenGebruikers;
-	private int aantalResterend;
-	
+	@Column(name="Naam")
 	private String naam;
+	@Column(name="Lokaal")
 	private String lokaal;
+	@Column(name="Beschrijving")
 	private String beschrijving;
-	private boolean bezig, staatOpen, gesloten;
-	
+	@Transient
+	private boolean bezig;
+	@Column(name="StaatOpen")
+	private boolean staatOpen;
+	@Column(name="Gesloten")
+	private boolean gesloten;
+	@Transient
 	private Duration duur;
-	private LocalDateTime startDatum, eindDatum;
+	@Column(name="StartDatum")
+	private LocalDateTime startDatum;
+	@Column(name="EindDatum")
+	private LocalDateTime eindDatum;
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Gebruiker verantwoordelijke;
 	
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<SessieGebruiker> gebruikersIngeschreven;
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<Media> media;
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<SessieAankondiging> aankondigingen;
 	
 	//nodig voor jpa
@@ -37,9 +70,6 @@ public class Sessie {
 		setEindDatum(eindDatum);
 		setGesloten(false);
 		setMaxCap(maxCap);
-		setAantalAanwezigeGebruikers(0);
-		setAantalIngeschrevenGebruikers(0);
-		setAantalResterend(maxCap);
 		setLokaal(lokaal);
 		setBeschrijving(beschrijving);
 		setStaatOpen(false);
@@ -80,15 +110,6 @@ public class Sessie {
 	}
 	public int getMaxCap() {
 		return maxCap;
-	}
-	public int getAantalAanwezigeGebruikers() {
-		return aantalAanwezigeGebruikers;
-	}
-	public int getAantalIngeschrevenGebruikers() {
-		return aantalIngeschrevenGebruikers;
-	}
-	public int getAantalResterend() {
-		return aantalResterend;
 	}
 	public String getLokaal() {
 		return lokaal;
@@ -146,15 +167,6 @@ public class Sessie {
 		}
 		this.maxCap = maxCap;
 	}
-	private void setAantalAanwezigeGebruikers(int aantalAanwezigeGebruikers) {
-		this.aantalAanwezigeGebruikers = aantalAanwezigeGebruikers;
-	}
-	private void setAantalIngeschrevenGebruikers(int aantalIngeschrevenGebruikers) {
-		this.aantalIngeschrevenGebruikers = aantalIngeschrevenGebruikers;
-	}
-	private void setAantalResterend(int aantalResterend) {
-		this.aantalResterend = aantalResterend;
-	}
 	private void setLokaal(String lokaal) {
 		if(lokaal == null || lokaal.equals("")) {
 			throw new IllegalArgumentException("Lokaal moet ingevuld zijn.");
@@ -201,8 +213,13 @@ public class Sessie {
 	public SessieGebruiker getInschrijvingByIndex(int index) {
 		return gebruikersIngeschreven.get(index);
 	}
-	
 
-
+	@Override
+	public String toString() {
+		return "Sessie [sessieId=" + sessieId + ", maxCap=" + maxCap + ", naam=" + naam + ", lokaal=" + lokaal
+				+ ", beschrijving=" + beschrijving + ", bezig=" + bezig + ", staatOpen=" + staatOpen + ", gesloten="
+				+ gesloten + ", duur=" + duur + ", startDatum=" + startDatum + ", eindDatum=" + eindDatum
+				+ ", verantwoordelijke=" + verantwoordelijke + "]";
+	}
 	
 }
