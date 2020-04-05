@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -26,6 +28,9 @@ public class Media implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="Id")
 	private int id;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "SessieId", referencedColumnName = "SessieId")
+	private Sessie sessie;
 	@Column(name="Adress")
 	private String adress;
 	@Column(name="Naam")

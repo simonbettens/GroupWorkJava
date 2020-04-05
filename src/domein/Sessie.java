@@ -5,13 +5,17 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -48,14 +52,19 @@ public class Sessie implements Serializable{
 	private LocalDateTime startDatum;
 	@Column(name="EindDatum")
 	private LocalDateTime eindDatum;
-	@ManyToOne(fetch = FetchType.EAGER)
+	
+	
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "VerantwoordelijkeId",referencedColumnName = "Id")
 	private Gebruiker verantwoordelijke;
 	
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "Sessie",cascade = CascadeType.ALL)
 	private List<SessieGebruiker> gebruikersIngeschreven;
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "Sessie")
+	@JoinColumn(name = "SessieId", referencedColumnName = "SessieId")
 	private List<Media> media;
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "Sessie")
+	@JoinColumn(name = "SessieId", referencedColumnName = "SessieId")
 	private List<SessieAankondiging> aankondigingen;
 	
 	//nodig voor jpa
@@ -220,6 +229,100 @@ public class Sessie implements Serializable{
 				+ ", beschrijving=" + beschrijving + ", bezig=" + bezig + ", staatOpen=" + staatOpen + ", gesloten="
 				+ gesloten + ", duur=" + duur + ", startDatum=" + startDatum + ", eindDatum=" + eindDatum
 				+ ", verantwoordelijke=" + verantwoordelijke + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((aankondigingen == null) ? 0 : aankondigingen.hashCode());
+		result = prime * result + ((beschrijving == null) ? 0 : beschrijving.hashCode());
+		result = prime * result + (bezig ? 1231 : 1237);
+		result = prime * result + ((duur == null) ? 0 : duur.hashCode());
+		result = prime * result + ((eindDatum == null) ? 0 : eindDatum.hashCode());
+		result = prime * result + ((gebruikersIngeschreven == null) ? 0 : gebruikersIngeschreven.hashCode());
+		result = prime * result + (gesloten ? 1231 : 1237);
+		result = prime * result + ((lokaal == null) ? 0 : lokaal.hashCode());
+		result = prime * result + maxCap;
+		result = prime * result + ((media == null) ? 0 : media.hashCode());
+		result = prime * result + ((naam == null) ? 0 : naam.hashCode());
+		result = prime * result + sessieId;
+		result = prime * result + (staatOpen ? 1231 : 1237);
+		result = prime * result + ((startDatum == null) ? 0 : startDatum.hashCode());
+		result = prime * result + ((verantwoordelijke == null) ? 0 : verantwoordelijke.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Sessie other = (Sessie) obj;
+		if (aankondigingen == null) {
+			if (other.aankondigingen != null)
+				return false;
+		} else if (!aankondigingen.equals(other.aankondigingen))
+			return false;
+		if (beschrijving == null) {
+			if (other.beschrijving != null)
+				return false;
+		} else if (!beschrijving.equals(other.beschrijving))
+			return false;
+		if (bezig != other.bezig)
+			return false;
+		if (duur == null) {
+			if (other.duur != null)
+				return false;
+		} else if (!duur.equals(other.duur))
+			return false;
+		if (eindDatum == null) {
+			if (other.eindDatum != null)
+				return false;
+		} else if (!eindDatum.equals(other.eindDatum))
+			return false;
+		if (gebruikersIngeschreven == null) {
+			if (other.gebruikersIngeschreven != null)
+				return false;
+		} else if (!gebruikersIngeschreven.equals(other.gebruikersIngeschreven))
+			return false;
+		if (gesloten != other.gesloten)
+			return false;
+		if (lokaal == null) {
+			if (other.lokaal != null)
+				return false;
+		} else if (!lokaal.equals(other.lokaal))
+			return false;
+		if (maxCap != other.maxCap)
+			return false;
+		if (media == null) {
+			if (other.media != null)
+				return false;
+		} else if (!media.equals(other.media))
+			return false;
+		if (naam == null) {
+			if (other.naam != null)
+				return false;
+		} else if (!naam.equals(other.naam))
+			return false;
+		if (sessieId != other.sessieId)
+			return false;
+		if (staatOpen != other.staatOpen)
+			return false;
+		if (startDatum == null) {
+			if (other.startDatum != null)
+				return false;
+		} else if (!startDatum.equals(other.startDatum))
+			return false;
+		if (verantwoordelijke == null) {
+			if (other.verantwoordelijke != null)
+				return false;
+		} else if (!verantwoordelijke.equals(other.verantwoordelijke))
+			return false;
+		return true;
 	}
 	
 }
