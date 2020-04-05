@@ -130,9 +130,15 @@ public class Sessie implements Serializable{
 		return staatOpen;
 	}
 	public Duration getDuur() {
+		if(duur == null) {
+			setDuur(Duration.between(startDatum, eindDatum));
+		}
 		return duur;
 	}
 	public boolean isBezig() {
+		//telkens als je kijkt naar de attribut moet je zien of de waarde veranderd moet worden (wordt dynamish aangepast)
+		boolean vernieuwBezig = (LocalDateTime.now().isAfter(startDatum)&&LocalDateTime.now().isBefore(eindDatum))|| LocalDateTime.now().isEqual(startDatum) ;
+		setBezig(vernieuwBezig);
 		return bezig;
 	}
 	
@@ -150,7 +156,7 @@ public class Sessie implements Serializable{
 		this.aankondigingen = aankondigingen;
 	}
 	private void setNaam(String naam) {
-		if(naam == null || naam.equals("")) {
+		if(naam.isEmpty() || naam.isBlank()) {
 			throw new IllegalArgumentException("Naam moet ingevuld zijn.");
 		}
 		this.naam = naam;
@@ -177,7 +183,7 @@ public class Sessie implements Serializable{
 		this.maxCap = maxCap;
 	}
 	private void setLokaal(String lokaal) {
-		if(lokaal == null || lokaal.equals("")) {
+		if(lokaal.isEmpty() || lokaal.isBlank()) {
 			throw new IllegalArgumentException("Lokaal moet ingevuld zijn.");
 		}
 		this.lokaal = lokaal;
@@ -230,7 +236,7 @@ public class Sessie implements Serializable{
 				+ gesloten + ", duur=" + duur + ", startDatum=" + startDatum + ", eindDatum=" + eindDatum
 				+ ", verantwoordelijke=" + verantwoordelijke + "]";
 	}
-
+	//nodig voor de mapping
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -252,7 +258,7 @@ public class Sessie implements Serializable{
 		result = prime * result + ((verantwoordelijke == null) ? 0 : verantwoordelijke.hashCode());
 		return result;
 	}
-
+	//nodig voor de mapping
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

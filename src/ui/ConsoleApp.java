@@ -48,7 +48,6 @@ public class ConsoleApp {
 		SessieDaoJpa sessieDaoJpa = new SessieDaoJpa();
 		List<Sessie> sessies = sessieDaoJpa.getAll();
 		sessies.forEach(s -> System.out.println(s.toString()));
-
 		GenericDaoJpa.closePersistency();
 	}
 

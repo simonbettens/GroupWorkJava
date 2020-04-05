@@ -120,7 +120,7 @@ public class Gebruiker {
 		this.inschrijvingen = inschrijvingen;
 	}
 	private void setVoornaam(String voornaam) {
-		if(voornaam == null || voornaam.equals("")) {
+		if(voornaam.isEmpty() || voornaam.isBlank()) {
 			throw new IllegalArgumentException("voornaam van de gebruiker moet ingevuld zijn.");
 		}
 		this.voornaam = voornaam;

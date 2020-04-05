@@ -99,7 +99,7 @@ public class Aankondiging implements Serializable{
 		this.gepost = gepost;
 	}
 	private void setInhoud(String inhoud) {
-		if(inhoud == null || inhoud.equals("")) {
+		if(inhoud.isEmpty() || inhoud.isBlank()) {
 			throw new IllegalArgumentException("Inhoud van de aankondiging moet ingevuld zijn");
 		}
 		this.inhoud = inhoud;

@@ -83,13 +83,13 @@ public class Media implements Serializable{
 		return mediaType;
 	}
 	private void setAdress(String adress) {
-		if(adress ==null || adress.equals("")) {
+		if(adress.isEmpty()|| adress.isBlank()) {
 			throw new IllegalArgumentException("adress moet ingevuld zijn");
 		}
 		this.adress = adress;
 	}
 	private void setNaam(String naam) {
-		if(naam == null || naam.equals("")) {
+		if(naam.isEmpty() || naam.isBlank()) {
 			throw new IllegalArgumentException("naam moet ingevuld zijn");
 		}
 		this.naam = naam;
