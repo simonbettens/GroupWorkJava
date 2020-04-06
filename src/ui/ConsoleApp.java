@@ -10,6 +10,7 @@ import domein.Aankondiging;
 import domein.Gebruiker;
 import domein.GebruikerType;
 import domein.Media;
+import domein.PasswoordHasher;
 import domein.Sessie;
 import domein.SessieGebruiker;
 import domein.SessieKalender;
@@ -21,8 +22,10 @@ import repository.SessieKalenderDao;
 import repository.SessieKalenderDaoJpa;
 
 public class ConsoleApp {
-
+	private Scanner sc = new Scanner(System.in);
+	public GebruikerController gc;
 	public ConsoleApp() {
+		gc = new GebruikerController(new GebruikerDaoJpa());
 		run();
 	}
 
@@ -31,24 +34,35 @@ public class ConsoleApp {
 		inloggen();
 		//databankTest();
 		//sessieControllerTest();
-		
+		sluitDatabank();
 	}
 
 	private void maakEenTestGebruiker() {
 		// TODO Auto-generated method stub
-		GebruikerController gc = new GebruikerController(new GebruikerDaoJpa());
-		Gebruiker nieuwegebruiker = new Gebruiker("testVoornaam", "testAchternaam", "test123", "test", "test.test@student.hogent.be", 1L,
+		
+		Gebruiker nieuwegebruiker = new Gebruiker("testVoornaam", "testAchternaam", "test123", "testpass", "test.test@student.hogent.be", 1L,
 				GebruikerType.GEBRUIKER, StatusType.ACTIEF);
+		
 		gc.insertGebruiker(nieuwegebruiker);
 		System.out.println(nieuwegebruiker.toString());
-		Scanner sc = new Scanner(System.in);
+		/*
 		System.out.println("Wachten op gebruikerinput voor verwijderen ");
 		sc.nextLine();
 		gc.deleteGebruiker(nieuwegebruiker);
 		System.out.println("gebruiker verwijderd");
+		*/
 	}
 
 	private void inloggen() {
+		Gebruiker opgehaaldeGebruiker = gc.getGebruikerByUsername("test123");
+		System.out.println("Geef het passwoord in voor de volgende gebruiker" + opgehaaldeGebruiker.toString());
+		String ingegevenPass = sc.nextLine();
+		boolean gelijkaardig = PasswoordHasher.verifyPasswordHash(opgehaaldeGebruiker.getPasswoordHash(), ingegevenPass);
+		System.out.println("Gelijkheid?" + gelijkaardig);
+		
+		System.out.println("Gebruiker verwijderen?(druk enter)");
+		sc.nextLine();
+		gc.deleteGebruiker(opgehaaldeGebruiker);
 		
 	}
 
