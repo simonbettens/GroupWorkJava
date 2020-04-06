@@ -37,7 +37,7 @@ public class ConsoleApp {
 	private void maakEenTestGebruiker() {
 		// TODO Auto-generated method stub
 		GebruikerController gc = new GebruikerController(new GebruikerDaoJpa());
-		Gebruiker nieuwegebruiker = new Gebruiker("testVoornaam", "testAchternaam", "test1234", "test", "test.test@student.hogent.be", 1L,
+		Gebruiker nieuwegebruiker = new Gebruiker("testVoornaam", "testAchternaam", "test123", "test", "test.test@student.hogent.be", 1L,
 				GebruikerType.GEBRUIKER, StatusType.ACTIEF);
 		gc.insertGebruiker(nieuwegebruiker);
 		System.out.println(nieuwegebruiker.toString());

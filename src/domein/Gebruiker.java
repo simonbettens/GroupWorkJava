@@ -142,8 +142,7 @@ public class Gebruiker {
 			this.discriminator = "Verantwoordelijke";
 		}
 		try {
-			byte[] passwoordbytes = PasswoordHasher.getEncryptedPassword(passwoord);
-			setPasswoordHash(Base64.getEncoder().encodeToString(passwoordbytes));
+			setPasswoordHash(PasswoordHasher.generateStorngPasswordHash(passwoord));
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
