@@ -2,6 +2,7 @@ package ui;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Scanner;
 
 import controllers.GebruikerController;
 import controllers.SessieController;
@@ -29,16 +30,22 @@ public class ConsoleApp {
 		maakEenTestGebruiker();
 		inloggen();
 		//databankTest();
-		sessieControllerTest();
+		//sessieControllerTest();
 		
 	}
 
 	private void maakEenTestGebruiker() {
 		// TODO Auto-generated method stub
 		GebruikerController gc = new GebruikerController(new GebruikerDaoJpa());
-		Gebruiker nieuwegebruiker = new Gebruiker("testVoornaam", "testAchternaam", "tst1234", "test", "test.test@student.hogent.be", 123L,
+		Gebruiker nieuwegebruiker = new Gebruiker("testVoornaam", "testAchternaam", "test1234", "test", "test.test@student.hogent.be", 1L,
 				GebruikerType.GEBRUIKER, StatusType.ACTIEF);
 		gc.insertGebruiker(nieuwegebruiker);
+		System.out.println(nieuwegebruiker.toString());
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Wachten op gebruikerinput voor verwijderen ");
+		sc.nextLine();
+		gc.deleteGebruiker(nieuwegebruiker);
+		System.out.println("gebruiker verwijderd");
 	}
 
 	private void inloggen() {
