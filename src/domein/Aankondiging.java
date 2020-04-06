@@ -2,6 +2,7 @@ package domein;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -40,6 +41,8 @@ public class Aankondiging implements Serializable{
 	private LocalDateTime gepost;
 	@Column(name="Inhoud")
 	private String inhoud;
+	@Transient
+	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy 'om' hh:mm");
 	
 	@Basic
 	@Column(name="Prioriteit")

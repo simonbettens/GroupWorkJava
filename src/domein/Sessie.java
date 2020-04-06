@@ -3,6 +3,7 @@ package domein;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import javax.persistence.AttributeOverride;
@@ -66,7 +67,8 @@ public class Sessie implements Serializable{
 	@OneToMany(fetch = FetchType.EAGER,mappedBy = "Sessie")
 	@JoinColumn(name = "SessieId", referencedColumnName = "SessieId")
 	private List<SessieAankondiging> aankondigingen;
-	
+	@Transient
+	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy 'om' hh:mm");
 	//nodig voor jpa
 	public Sessie() {}
 	

@@ -3,13 +3,16 @@ package ui;
 import java.time.LocalDate;
 import java.util.List;
 
+import controllers.GebruikerController;
 import controllers.SessieController;
 import domein.Aankondiging;
 import domein.Gebruiker;
+import domein.GebruikerType;
 import domein.Media;
 import domein.Sessie;
 import domein.SessieGebruiker;
 import domein.SessieKalender;
+import domein.StatusType;
 import repository.GebruikerDaoJpa;
 import repository.GenericDaoJpa;
 import repository.SessieDaoJpa;
@@ -23,13 +26,23 @@ public class ConsoleApp {
 	}
 
 	private void run() {
+		maakEenTestGebruiker();
 		inloggen();
 		//databankTest();
 		sessieControllerTest();
+		
+	}
+
+	private void maakEenTestGebruiker() {
+		// TODO Auto-generated method stub
+		GebruikerController gc = new GebruikerController(new GebruikerDaoJpa());
+		Gebruiker nieuwegebruiker = new Gebruiker("testVoornaam", "testAchternaam", "tst1234", "test", "test.test@student.hogent.be", 123L,
+				GebruikerType.GEBRUIKER, StatusType.ACTIEF);
+		gc.insertGebruiker(nieuwegebruiker);
 	}
 
 	private void inloggen() {
-
+		
 	}
 
 	private void databankTest() {
@@ -54,7 +67,6 @@ public class ConsoleApp {
 		SessieDaoJpa sessieDaoJpa = new SessieDaoJpa();
 		List<Sessie> sessies = sessieDaoJpa.getAll();
 		sessies.forEach(s -> System.out.println(s.toString()));
-		GenericDaoJpa.closePersistency();
 	}
 	
 	private void sessieControllerTest() {
@@ -63,10 +75,10 @@ public class ConsoleApp {
 		System.out.println(sk.getStartDatum() + "-" + sk.getEindDatum());
 		sk = sc.geefSessieKalender("2020");
 		System.out.println(sk.getStartDatum() + "-" + sk.getEindDatum());
-		
+	}
+	
+	private void sluitDatabank() {
 		GenericDaoJpa.closePersistency();
-		
-
 	}
 
 }

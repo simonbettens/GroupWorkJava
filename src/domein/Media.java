@@ -2,6 +2,7 @@ package domein;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -37,6 +38,8 @@ public class Media implements Serializable{
 	private String naam;
 	@Column(name="TijdToegevoegd")
 	private LocalDateTime tijdToegevoegd;
+	@Transient
+	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy 'om' hh:mm");
 	
 	@Basic
 	@Column(name="MediaType")

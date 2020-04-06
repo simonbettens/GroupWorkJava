@@ -2,6 +2,7 @@ package domein;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity(name="SessieKalender")
 @NamedQueries({
@@ -38,6 +40,8 @@ public class SessieKalender implements Serializable{
 	private LocalDate eindDatum;
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Sessie> sessies;
+	@Transient
+	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy 'om' hh:mm");
 
 	public SessieKalender() {
 		
