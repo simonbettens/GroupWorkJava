@@ -1,31 +1,49 @@
 package controllers;
 
 import domein.SessieKalender;
+import repository.SessieDao;
+import repository.SessieDaoJpa;
 import repository.SessieKalenderDao;
+import repository.SessieKalenderDaoJpa;
 
 public class SessieController {
 
-	private SessieKalenderDao sessieKalenderRepository;
-	private String academiejaar;
-	private SessieKalender sessieKalender;
+	//Properties
+	private SessieKalenderDao sessiekalenderRepository;
+	private SessieDao sessieRepository;
 
-	public SessieController(SessieKalenderDao sessieKalenderRepository) {
-		this.sessieKalenderRepository = sessieKalenderRepository;
+	//Constructor
+	public SessieController() {
+		setSessiekalenderRepository(new SessieKalenderDaoJpa());
 	}
 	
-	public SessieKalender geefSessieKalender(String academiejaar) {
+	
+	//Setters
+	public void setSessiekalenderRepository(SessieKalenderDaoJpa mock) {
+		this.sessiekalenderRepository = mock;
+	}
+	public void setSessieRepository(SessieDaoJpa mock) {
+		this.sessieRepository = mock;
+	}
+	
+	
+	//Sessiekalender methods
+	public SessieKalender geefSessieKalender(String beginjaar) {
 		try {
-			if (academiejaar.isBlank() || academiejaar == null) {
-				//TODO kalender van huidig jaar
-				
-			} else return null;
+			if (beginjaar == "0") {
+				return sessiekalenderRepository.getByBeginjaar("2020");
+			} else {
+				return sessiekalenderRepository.getByBeginjaar(beginjaar);
+			}
 		} catch (Exception e) {
 			// TODO 
 			System.err.printf("Kalender niet gevonden.\n");
 			e.printStackTrace();
 		}
-		throw new java.lang.UnsupportedOperationException("Not supported yet.");
+		return null;
 	}
 	
+	
+	//Sessie methods
 	
 }

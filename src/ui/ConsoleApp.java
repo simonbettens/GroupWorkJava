@@ -1,15 +1,20 @@
 package ui;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import controllers.SessieController;
 import domein.Aankondiging;
 import domein.Gebruiker;
 import domein.Media;
 import domein.Sessie;
 import domein.SessieGebruiker;
+import domein.SessieKalender;
 import repository.GebruikerDaoJpa;
 import repository.GenericDaoJpa;
 import repository.SessieDaoJpa;
+import repository.SessieKalenderDao;
+import repository.SessieKalenderDaoJpa;
 
 public class ConsoleApp {
 
@@ -19,7 +24,8 @@ public class ConsoleApp {
 
 	private void run() {
 		inloggen();
-		databankTest();
+		//databankTest();
+		sessieControllerTest();
 	}
 
 	private void inloggen() {
@@ -49,6 +55,18 @@ public class ConsoleApp {
 		List<Sessie> sessies = sessieDaoJpa.getAll();
 		sessies.forEach(s -> System.out.println(s.toString()));
 		GenericDaoJpa.closePersistency();
+	}
+	
+	private void sessieControllerTest() {
+		SessieController sc = new SessieController();
+		SessieKalender sk = sc.geefSessieKalender("0");
+		System.out.println(sk.getStartDatum() + "-" + sk.getEindDatum());
+		sk = sc.geefSessieKalender("2020");
+		System.out.println(sk.getStartDatum() + "-" + sk.getEindDatum());
+		
+		GenericDaoJpa.closePersistency();
+		
+
 	}
 
 }

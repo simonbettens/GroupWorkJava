@@ -6,5 +6,5 @@ import domein.SessieKalender;
 
 public interface SessieKalenderDao extends GenericDao<SessieKalender>{
 	
-	public SessieKalender getByAcademieJaar(String academiejaar);
+	public SessieKalender getByBeginjaar(String beginjaar);
 }

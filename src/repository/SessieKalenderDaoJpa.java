@@ -11,8 +11,9 @@ import domein.SessieKalender;
 
 public class SessieKalenderDaoJpa extends GenericDaoJpa<SessieKalender> implements SessieKalenderDao{
 
-	 private List<SessieKalender> sessieKalenders = new ArrayList<>();
-	 private SessieKalender sessieKalender;
+	private List<SessieKalender> sessieKalenders = new ArrayList<>();
+	private SessieKalender sessieKalender;
+	 
 	public SessieKalenderDaoJpa() {
 		super(SessieKalender.class);
 		this.sessieKalender = new SessieKalender();
@@ -20,10 +21,11 @@ public class SessieKalenderDaoJpa extends GenericDaoJpa<SessieKalender> implemen
 
 
 	@Override
-	public SessieKalender getByAcademieJaar(String academiejaar) throws EntityNotFoundException{
+	public SessieKalender getByBeginjaar(String beginjaar) throws EntityNotFoundException{
 		try {
-			return em.createNamedQuery("SessieKalender.getByBeginJaar", SessieKalender.class)
-					.setParameter("academiejaar", academiejaar).getSingleResult();
+			return em.createNamedQuery("SessieKalender.getByBeginjaar", SessieKalender.class)
+					.setParameter("beginjaar", beginjaar)
+					.getSingleResult();
 		} catch (NoResultException ex) {
 			throw new EntityNotFoundException();
 		}
