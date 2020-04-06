@@ -5,10 +5,14 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
@@ -19,6 +23,9 @@ import javax.persistence.Transient;
 
 @Entity(name="Aankondiging")
 @Table(name = "Aankondiging")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "Discriminator")
+@DiscriminatorValue(value = "Aankondiging")
 public class Aankondiging implements Serializable{
 	
 	/**
@@ -92,7 +99,7 @@ public class Aankondiging implements Serializable{
 		this.gepost = gepost;
 	}
 	private void setInhoud(String inhoud) {
-		if(inhoud == null || inhoud.equals("")) {
+		if(inhoud.isEmpty() || inhoud.isBlank()) {
 			throw new IllegalArgumentException("Inhoud van de aankondiging moet ingevuld zijn");
 		}
 		this.inhoud = inhoud;
@@ -103,8 +110,7 @@ public class Aankondiging implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Aankondiging [aankondigingId=" + aankondingId + ", gepost=" + gepost + ", inhoud=" + inhoud
-				+ ", prioriteitValue=" + prioriteitValue + ", prioriteit=" + prioriteit + "]";
+		return "Aankondiging met als id :" + aankondingId + ", gepost op :" + gepost + ", bevat deze inhoud :" + inhoud+", met prioriteit=" + prioriteit + " en is van het type aankondiging";
 	}
 	
 	

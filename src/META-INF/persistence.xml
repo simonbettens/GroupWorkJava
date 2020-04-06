@@ -3,6 +3,7 @@
     <persistence-unit name="ItLabTest" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>domein.Aankondiging</class>
+        <class>domein.SessieAankondiging</class>
         <class>domein.Media</class>
         <class>domein.Sessie</class>
         <class>domein.Gebruiker</class>
