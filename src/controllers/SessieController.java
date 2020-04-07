@@ -1,6 +1,10 @@
 package controllers;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import domein.SessieKalender;
+import repository.GenericDaoJpa;
 import repository.SessieDao;
 import repository.SessieDaoJpa;
 import repository.SessieKalenderDao;
@@ -11,6 +15,7 @@ public class SessieController {
 	//Properties
 	private SessieKalenderDao sessiekalenderRepository;
 	private SessieDao sessieRepository;
+	private List<SessieKalender> sessieKalenderList;
 
 	//Constructor
 	public SessieController() {
@@ -43,6 +48,26 @@ public class SessieController {
 		return null;
 	}
 	
+	public void maakNieuweSessieKalender(LocalDate startDatum, LocalDate eindDatum) {
+		SessieKalender sk = new SessieKalender(startDatum, eindDatum);
+		GenericDaoJpa.startTransaction();
+		sessiekalenderRepository.insert(sk);
+		GenericDaoJpa.commitTransaction();
+	}
+	
+	public void verwijderSessieKalender(String beginjaar) {
+		SessieKalender sk = sessiekalenderRepository.getByBeginjaar(beginjaar);
+		GenericDaoJpa.startTransaction();
+		sessiekalenderRepository.delete(sk);
+		GenericDaoJpa.commitTransaction();
+	}
+	
+	private List<SessieKalender> getSessieKalenderList(){
+		if(sessieKalenderList==null) {
+			sessieKalenderList=sessiekalenderRepository.getAll();
+		}
+		return sessieKalenderList;
+	}
 	
 	//Sessie methods
 	

@@ -30,10 +30,10 @@ public class ConsoleApp {
 	}
 
 	private void run() {
-		maakEenTestGebruiker();
-		inloggen();
+		//maakEenTestGebruiker();
+		//inloggen();
 		//databankTest();
-		//sessieControllerTest();
+		sessieControllerTest();
 		sluitDatabank();
 	}
 
@@ -96,6 +96,11 @@ public class ConsoleApp {
 		System.out.println(sk.getStartDatum() + "-" + sk.getEindDatum());
 		sk = sc.geefSessieKalender("2020");
 		System.out.println(sk.getStartDatum() + "-" + sk.getEindDatum());
+		
+		sc.maakNieuweSessieKalender(LocalDate.now().minusYears(2), LocalDate.now().minusYears(1).minusDays(5));
+		SessieKalender sk2 = sc.geefSessieKalender("2018");
+		System.out.println(sk2.getStartDatum());
+		sc.verwijderSessieKalender("2018");
 	}
 	
 	private void sluitDatabank() {
