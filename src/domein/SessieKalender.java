@@ -53,11 +53,11 @@ public class SessieKalender implements Serializable{
 		this.sessies = new ArrayList<Sessie>();
 	}
 
-	private void setStartDatum(LocalDate startDatum) {
+	public final void setStartDatum(LocalDate startDatum) {
 		this.startDatum = startDatum;
 	}
 
-	private void setEindDatum(LocalDate eindDatum) {
+	public final void setEindDatum(LocalDate eindDatum) {
 		this.eindDatum = eindDatum;
 	}
 
