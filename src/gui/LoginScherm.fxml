@@ -25,12 +25,12 @@
             </AnchorPane>
          </left>
          <right>
-            <AnchorPane prefHeight="500.0" prefWidth="355.0" style="-fx-background-color: #313131;" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="rightAnchorPane" onMouseClicked="#rightPaneClicked" prefHeight="500.0" prefWidth="355.0" style="-fx-background-color: #313131;" BorderPane.alignment="CENTER">
                <children>
                   <TextField id="fieldUsername" fx:id="fieldUsername" focusTraversable="false" layoutX="124.0" layoutY="189.0" promptText="Username" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px; -fx-text-fill: #ffffff;" />
                   <PasswordField id="fieldPassword" fx:id="fieldPassword" focusTraversable="false" layoutX="124.0" layoutY="247.0" promptText="Password" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px; -fx-text-fill: #ffffff;" />
                   <Button id="buttonLogin" fx:id="buttonLogin" layoutX="148.0" layoutY="325.0" mnemonicParsing="false" onMouseClicked="#login" onMouseEntered="#hoverLogin" onMouseExited="#hoverExitLogin" prefHeight="36.0" prefWidth="61.0" text="Login" />
-                  <Hyperlink id="hlForgotPassword" fx:id="hlForgotPassword" layoutX="117.0" layoutY="424.0" onMouseClicked="#forgotPassword" onMouseEntered="#hoverForgotPassword" onMouseExited="#hoverExitForgotPassword" text="Forgot password?" />
+                  <Hyperlink id="hlForgotPassword" fx:id="hlForgotPassword" focusTraversable="false" layoutX="117.0" layoutY="424.0" onMouseClicked="#forgotPassword" onMouseEntered="#hoverForgotPassword" onMouseExited="#hoverExitForgotPassword" text="Forgot password?" />
                   <ImageView id="imageGroup" fx:id="imageGroup" fitHeight="62.0" fitWidth="91.0" layoutX="143.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/iconGroup.png" />
