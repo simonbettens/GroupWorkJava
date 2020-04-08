@@ -50,7 +50,7 @@ public class Media implements Serializable{
 	@PostLoad
     private void fillTransientPriorieteit(){
         if (mediaTypeValue > 0) {
-            this.mediaType = mediaType.of(mediaTypeValue);
+            this.mediaType = MediaType.of(mediaTypeValue);
         }
     }
  

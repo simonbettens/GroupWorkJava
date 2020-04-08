@@ -14,12 +14,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
 import javax.persistence.PostLoad;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 @Entity(name="Aankondiging")
@@ -55,7 +52,7 @@ public class Aankondiging implements Serializable{
 	@PostLoad
     private void fillTransientPriorieteit(){
         if (prioriteitValue > 0) {
-            this.prioriteit = prioriteit.of(prioriteitValue);
+            this.prioriteit = AankondigingPrioriteit.of(prioriteitValue);
         }
     }
  

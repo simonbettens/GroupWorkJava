@@ -1,24 +1,15 @@
 package domein;
 
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.util.*;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.persistence.AttributeOverride;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -92,11 +83,11 @@ public class Gebruiker {
 	@PostLoad
 	private void fillTransientEnums() {
 		if (gebruikersTypeValue > 0) {
-			this.gebruikersType = gebruikersType.of(gebruikersTypeValue);
+			this.gebruikersType = GebruikerType.of(gebruikersTypeValue);
 		}
 
 		if (statusTypeValue > 0) {
-			this.statusType = statusType.of(statusTypeValue);
+			this.statusType = StatusType.of(statusTypeValue);
 		}
 	}
 

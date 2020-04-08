@@ -31,17 +31,17 @@ public class GebruikerController {
 	}
 	public void deleteGebruiker(Gebruiker gebruiker) {
 		gebruikerLijst.remove(gebruiker);
-		GebruikerDaoJpa.startTransaction();
+		GenericDaoJpa.startTransaction();
 		gebruikerRepository.delete(gebruiker);
-		GebruikerDaoJpa.commitTransaction();
+		GenericDaoJpa.commitTransaction();
 	}
 	public void insertGebruiker(Gebruiker gebruiker) {
-		GebruikerDaoJpa.startTransaction();
+		GenericDaoJpa.startTransaction();
 		gebruikerRepository.insert(gebruiker);
-		GebruikerDaoJpa.commitTransaction();
+		GenericDaoJpa.commitTransaction();
 	}
 	public void rollBack() {
-		GebruikerDaoJpa.rollbackTransaction();
+		GenericDaoJpa.rollbackTransaction();
 	}
 	
 	

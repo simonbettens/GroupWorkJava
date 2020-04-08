@@ -18,8 +18,6 @@ import domein.StatusType;
 import repository.GebruikerDaoJpa;
 import repository.GenericDaoJpa;
 import repository.SessieDaoJpa;
-import repository.SessieKalenderDao;
-import repository.SessieKalenderDaoJpa;
 
 public class ConsoleApp {
 	private Scanner sc = new Scanner(System.in);
