@@ -17,6 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 @Entity(name="Sessie")
@@ -37,7 +39,7 @@ public class Sessie implements Serializable{
 	private String naam;
 	@Column(name="Lokaal")
 	private String lokaal;
-	@Column(name="Beschrijving")
+	@Column(name="Beschrijving",length = 1000)
 	private String beschrijving;
 	@Transient
 	private boolean bezig;
@@ -59,9 +61,11 @@ public class Sessie implements Serializable{
 	
 	@OneToMany(fetch = FetchType.EAGER,mappedBy = "Sessie",cascade = CascadeType.ALL)
 	private List<SessieGebruiker> gebruikersIngeschreven;
+	
 	@OneToMany(fetch = FetchType.EAGER,mappedBy = "Sessie")
 	@JoinColumn(name = "SessieId", referencedColumnName = "SessieId")
 	private List<Media> media;
+	
 	@OneToMany(fetch = FetchType.EAGER,mappedBy = "Sessie")
 	@JoinColumn(name = "SessieId", referencedColumnName = "SessieId")
 	private List<SessieAankondiging> aankondigingen;
@@ -206,7 +210,9 @@ public class Sessie implements Serializable{
 	}
 	
 	// ----- lijst operatie's
-	
+	public void addInschrijving (SessieGebruiker sg) {
+		this.gebruikersIngeschreven.add(sg);
+	}
 	public void addMediaItem(Media nieuwMedia) {
 		media.add(nieuwMedia);
 	}

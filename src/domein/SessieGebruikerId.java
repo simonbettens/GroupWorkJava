@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 @Embeddable
 public class SessieGebruikerId implements Serializable {
-	@Column(name="GebruikerId")
+	@Column(name="GebruikerId",columnDefinition = "nvarchar")
 	private String id;
 	
 	@Column(name="SessieId")

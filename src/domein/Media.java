@@ -7,6 +7,8 @@ import java.time.format.DateTimeFormatter;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,6 +48,10 @@ public class Media implements Serializable{
     private int mediaTypeValue;
     @Transient
 	private MediaType mediaType;
+    
+	@Column(name="TypeMedia")
+	@Enumerated(EnumType.STRING)
+    private TypeMedia specifiekeKlasse;
 	
 	@PostLoad
     private void fillTransientPriorieteit(){
@@ -64,11 +70,30 @@ public class Media implements Serializable{
 	//voor jpa
 	public Media() {}
 	//voor nieuwe instantie
-	public Media(String adress, String naam, LocalDateTime tijdToegevoegd, MediaType mediaType) {
+	public Media(Sessie sessie,String adress, String naam, LocalDateTime tijdToegevoegd, MediaType mediaType) {
 		setAdress(adress);
 		setNaam(naam);
 		setTijdToegevoegd(tijdToegevoegd);
 		setMediaType(mediaType);
+		this.sessie = sessie;
+		switch(mediaType) {
+		case LINK:setSpecifiekeKlasse(TypeMedia.Link);
+			break;
+		case AFBEELDING: setSpecifiekeKlasse(TypeMedia.Afbeelding);
+			break;
+		case YOUTUBEVIDEO:
+		case VIDEO:setSpecifiekeKlasse(TypeMedia.Video);
+			break;
+		case EXCEL:
+		case PDF:
+		case POWERPOINT:
+		case WORD:
+		case ZIP:
+		case ANDERDOCUMENT:
+		default: setSpecifiekeKlasse(TypeMedia.Document);
+			break;
+			}
+		
 	}
 	public int getId() {
 		return id;
@@ -84,6 +109,9 @@ public class Media implements Serializable{
 	}
 	public MediaType getMediaType() {
 		return mediaType;
+	}
+	public TypeMedia getSpecifiekeKlasse() {
+		return specifiekeKlasse;
 	}
 	private void setAdress(String adress) {
 		if(adress.isEmpty()|| adress.isBlank()) {
@@ -105,6 +133,9 @@ public class Media implements Serializable{
 	}
 	private void setMediaType(MediaType mediaType) {
 		this.mediaType = mediaType;
+	}
+	private void setSpecifiekeKlasse(TypeMedia specifiekeKlasse) {
+		this.specifiekeKlasse = specifiekeKlasse;
 	}
 
 	@Override

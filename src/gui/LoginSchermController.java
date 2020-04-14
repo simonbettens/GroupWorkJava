@@ -2,6 +2,12 @@ package gui;
 
 import java.io.IOException;
 
+import javax.persistence.EntityNotFoundException;
+
+import controllers.GebruikerController;
+import domein.Gebruiker;
+import domein.GebruikerType;
+import domein.PasswoordHasher;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -14,7 +20,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 public class LoginSchermController extends AnchorPane {
-	public LoginSchermController() {
+	private GebruikerController gebruikerController;
+	public LoginSchermController(GebruikerController gController) {
+
+		this.gebruikerController = gController;
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScherm.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
@@ -103,6 +112,37 @@ public class LoginSchermController extends AnchorPane {
 
 	    @FXML
 	    void login(MouseEvent event) {
+	    	String gebruikerNaam = this.fieldUsername.getText();
+			String wachtwoord = this.fieldPassword.getText();
+			Gebruiker gebruiker = null;
+			boolean gelijkaardig = false;
+			if (gebruikerNaam.isEmpty() || gebruikerNaam.isBlank()) {
+				System.out.println("Gebruikernaam is niet ingevuld");
+			} else {
+				if (wachtwoord.isEmpty() || wachtwoord.isBlank()) {
+					System.out.println("Wachtwoordveld is niet ingevuld");
+				} else {
+					try {
+						gebruiker = gebruikerController.getGebruikerByUsername(gebruikerNaam);
+						if(gebruiker.getType()!=GebruikerType.GEBRUIKER) {
+							gelijkaardig = PasswoordHasher.verifyPasswordHash(gebruiker.getPasswoordHash(), wachtwoord);
+						}else {
+							System.out.println("Enkel (hoofd-)verantwoordelijken kunnen zich inloggen op deze applicatie");
+						}
+					}catch(EntityNotFoundException e) {
+						System.out.println("Gebruiker bestaat niet");
+					}
+					catch(Exception e) {
+						System.out.println("Er ging iets anders mis" + e.getMessage());
+					}
+				}
+			}
+			if(gelijkaardig) {
+				System.out.println("Wachtwoord komt overeen en gebruiker is ingelogd");
+				gebruikerController.setIngelogdeGebruiker(gebruiker);
+			}else{
+				System.out.println("Gebruiker niet ingelogd");
+			}
 
 	    }
 

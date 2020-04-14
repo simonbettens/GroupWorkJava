@@ -60,7 +60,7 @@ public class ConsoleApp {
 		
 		System.out.println("Gebruiker verwijderen?(druk enter)");
 		sc.nextLine();
-		gc.deleteGebruiker(opgehaaldeGebruiker);
+		gc.deleteGebruiker();
 		
 	}
 

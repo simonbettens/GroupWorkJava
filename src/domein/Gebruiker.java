@@ -2,6 +2,7 @@ package domein;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import javax.persistence.Basic;
@@ -21,61 +22,64 @@ import javax.persistence.Transient;
 
 @Entity(name = "Gebruiker")
 @NamedQueries({
-		@NamedQuery(name = "Gebruiker.findByUsername", query = "select g from Gebruiker g where g.userName = :username") }
-)
+		@NamedQuery(name = "Gebruiker.findByUsername", query = "select g from Gebruiker g where g.userName = :username") })
 
 @Table(name = "AspNetUsers")
 public class Gebruiker {
 	// de asp.net guid
 	@Id
-	@Column(name = "Id")
+	@Column(name = "Id", columnDefinition = "uniqueidentifier", nullable = false)
 	private String id;
 	// bv sb12356
-	@Column(name = "UserName")
+	@Column(name = "UserName", columnDefinition = "nvarchar(256) not null", nullable = false)
 	private String userName;
-	@Column(name= "NormalizedUserName")
+	@Column(name = "NormalizedUserName", columnDefinition = "nvarchar(256)")
 	private String normalizedUserName;
-	@Column(name = "IdNumber")
+	@Column(name = "IdNumber", columnDefinition = "bigint not null", nullable = false)
 	private Long idNumber;
-	@Column(name = "Voornaam")
+	@Column(name = "Voornaam", columnDefinition = "nvarchar(max) not null", nullable = false)
 	private String voornaam;
-	@Column(name = "Achternaam")
+	@Column(name = "Achternaam", columnDefinition = "nvarchar(max) not null", nullable = false)
 	private String achternaam;
-	@Column(name = "PasswordHash")
+	@Column(name = "PasswordHash", columnDefinition = "nvarchar(MAX)")
 	private String passwoordHash;
-	@Column(name = "SecurityStamp")
+	@Column(name = "SecurityStamp", columnDefinition = "nvarchar(MAX)")
 	private String securityStamp;
-	@Column(name = "ConcurrencyStamp")
+	@Column(name = "ConcurrencyStamp", columnDefinition = "nvarchar(MAX)")
 	private String concurrencyStamp;
-	@Column(name = "Discriminator")
+	@Column(name = "Discriminator", columnDefinition = "nvarchar(MAX) not null", nullable = false)
 	private String discriminator;
-	@Column(name = "Email")
+	@Column(name = "Email", columnDefinition = "nvarchar(256)")
 	private String email;
-	@Column(name = "NormalizedEmail")
+	@Column(name = "NormalizedEmail", columnDefinition = "nvarchar(256)")
 	private String normalizedEmail;
-	@Column(name = "EmailConfirmed")
+	@Column(name = "EmailConfirmed ", nullable = false)
 	private boolean emailConfirmed;
-	@Column(name = "PhoneNumberConfirmed")
+	@Column(name = "PhoneNumberConfirmed", nullable = false)
 	private boolean phoneNumberConfirmed;
-	@Column(name = "TwoFactorEnabled")
+	@Column(name = "TwoFactorEnabled", nullable = false)
 	private boolean twoFactorEnabled;
-	@Column(name = "LockoutEnabled")
+	@Column(name = "LockoutEnabled", nullable = false)
 	private boolean lockoutEnabled;
 	@Column(name = "AccessFailedCount")
 	private int accessFailedCount;
+	@Column(name = "PhoneNumber", columnDefinition = "nvarchar(256)")
+	private String phoneNumber = null;
+	@Column(name = "LockoutEnd")
+	private LocalDateTime lockoutEnd = null;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "Gebruiker", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn(name = "Id", referencedColumnName = "Id")
 	private List<SessieGebruiker> inschrijvingen;
 
 	@Basic
-	@Column(name = "Type")
+	@Column(name = "Type", nullable = false)
 	private int gebruikersTypeValue;
 	@Transient
 	private GebruikerType gebruikersType;
 
 	@Basic
-	@Column(name = "Status")
+	@Column(name = "Status", nullable = false)
 	private int statusTypeValue;
 	@Transient
 	private StatusType statusType;
@@ -142,126 +146,176 @@ public class Gebruiker {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String getNormalizedUserName() {
 		return normalizedUserName;
 	}
+
 	public String getDiscriminator() {
 		return discriminator;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public String getNormalizedEmail() {
 		return normalizedEmail;
 	}
+
 	public boolean isEmailConfirmed() {
 		return emailConfirmed;
 	}
+
 	public boolean isPhoneNumberConfirmed() {
 		return phoneNumberConfirmed;
 	}
+
 	public boolean isTwoFactorEnabled() {
 		return twoFactorEnabled;
 	}
+
 	public boolean isLockoutEnabled() {
 		return lockoutEnabled;
 	}
+
 	public int getAccessFailedCount() {
 		return accessFailedCount;
 	}
+
 	public String getPasswoordHash() {
 		return passwoordHash;
 	}
+
 	public String getSecurityStamp() {
 		return securityStamp;
 	}
+
 	public String getConcurrencyStamp() {
 		return concurrencyStamp;
 	}
+
 	public List<SessieGebruiker> getInschrijvingen() {
 		return inschrijvingen;
 	}
+
 	public Long getIdNumber() {
 		return idNumber;
 	}
+
 	public String getVoornaam() {
 		return voornaam;
 	}
+
 	public String getAchternaam() {
 		return achternaam;
+	}
+	public String getVolledigeNaam() {
+		return getVoornaam() + " " + getAchternaam();
 	}
 	public GebruikerType getType() {
 		return gebruikersType;
 	}
+
 	public StatusType getStatus() {
 		return statusType;
 	}
+
 	public String getUserName() {
 		return userName;
 	}
+
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	private void setSessieGebruikers(List<SessieGebruiker> inschrijvingen) {
 		this.inschrijvingen = inschrijvingen;
 	}
+
 	private void setVoornaam(String voornaam) {
 		if (voornaam.isEmpty() || voornaam.isBlank()) {
 			throw new IllegalArgumentException("voornaam van de gebruiker moet ingevuld zijn.");
 		}
 		this.voornaam = voornaam;
 	}
+
 	private void setAchternaam(String achternaam) {
 		if (achternaam == null || achternaam.equals("")) {
 			throw new IllegalArgumentException("achternaam van de gebruiker moet ingevuld zijn.");
 		}
 		this.achternaam = achternaam;
 	}
+
 	private void setType(GebruikerType type) {
 		this.gebruikersType = type;
 	}
+
 	private void setStatus(StatusType status) {
 		this.statusType = status;
 	}
+
 	public void setIdNumber(Long idNumber) {
 		this.idNumber = idNumber;
 	}
+
 	public void setUserName(String userName) {
+		if (userName.isEmpty() || userName.isBlank()) {
+			throw new IllegalArgumentException("userName van de gebruiker moet ingevuld zijn.");
+		}
 		this.userName = userName;
 	}
+
 	public void setDiscriminator(String discriminator) {
 		this.discriminator = discriminator;
 	}
+
 	public void setEmail(String email) {
+		if (email.isEmpty() || email.isBlank()) {
+			throw new IllegalArgumentException("email van de gebruiker moet ingevuld zijn.");
+		}
 		this.email = email;
 	}
+
 	public void setNormalizedEmail(String normalizedEmail) {
+		if (normalizedEmail.isEmpty() || normalizedEmail.isBlank()) {
+			throw new IllegalArgumentException("email van de gebruiker moet ingevuld zijn.");
+		}
 		this.normalizedEmail = normalizedEmail;
 	}
+
 	private void setEmailConfirmed(boolean emailConfirmed) {
 		this.emailConfirmed = emailConfirmed;
 	}
+
 	private void setPhoneNumberConfirmed(boolean phoneNumberConfirmed) {
 		this.phoneNumberConfirmed = phoneNumberConfirmed;
 	}
+
 	private void setLockoutEnabled(boolean lockoutEnabled) {
 		this.lockoutEnabled = lockoutEnabled;
 	}
+
 	private void setTwoFactorEnabled(boolean twoFactorEnabled) {
 		this.twoFactorEnabled = twoFactorEnabled;
 	}
+
 	private void setAccessFailedCount(int accessFailedCount) {
 		this.accessFailedCount = accessFailedCount;
 	}
+
 	private void setPasswoordHash(String passwoordHash) {
 		this.passwoordHash = passwoordHash;
 	}
 
 	private void setNormalizedUserName(String normalizedUserName) {
+		if (normalizedUserName.isEmpty() || normalizedUserName.isBlank()) {
+			throw new IllegalArgumentException("userName van de gebruiker moet ingevuld zijn.");
+		}
 		this.normalizedUserName = normalizedUserName;
 	}
 
@@ -273,6 +327,82 @@ public class Gebruiker {
 		this.concurrencyStamp = concurrencyStamp;
 	}
 
+	public void addInschrijvingen(SessieGebruiker sessieGebruiker) {
+		this.inschrijvingen.add(sessieGebruiker);
+	}
+
+	public int pasGebruikerAan(String voornaam, String achternaam, String userName, String passwoord, String email,
+			Long idNummer, GebruikerType type, StatusType status) {
+		int veranderingen = 0;
+		if (!userName.equals(getUserName())) {
+			setUserName(userName);
+			setNormalizedUserName(userName);
+			veranderingen++;
+		}
+		if (!idNummer.equals(getIdNumber())) {
+			setIdNumber(idNummer);
+			veranderingen++;
+
+		}
+		if (!voornaam.equals(getVoornaam())) {
+			setVoornaam(voornaam);
+			veranderingen++;
+
+		}
+		if (!achternaam.equals(getAchternaam())) {
+			setAchternaam(achternaam);
+			veranderingen++;
+
+		}
+		if (!type.equals(getType())) {
+			setType(type);
+			if (type.equals(GebruikerType.GEBRUIKER)) {
+				this.discriminator = "Gebruiker";
+			} else {
+				this.discriminator = "Verantwoordelijke";
+			}
+			veranderingen++;
+
+		}
+		if (!status.equals(getStatus())) {
+			setStatus(status);
+			veranderingen++;
+
+		}
+		if (!email.equals(getEmail())) {
+			setEmail(email);
+			setNormalizedEmail(email);
+			setEmailConfirmed(true);
+			veranderingen++;
+		}
+		setPhoneNumberConfirmed(false);
+		setLockoutEnabled(false);
+		setTwoFactorEnabled(false);
+		setAccessFailedCount(0);
+		if (passwoord.isEmpty() || passwoord.isBlank()) {
+
+		} else {
+			try {
+				setPasswoordHash(PasswoordHasher.generateStorngPasswordHash(passwoord));
+				setSecurityStamp(UUID.randomUUID().toString());
+				veranderingen++;
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidKeySpecException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (veranderingen > 0) {
+			setConcurrencyStamp(UUID.randomUUID().toString());
+		}
+		return veranderingen;
+	}
+	public void genereerNieuwId() {
+		setId(UUID.randomUUID().toString().toUpperCase());
+	}
+	
 	@Override
 	public String toString() {
 		return "Gebruiker [id=" + id + ", userName=" + userName + ", idNumber=" + idNumber + ", voornaam=" + voornaam
@@ -347,5 +477,5 @@ public class Gebruiker {
 			return false;
 		return true;
 	}
-	
+
 }

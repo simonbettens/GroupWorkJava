@@ -12,6 +12,7 @@ open module JpaEnJavaFXEnTesten {
 	requires mockito.junit.jupiter;
 	requires org.mockito;
 	requires org.junit.jupiter.params;
+	requires java.desktop;
 	
 	exports ui;
 	exports main;

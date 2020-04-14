@@ -77,6 +77,9 @@ public class SessieKalender implements Serializable{
 	public List<Sessie> getSessies() {
 		return sessies;
 	}
+	public void addSessie(Sessie sessie) {
+		this.sessies.add(sessie);
+	} 
 	
 	
 }

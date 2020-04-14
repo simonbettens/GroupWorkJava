@@ -1,10 +1,13 @@
 package main;
 
+import controllers.GebruikerController;
 import gui.LoginSchermController;
 import gui.LoginSchermGridPaneController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import repository.GebruikerDaoJpa;
+import repository.InitData;
 import ui.ConsoleApp;
 
 
@@ -18,9 +21,10 @@ import ui.ConsoleApp;
 	public class StartUpUI extends Application {
 		@Override
 		public void start(Stage primaryStage) {
-			
+			InitData invoerdata = new InitData();
+			GebruikerController gController = new GebruikerController(new GebruikerDaoJpa());
 				//LoginSchermController root = new LoginSchermController();
-			LoginSchermGridPaneController root = new LoginSchermGridPaneController();
+			LoginSchermGridPaneController root = new LoginSchermGridPaneController(gController);
 				//Parent root = FXMLLoader.load(getClass().getResource("LoginScherm.fxml"));
 				Scene scene = new Scene(root);
 			//	root.prefHeightProperty().bind(scene.heightProperty());
