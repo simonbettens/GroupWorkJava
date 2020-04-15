@@ -20,6 +20,9 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 @Entity(name = "Gebruiker")
 @NamedQueries({
 		@NamedQuery(name = "Gebruiker.findByUsername", query = "select g from Gebruiker g where g.userName = :username") })
@@ -83,7 +86,14 @@ public class Gebruiker {
 	private int statusTypeValue;
 	@Transient
 	private StatusType statusType;
-
+	@Transient
+	 private final SimpleStringProperty volledigeNaamProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty gebruikerNaamProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty typeProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty statusProperty = new SimpleStringProperty();
 	@PostLoad
 	private void fillTransientEnums() {
 		if (gebruikersTypeValue > 0) {
@@ -105,7 +115,7 @@ public class Gebruiker {
 			this.statusTypeValue = statusType.getStatusTypeValue();
 		}
 	}
-
+	
 	// voor jpa
 	public Gebruiker() {
 	}
@@ -232,6 +242,25 @@ public class Gebruiker {
 	public void setId(String id) {
 		this.id = id;
 	}
+	public SimpleStringProperty getVolledigeNaamProperty() {
+		volledigeNaamProperty.set(getVolledigeNaam());
+		return volledigeNaamProperty;
+	}
+
+	public SimpleStringProperty getGebruikerNaamProperty() {
+		gebruikerNaamProperty.set(getUserName());
+		return gebruikerNaamProperty;
+	}
+
+	public SimpleStringProperty getTypeProperty() {
+		typeProperty.set(GebruikerType.toString(getType()));
+		return typeProperty;
+	}
+
+	public SimpleStringProperty getStatusProperty() {
+		statusProperty.set(StatusType.toString(getStatus()));
+		return statusProperty;
+	}
 
 	private void setSessieGebruikers(List<SessieGebruiker> inschrijvingen) {
 		this.inschrijvingen = inschrijvingen;
@@ -242,6 +271,7 @@ public class Gebruiker {
 			throw new IllegalArgumentException("voornaam van de gebruiker moet ingevuld zijn.");
 		}
 		this.voornaam = voornaam;
+		volledigeNaamProperty.set(getVolledigeNaam());
 	}
 
 	private void setAchternaam(String achternaam) {
@@ -249,14 +279,19 @@ public class Gebruiker {
 			throw new IllegalArgumentException("achternaam van de gebruiker moet ingevuld zijn.");
 		}
 		this.achternaam = achternaam;
+		volledigeNaamProperty.set(getVolledigeNaam());
 	}
 
 	private void setType(GebruikerType type) {
 		this.gebruikersType = type;
+		typeProperty.set(GebruikerType.toString(getType()));
+
 	}
 
 	private void setStatus(StatusType status) {
 		this.statusType = status;
+		statusProperty.set(StatusType.toString(getStatus()));
+
 	}
 
 	public void setIdNumber(Long idNumber) {
@@ -268,6 +303,7 @@ public class Gebruiker {
 			throw new IllegalArgumentException("userName van de gebruiker moet ingevuld zijn.");
 		}
 		this.userName = userName;
+		gebruikerNaamProperty.set(getUserName());
 	}
 
 	public void setDiscriminator(String discriminator) {
@@ -326,7 +362,7 @@ public class Gebruiker {
 	private void setConcurrencyStamp(String concurrencyStamp) {
 		this.concurrencyStamp = concurrencyStamp;
 	}
-
+	
 	public void addInschrijvingen(SessieGebruiker sessieGebruiker) {
 		this.inschrijvingen.add(sessieGebruiker);
 	}

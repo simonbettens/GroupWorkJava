@@ -42,7 +42,7 @@
                <font>
                   <Font size="14.0" />
                </font></PasswordField>
-            <Button id="inlogButton" fx:id="buttonLogin" layoutX="148.0" layoutY="313.0" mnemonicParsing="false" onMouseClicked="#login" onMouseEntered="#hoverLogin" onMouseExited="#hoverExitLogin" prefHeight="36.0" prefWidth="61.0" stylesheets="@../styles/styles.css" text="Login" />
+            <Button fx:id="buttonLogin" layoutX="148.0" layoutY="313.0" mnemonicParsing="false" onMouseClicked="#login" onMouseEntered="#hoverLogin" onMouseExited="#hoverExitLogin" prefHeight="36.0" prefWidth="61.0" styleClass="greyButton" stylesheets="@../styles/styles.css" text="Login" />
             <Hyperlink id="hlForgotPassword" fx:id="hlForgotPassword" focusTraversable="false" layoutX="119.0" layoutY="422.0" onMouseClicked="#forgotPassword" onMouseEntered="#hoverForgotPassword" onMouseExited="#hoverExitForgotPassword" text="Forgot password?">
                <font>
                   <Font size="14.0" />

@@ -32,7 +32,15 @@ public class ApplicatieController extends HBox{
 		this.setId("background");
 		
 	}
+	public void update(int welkeDeelScherm) {
+		this.getChildren().removeAll(menu,(Node) deelScherm);
+		buildGui(welkeDeelScherm);
+	}
 	
+	public GebruikerController getGebruikerController() {
+		return gebruikerController;
+	}
+
 	public Gebruiker getIngelogdeGebruiker() {
 		return ingelogdeGebruiker;
 	}

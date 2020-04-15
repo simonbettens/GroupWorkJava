@@ -23,4 +23,8 @@ public enum StatusType {
           .findFirst()
           .orElseThrow(IllegalArgumentException::new);
     }
+    public static String toString(StatusType t) {
+    	String enumStringLowerCase = t.toString().toLowerCase();
+		return enumStringLowerCase.substring(0, 1).toUpperCase() + enumStringLowerCase.substring(1);
+    }
 }

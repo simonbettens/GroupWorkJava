@@ -198,14 +198,6 @@ public class LoginSchermGridPaneController extends GridPane {
         stage.setX(bounds.getMinX());
         stage.setY(bounds.getMinY());
         stage.setMaximized(true);
-        //je kan enkel met dit scherm bezig zijn
-        //nieuwSpelStage.initModality(Modality.WINDOW_MODAL);
-        // Specifies the owner Window (parent) for new window
-        //nieuwSpelStage.initOwner(achtergrond);
-        // Set position of second window, related to primary window.
-        //nieuwSpelStage.setX(achtergrond.getX() + 200);
-        //nieuwSpelStage.setY(achtergrond.getY() + 100);
-        //nieuwSpelScherm.getStylesheets().addAll(this.getClass().getResource("/css/style.css").toExternalForm());
 		scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
         stage.show();
 	}

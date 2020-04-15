@@ -64,11 +64,9 @@ public class GebruikerController {
 	}
 	
 
-	public void setGeselecteerdeGebruiker(String volledigeNaam) {
-		Gebruiker geselecteerdeGebruiker = gebruikerLijst.stream()
-				.filter(g -> g.getVolledigeNaam().equals(volledigeNaam)).findFirst().orElse(null);
-		firePropertyChange("geselecteerdeGebruiker", this.geselecteerdeGebruiker, geselecteerdeGebruiker);
-		this.geselecteerdeGebruiker = geselecteerdeGebruiker;
+	public void setGeselecteerdeGebruiker(Gebruiker gebruiker) {
+		firePropertyChange("geselecteerdeGebruiker", this.geselecteerdeGebruiker, gebruiker);
+		this.geselecteerdeGebruiker = gebruiker;
 	}
 
 	public Gebruiker getGebruikerById(String id) {
