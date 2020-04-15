@@ -12,29 +12,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import repository.GebruikerDaoJpa;
 
 public class LoginSchermGridPaneController extends GridPane {
-	private GebruikerController gebruikerController;
-	public LoginSchermGridPaneController(GebruikerController gController) {
-
-		this.gebruikerController = gController;
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginSchermTest.fxml"));
-		loader.setController(this);
-		loader.setRoot(this);
-		
-		try {
-			loader.load();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
     @FXML
     private ImageView imageItLab;
@@ -65,6 +54,38 @@ public class LoginSchermGridPaneController extends GridPane {
 
     @FXML
     private ImageView imageLock;
+    @FXML
+    private Label lblFout;
+    
+	private GebruikerController gebruikerController;
+	
+	public LoginSchermGridPaneController() {
+		this.gebruikerController = new GebruikerController(new GebruikerDaoJpa());
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginSchermTest.fxml"));
+		loader.setController(this);
+		loader.setRoot(this);
+		
+		try {
+			loader.load();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		lblFout.setText("");
+		fieldPassword.setFocusTraversable(true);
+		fieldUsername.setOnKeyReleased(e->{
+			if(e.getCode() == KeyCode.TAB) {
+				lblFout.setText("");
+				fieldPassword.requestFocus();
+			}
+		});
+		fieldPassword.setOnKeyReleased(e->{
+			if(e.getCode() == KeyCode.ENTER) {
+				lblFout.setText("");
+				login(null);
+			}
+		});
+	}
+
 
     @FXML
     void forgotPassword(MouseEvent event) {
@@ -112,16 +133,21 @@ public class LoginSchermGridPaneController extends GridPane {
     }
 
     @FXML
-    void login(MouseEvent event) {
+    public void login(MouseEvent event) {
     	String gebruikerNaam = this.fieldUsername.getText();
 		String wachtwoord = this.fieldPassword.getText();
 		Gebruiker gebruiker = null;
 		boolean gelijkaardig = false;
+		
 		if (gebruikerNaam.isEmpty() || gebruikerNaam.isBlank()) {
 			System.out.println("Gebruikernaam is niet ingevuld");
+			lblFout.setText("Gebruikernaam is niet ingevuld");
+			return;
 		} else {
 			if (wachtwoord.isEmpty() || wachtwoord.isBlank()) {
 				System.out.println("Wachtwoordveld is niet ingevuld");
+				lblFout.setText("Wachtwoordveld is niet ingevuld");
+				return;
 			} else {
 				try {
 					gebruiker = gebruikerController.getGebruikerByUsername(gebruikerNaam);
@@ -129,20 +155,28 @@ public class LoginSchermGridPaneController extends GridPane {
 						gelijkaardig = PasswoordHasher.verifyPasswordHash(gebruiker.getPasswoordHash(), wachtwoord);
 					}else {
 						System.out.println("Enkel (hoofd-)verantwoordelijken kunnen zich inloggen op deze applicatie");
+						lblFout.setText("Enkel (hoofd-)verantwoordelijke \nkunnen zich inloggen");
+						return;
 					}
 				}catch(EntityNotFoundException e) {
 					System.out.println("Gebruiker bestaat niet");
+					lblFout.setText("Gebruiker bestaat niet");
+					return;
 				}
 				catch(Exception e) {
 					System.out.println("Er ging iets anders mis" + e.getMessage());
+					lblFout.setText("Er ging iets anders mis");
+					return;
 				}
 			}
 		}
 		if(gelijkaardig) {
 			System.out.println("Wachtwoord komt overeen en gebruiker is ingelogd");
 			gebruikerController.setIngelogdeGebruiker(gebruiker);
+			lblFout.setText("");
 		}else{
 			System.out.println("Gebruiker niet ingelogd");
+			lblFout.setText("Wachtwoord is niet correct");
 		}
 
     }

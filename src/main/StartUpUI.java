@@ -1,7 +1,6 @@
 package main;
 
 import controllers.GebruikerController;
-import gui.LoginSchermController;
 import gui.LoginSchermGridPaneController;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -22,9 +21,8 @@ import ui.ConsoleApp;
 		@Override
 		public void start(Stage primaryStage) {
 			InitData invoerdata = new InitData();
-			GebruikerController gController = new GebruikerController(new GebruikerDaoJpa());
 				//LoginSchermController root = new LoginSchermController();
-			LoginSchermGridPaneController root = new LoginSchermGridPaneController(gController);
+			LoginSchermGridPaneController root = new LoginSchermGridPaneController();
 				//Parent root = FXMLLoader.load(getClass().getResource("LoginScherm.fxml"));
 				Scene scene = new Scene(root);
 			//	root.prefHeightProperty().bind(scene.heightProperty());

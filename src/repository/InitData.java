@@ -34,7 +34,7 @@ public class InitData {
 		this.aankondingRepo = new GenericDaoJpa<>(Aankondiging.class);
 		this.sessiegebruikerRepo = new GenericDaoJpa<>(SessieGebruiker.class);
 		this.mediaRepo = new GenericDaoJpa<>(Media.class);
-		run();
+		//run();
 		showResult();
 	}
 
