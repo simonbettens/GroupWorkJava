@@ -77,6 +77,7 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 			throw new RuntimeException(e);
 		}
 		lblError.setText("");
+		lblError.setVisible(false);
 		typeObs = FXCollections.observableArrayList(
 				typeList.stream().distinct().map(t -> GebruikerType.toString(t)).collect(Collectors.toList()));
 		statusObs = FXCollections.observableArrayList(
@@ -111,7 +112,7 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 	@FXML
 	public void opslaan(ActionEvent event) {
 		try {
-			lblError.setText("");
+
 			int typeIndex = cbType.getSelectionModel().getSelectedIndex();
 			int statusIndex = cbStatus.getSelectionModel().getSelectedIndex();
 			if(statusIndex == -1) {
@@ -136,9 +137,11 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 			
 			bewerkGebruiker();
 		} catch (NumberFormatException e) {
+			lblError.setVisible(true);
 			lblError.setText("Idnummer moet een nummer zijn");
 			System.out.println("Fout bij het parsen");
 		} catch (IllegalArgumentException e) {
+			lblError.setVisible(true);
 			lblError.setText(e.getMessage());
 			System.out.println(e.getMessage());
 		} finally {
@@ -166,6 +169,7 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 
 	public void bewerkGebruiker() {
 		isEdit = true;
+		lblError.setVisible(false);
 		lblError.setText("");
 		txfAchternaam.setText("");
 		txfVoornaam.setText("");
@@ -177,7 +181,7 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 		cbType.getSelectionModel().clearSelection();
 		btnOpslaan.setText("Wijzigingen opslaan");
 		lblError.setText("");
-		verbergButtonVerwijder(!isEdit);
+		btnVerwijder.setDisable(!isEdit);
 	}
 
 	public void maakGebruiker() {
@@ -192,17 +196,14 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 		cbStatus.getSelectionModel().clearSelection();
 		cbType.getSelectionModel().clearSelection();
 		btnOpslaan.setText("Maak gebruiker");
-		verbergButtonVerwijder(!isEdit);
-	}
-
-	public void verbergButtonVerwijder(boolean waarde) {
-		btnVerwijder.setDisable(waarde);
+		btnVerwijder.setDisable(!isEdit);
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
 		Gebruiker gebruiker = (Gebruiker) evt.getNewValue();
+		bewerkGebruiker();
 		if (gebruiker != null) {
 			txfAchternaam.setText(gebruiker.getAchternaam());
 			txfVoornaam.setText(gebruiker.getVoornaam());
