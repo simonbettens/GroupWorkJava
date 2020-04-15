@@ -112,30 +112,41 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 	@FXML
 	public void opslaan(ActionEvent event) {
 		try {
-
-			int typeIndex = cbType.getSelectionModel().getSelectedIndex();
-			int statusIndex = cbStatus.getSelectionModel().getSelectedIndex();
-			if(statusIndex == -1) {
-				throw new IllegalArgumentException("Je moet de status selecteren");
-			}
-			if(typeIndex == -1) {
-				throw new IllegalArgumentException("Je moet het gebruikerstype selecteren");
-			}
+			
+			
 			
 			
 			if (isEdit) {
+				if(gc.getGeselecteerdeGebruiker() == null) {
+					throw new IllegalArgumentException("Je moet een gebruiker selecteren");
+				}
+				int typeIndex = cbType.getSelectionModel().getSelectedIndex();
+				int statusIndex = cbStatus.getSelectionModel().getSelectedIndex();
+				if(statusIndex == -1) {
+					throw new IllegalArgumentException("Je moet de status selecteren");
+				}
+				if(typeIndex == -1) {
+					throw new IllegalArgumentException("Je moet het gebruikerstype selecteren");
+				}
 				gc.pasGebruikerAan(txfVoornaam.getText(), txfAchternaam.getText(), txfUsername.getText(),
 						txfWachtwoord.getText(), txfEmail.getText(), Long.valueOf(txfIdNummer.getText()),
 						typeList.get(typeIndex),
 						statusList.get(statusIndex));
 			} else {
+				int typeIndex = cbType.getSelectionModel().getSelectedIndex();
+				int statusIndex = cbStatus.getSelectionModel().getSelectedIndex();
+				if(statusIndex == -1) {
+					throw new IllegalArgumentException("Je moet de status selecteren");
+				}
+				if(typeIndex == -1) {
+					throw new IllegalArgumentException("Je moet het gebruikerstype selecteren");
+				}
 				gc.maakGebruiker(txfVoornaam.getText(), txfAchternaam.getText(), txfUsername.getText(),
 						txfWachtwoord.getText(), txfEmail.getText(), Long.valueOf(txfIdNummer.getText()),
 						typeList.get(typeIndex),
 						statusList.get(statusIndex));
+				bewerkGebruiker();
 			}
-			
-			bewerkGebruiker();
 		} catch (NumberFormatException e) {
 			lblError.setVisible(true);
 			lblError.setText("Idnummer moet een nummer zijn");
@@ -203,7 +214,6 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 	public void propertyChange(PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
 		Gebruiker gebruiker = (Gebruiker) evt.getNewValue();
-		bewerkGebruiker();
 		if (gebruiker != null) {
 			txfAchternaam.setText(gebruiker.getAchternaam());
 			txfVoornaam.setText(gebruiker.getVoornaam());

@@ -39,10 +39,11 @@ public class GebruikerController {
 		gebruikerLijst = gebruikerRepository.getAll();
 		gebruikerObsLijst = FXCollections.observableArrayList(gebruikerLijst);
 		filteredGebruikerLijst = new FilteredList<>(gebruikerObsLijst, e -> true);
-		sortedGebruikerLijst = new SortedList<Gebruiker>(filteredGebruikerLijst,Comparator.comparing(Gebruiker::getVolledigeNaam)
-	    		.thenComparing(Gebruiker::getUserName).thenComparing(Gebruiker::getType));
+		sortedGebruikerLijst = new SortedList<Gebruiker>(filteredGebruikerLijst,
+				Comparator.comparing(Gebruiker::getVolledigeNaam).thenComparing(Gebruiker::getUserName)
+						.thenComparing(Gebruiker::getType));
 	}
-	
+
 	public Gebruiker getIngelogdeGebruiker() {
 		return ingelogdeGebruiker;
 	}
@@ -50,11 +51,11 @@ public class GebruikerController {
 	public Gebruiker getGeselecteerdeGebruiker() {
 		return geselecteerdeGebruiker;
 	}
-	
+
 	public ObservableList<Gebruiker> getSortedGebruikerLijst() {
 		return sortedGebruikerLijst;
 	}
-	
+
 	private void setGebruikerRepository(GebruikerDaoJpa gebruikerRepository) {
 		this.gebruikerRepository = gebruikerRepository;
 	}
@@ -62,7 +63,6 @@ public class GebruikerController {
 	public void setIngelogdeGebruiker(Gebruiker ingelogdeGebruiker) {
 		this.ingelogdeGebruiker = ingelogdeGebruiker;
 	}
-	
 
 	public void setGeselecteerdeGebruiker(Gebruiker gebruiker) {
 		firePropertyChange("geselecteerdeGebruiker", this.geselecteerdeGebruiker, gebruiker);
@@ -119,12 +119,15 @@ public class GebruikerController {
 			GenericDaoJpa.startTransaction();
 			gebruikerRepository.update(this.geselecteerdeGebruiker);
 			GenericDaoJpa.commitTransaction();
+			this.geselecteerdeGebruiker = gebruiker;
 			firePropertyChange("geselecteerdeGebruiker", this.geselecteerdeGebruiker, gebruiker);
 		}
 	}
-	private void firePropertyChange(String welke,Gebruiker oude,Gebruiker nieuwe) {
-		subject.firePropertyChange(welke,oude, nieuwe);
+
+	private void firePropertyChange(String welke, Gebruiker oude, Gebruiker nieuwe) {
+		subject.firePropertyChange(welke, oude, nieuwe);
 	}
+
 	public void addPropertyChangeListener(PropertyChangeListener pcl) {
 		subject.addPropertyChangeListener(pcl);
 		pcl.propertyChange(new PropertyChangeEvent(pcl, "geselecteerdeGebruiker", null, this.geselecteerdeGebruiker));
