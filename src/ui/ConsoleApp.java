@@ -23,7 +23,7 @@ public class ConsoleApp {
 	private Scanner sc = new Scanner(System.in);
 	public GebruikerController gc;
 	public ConsoleApp() {
-		gc = new GebruikerController(new GebruikerDaoJpa());
+		gc = new GebruikerController();
 		run();
 	}
 

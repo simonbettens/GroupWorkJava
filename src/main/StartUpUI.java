@@ -27,7 +27,7 @@ import ui.ConsoleApp;
 				Scene scene = new Scene(root);
 			//	root.prefHeightProperty().bind(scene.heightProperty());
                // root.prefWidthProperty().bind(scene.widthProperty());
-				//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+				scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
 				primaryStage.setTitle("Login");
 				primaryStage.setScene(scene);
 				primaryStage.setResizable(false);

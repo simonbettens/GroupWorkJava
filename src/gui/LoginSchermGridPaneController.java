@@ -10,6 +10,8 @@ import domein.GebruikerType;
 import domein.PasswoordHasher;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -21,6 +23,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
 import repository.GebruikerDaoJpa;
 
 public class LoginSchermGridPaneController extends GridPane {
@@ -60,7 +64,7 @@ public class LoginSchermGridPaneController extends GridPane {
 	private GebruikerController gebruikerController;
 	
 	public LoginSchermGridPaneController() {
-		this.gebruikerController = new GebruikerController(new GebruikerDaoJpa());
+		this.gebruikerController = new GebruikerController();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginSchermTest.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
@@ -174,6 +178,7 @@ public class LoginSchermGridPaneController extends GridPane {
 			System.out.println("Wachtwoord komt overeen en gebruiker is ingelogd");
 			gebruikerController.setIngelogdeGebruiker(gebruiker);
 			lblFout.setText("");
+			switchScherm();
 		}else{
 			System.out.println("Gebruiker niet ingelogd");
 			lblFout.setText("Wachtwoord is niet correct");
@@ -181,7 +186,32 @@ public class LoginSchermGridPaneController extends GridPane {
 
     }
 
-    @FXML
+    private void switchScherm() {
+        ApplicatieController nss = new ApplicatieController(gebruikerController);
+        String s = "It-lab";
+        Rectangle2D bounds= Screen.getPrimary().getVisualBounds();
+        Scene scene = new Scene(nss, bounds.getWidth(), bounds.getHeight());
+        Stage stage = (Stage) this.getScene().getWindow();
+        stage.setResizable(true);
+        stage.setTitle(s);
+        stage.setScene(scene);
+        stage.setX(bounds.getMinX());
+        stage.setY(bounds.getMinY());
+        stage.setMaximized(true);
+        //je kan enkel met dit scherm bezig zijn
+        //nieuwSpelStage.initModality(Modality.WINDOW_MODAL);
+        // Specifies the owner Window (parent) for new window
+        //nieuwSpelStage.initOwner(achtergrond);
+        // Set position of second window, related to primary window.
+        //nieuwSpelStage.setX(achtergrond.getX() + 200);
+        //nieuwSpelStage.setY(achtergrond.getY() + 100);
+        //nieuwSpelScherm.getStylesheets().addAll(this.getClass().getResource("/css/style.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
+        stage.show();
+	}
+
+
+	@FXML
     void rightPaneClicked(MouseEvent event) {
 
     }

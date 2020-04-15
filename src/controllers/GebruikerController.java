@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,19 +13,23 @@ import domein.GebruikerType;
 import domein.StatusType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import repository.GebruikerDaoJpa;
 import repository.GenericDaoJpa;
 
 public class GebruikerController {
 	private List<Gebruiker> gebruikerLijst;
-	private ObservableList<String> gebruikerObsLijst;
+	private ObservableList<Gebruiker> gebruikerObsLijst;
+	private FilteredList<Gebruiker> filteredGebruikerLijst;
+	private SortedList<Gebruiker> sortedGebruikerLijst;
 	private Gebruiker ingelogdeGebruiker;
 	private Gebruiker geselecteerdeGebruiker;
 	private PropertyChangeSupport subject;
 	public GebruikerDaoJpa gebruikerRepository;
 
-	public GebruikerController(GebruikerDaoJpa gebruikerRepository) {
-		this.gebruikerRepository = gebruikerRepository;
+	public GebruikerController() {
+		setGebruikerRepository(new GebruikerDaoJpa());
 		gebruikerLijst = new ArrayList<>();
 		subject = new PropertyChangeSupport(this);
 		vulLijsten();
@@ -32,17 +37,12 @@ public class GebruikerController {
 
 	private void vulLijsten() {
 		gebruikerLijst = gebruikerRepository.getAll();
-		setObservableList();
+		gebruikerObsLijst = FXCollections.observableArrayList(gebruikerLijst);
+		filteredGebruikerLijst = new FilteredList<>(gebruikerObsLijst, e -> true);
+		sortedGebruikerLijst = new SortedList<Gebruiker>(filteredGebruikerLijst,Comparator.comparing(Gebruiker::getVolledigeNaam)
+	    		.thenComparing(Gebruiker::getUserName).thenComparing(Gebruiker::getType));
 	}
-
-	private void setObservableList() {
-		gebruikerObsLijst = FXCollections.observableArrayList(getGebruikers());
-	}
-
-	private List<String> getGebruikers() {
-		return gebruikerLijst.stream().distinct().map(Gebruiker::getVolledigeNaam).collect(Collectors.toList());
-	}
-
+	
 	public Gebruiker getIngelogdeGebruiker() {
 		return ingelogdeGebruiker;
 	}
@@ -50,10 +50,19 @@ public class GebruikerController {
 	public Gebruiker getGeselecteerdeGebruiker() {
 		return geselecteerdeGebruiker;
 	}
+	
+	public ObservableList<Gebruiker> getSortedGebruikerLijst() {
+		return sortedGebruikerLijst;
+	}
+	
+	private void setGebruikerRepository(GebruikerDaoJpa gebruikerRepository) {
+		this.gebruikerRepository = gebruikerRepository;
+	}
 
 	public void setIngelogdeGebruiker(Gebruiker ingelogdeGebruiker) {
 		this.ingelogdeGebruiker = ingelogdeGebruiker;
 	}
+	
 
 	public void setGeselecteerdeGebruiker(String volledigeNaam) {
 		Gebruiker geselecteerdeGebruiker = gebruikerLijst.stream()
@@ -73,7 +82,7 @@ public class GebruikerController {
 	public void deleteGebruiker() {
 		Gebruiker teVerwijderenGebruiker = this.geselecteerdeGebruiker;
 		gebruikerLijst.remove(teVerwijderenGebruiker);
-		gebruikerObsLijst.remove(teVerwijderenGebruiker.getVolledigeNaam());
+		gebruikerObsLijst.remove(teVerwijderenGebruiker);
 		GenericDaoJpa.startTransaction();
 		gebruikerRepository.delete(teVerwijderenGebruiker);
 		GenericDaoJpa.commitTransaction();
@@ -100,7 +109,7 @@ public class GebruikerController {
 		}
 		insertGebruiker(gebruiker);
 		gebruikerLijst.add(gebruiker);
-		gebruikerObsLijst.add(gebruiker.getVolledigeNaam());
+		gebruikerObsLijst.add(gebruiker);
 	}
 
 	public void pasGebruikerAan(String voornaam, String achternaam, String userName, String passwoord, String email,
