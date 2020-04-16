@@ -94,6 +94,7 @@ public class Gebruiker {
 	private final SimpleStringProperty typeProperty = new SimpleStringProperty();
 	@Transient
 	private final SimpleStringProperty statusProperty = new SimpleStringProperty();
+	
 	@PostLoad
 	private void fillTransientEnums() {
 		if (gebruikersTypeValue > 0) {
@@ -284,12 +285,14 @@ public class Gebruiker {
 
 	private void setType(GebruikerType type) {
 		this.gebruikersType = type;
+		this.gebruikersTypeValue = type.getGebruikersTypeValue();
 		typeProperty.set(GebruikerType.toString(getType()));
 
 	}
 
 	private void setStatus(StatusType status) {
 		this.statusType = status;
+		this.statusTypeValue = status.getStatusTypeValue();
 		statusProperty.set(StatusType.toString(getStatus()));
 
 	}
