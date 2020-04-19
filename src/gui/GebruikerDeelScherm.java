@@ -16,7 +16,7 @@ public class GebruikerDeelScherm extends HBox implements DeelScherm {
 		this.gdc = new GebruikerDetailsController(this);
 		this.glc = new GebruikerLijstController(this,gdc);
 		
-		this.setAlignment(Pos.BOTTOM_CENTER);
+		this.setAlignment(Pos.CENTER);
 		this.getChildren().add(glc);
 		this.getChildren().add(gdc);
 		this.setSpacing(10);

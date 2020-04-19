@@ -40,6 +40,10 @@ public class ApplicatieController extends HBox{
 	public GebruikerController getGebruikerController() {
 		return gebruikerController;
 	}
+	
+	public SessieController getSessieController() {
+		return sessieController;
+	}
 
 	public Gebruiker getIngelogdeGebruiker() {
 		return ingelogdeGebruiker;

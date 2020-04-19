@@ -10,8 +10,6 @@ import javafx.scene.layout.GridPane;
 public class StartDeelSchermController extends GridPane implements DeelScherm{
 	@FXML
 	private Label lblWelkom;
-	@FXML
-	private Label lblNaam;
 	private ApplicatieController parent;
 	
 	@Override
@@ -27,7 +25,7 @@ public class StartDeelSchermController extends GridPane implements DeelScherm{
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		lblNaam.setText(parent.getIngelogdeGebruiker().getVolledigeNaam());
+		lblWelkom.setText(lblWelkom.getText() + " " + parent.getIngelogdeGebruiker().getVolledigeNaam());
 	}
 
 }

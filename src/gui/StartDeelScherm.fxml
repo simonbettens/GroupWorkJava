@@ -8,7 +8,6 @@
 <fx:root alignment="CENTER" gridLinesVisible="false" prefHeight="500.0" prefWidth="700.0" type="GridPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
     <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
@@ -17,6 +16,5 @@
   </rowConstraints>
    <children>
       <Label fx:id="lblWelkom" text="Welkom" />
-      <Label fx:id="lblNaam" alignment="CENTER_RIGHT" contentDisplay="CENTER" GridPane.columnIndex="1" />
    </children>
 </fx:root>

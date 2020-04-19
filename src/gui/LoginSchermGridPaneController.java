@@ -190,15 +190,14 @@ public class LoginSchermGridPaneController extends GridPane {
         ApplicatieController nss = new ApplicatieController(gebruikerController);
         String s = "It-lab";
         Rectangle2D bounds= Screen.getPrimary().getVisualBounds();
-        Scene scene = new Scene(nss, bounds.getWidth(), bounds.getHeight());
+        Scene scene = new Scene(nss, 1500, 900);
         Stage stage = (Stage) this.getScene().getWindow();
-        stage.setResizable(true);
         stage.setTitle(s);
         stage.setScene(scene);
-        stage.setX(bounds.getMinX());
-        stage.setY(bounds.getMinY());
-        stage.setMaximized(true);
+        stage.setX((bounds.getWidth() - stage.getWidth()) / 2);
+        stage.setY((bounds.getHeight() - stage.getHeight()) / 2);
 		scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
+		stage.setResizable(false);
         stage.show();
 	}
 
