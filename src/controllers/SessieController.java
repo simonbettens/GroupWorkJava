@@ -30,7 +30,8 @@ public class SessieController {
 	// Properties
 	private SessieKalenderDao sessiekalenderRepository;
 	private SessieDao sessieRepository;
-	private PropertyChangeSupport subject;
+	private PropertyChangeSupport subjectSessie;
+	private PropertyChangeSupport subjectSessieKalender;
 	private Gebruiker ingelogdeGebruiker;
 	private Maand gekozenMaand;
 	// Lijst van sessieKalenders
@@ -50,7 +51,8 @@ public class SessieController {
 		setSessiekalenderRepository(new SessieKalenderDaoJpa());
 		setSessieRepository(new SessieDaoJpa());
 		setIngelogdeGebruiker(ingelogdeGebruiker);
-		this.subject = new PropertyChangeSupport(this);
+		this.subjectSessie = new PropertyChangeSupport(this);
+		this.subjectSessieKalender = new PropertyChangeSupport(this);
 		setSessieKalender("0");
 		gekozenMaand = Maand.of(LocalDate.now().getMonthValue());
 		vulLijsten();
@@ -66,21 +68,28 @@ public class SessieController {
 	}
 
 	private void vulSessieLijsten() {
-		if(ingelogdeGebruiker.getType()==GebruikerType.HOOFDVERANTWOORDELIJKE) {
-			this.sessieLijst = this.gekozenSessieKalender.getSessies();
-		}else {
-			this.sessieLijst = this.gekozenSessieKalender.getSessies().stream()
-					.filter(s->s.getVerantwoordelijke().getId().equals(ingelogdeGebruiker.getId())).collect(Collectors.toList());
+		if (gekozenSessieKalender != null) {
+			if (ingelogdeGebruiker.getType() == GebruikerType.HOOFDVERANTWOORDELIJKE) {
+				this.sessieLijst = this.gekozenSessieKalender.getSessies();
+			} else {
+				this.sessieLijst = this.gekozenSessieKalender.getSessies().stream()
+						.filter(s -> s.getVerantwoordelijke().getId().equals(ingelogdeGebruiker.getId()))
+						.collect(Collectors.toList());
+			}
+			this.sessieObservableLijst = FXCollections.observableArrayList(sessieLijst);
+			this.filteredSessieLijst = new FilteredList<>(sessieObservableLijst, e -> true);
+			this.sortedSessieLijst = new SortedList<Sessie>(filteredSessieLijst,
+					Comparator.comparing(Sessie::getStartDatum).thenComparing(Sessie::getNaam));
 		}
-		this.sessieObservableLijst = FXCollections.observableArrayList(sessieLijst);
-		this.filteredSessieLijst = new FilteredList<>(sessieObservableLijst, e -> true);
-		this.sortedSessieLijst = new SortedList<Sessie>(filteredSessieLijst,
-				Comparator.comparing(Sessie::getStartDatum).thenComparing(Sessie::getNaam));
-		System.out.println(this.sessieLijst.size());
+		else {
+			System.out.println("Sessiekalender is null");
+		}
 	}
+
 	public void zoekOpNaam(String naamWaarde) {
 		veranderFilter(gekozenMaand, naamWaarde);
 	}
+
 	private void veranderFilter(Maand maandWaarde, String naamWaarde) {
 		this.filteredSessieLijst.setPredicate(sessie -> {
 			boolean maandWaardeLeeg = maandWaarde == null;
@@ -143,7 +152,7 @@ public class SessieController {
 				.orElse(null);
 		veranderFilter(gekozenMaand, "");
 	}
-	
+
 	// Sessiekalender methods
 	public void setSessieKalender(String beginjaar) {
 		try {
@@ -165,8 +174,10 @@ public class SessieController {
 			// e.printStackTrace();
 		}
 	}
+
 	public SessieKalender getLaasteSessieKalender() {
-		return this.sessieKalenderLijst.stream().sorted(Comparator.comparing(SessieKalender::getStartDatum).reversed()).findFirst().orElse(null);
+		return this.sessieKalenderLijst.stream().sorted(Comparator.comparing(SessieKalender::getStartDatum).reversed())
+				.findFirst().orElse(null);
 	}
 
 	public void maakNieuweSessieKalender(LocalDate startDatum, LocalDate eindDatum) {
@@ -174,6 +185,29 @@ public class SessieController {
 		GenericDaoJpa.startTransaction();
 		sessiekalenderRepository.insert(sk);
 		GenericDaoJpa.commitTransaction();
+		sessieKalenderLijst.add(sk);
+		sessieKalenderObservableLijst.add(sk.toString());
+		firePropertyChange("gekozenSessieKalender", this.gekozenSessieKalender, sk);
+
+	}
+
+	public void pasSessieKalender(LocalDate startDatum, LocalDate eindDatum) {
+		System.out.println(sessieKalenderLijst.size() + " " + sessieKalenderObservableLijst.size()  );
+		SessieKalender sk = this.gekozenSessieKalender;
+		sessieKalenderLijst.remove(this.gekozenSessieKalender);
+		sessieKalenderObservableLijst.remove(this.gekozenSessieKalender.toString());
+		sk.setStartDatum(startDatum);
+		sk.setEindDatum(eindDatum);
+		GenericDaoJpa.startTransaction();
+		System.out.println(this.gekozenSessieKalender.toString());
+		sessiekalenderRepository.update(this.gekozenSessieKalender);
+		GenericDaoJpa.commitTransaction();
+		sessieKalenderLijst.add(sk);
+		sessieKalenderObservableLijst.add(sk.toString());
+		this.gekozenSessieKalender = sk;
+		firePropertyChange("gekozenSessieKalender", this.gekozenSessieKalender, sk);
+		System.out.println("einde");
+		
 	}
 
 	public void verwijderSessieKalender(String beginjaar) {
@@ -189,6 +223,7 @@ public class SessieController {
 		}
 		return sessieKalenderLijst;
 	}
+
 	public Sessie getSessie() {
 		return sessie;
 	}
@@ -199,19 +234,32 @@ public class SessieController {
 	}
 	// Sessie methods
 
-	
-
-	private void firePropertyChange(String welke, Sessie oude, Sessie nieuwe) {
-		subject.firePropertyChange(welke, oude, nieuwe);
+	private <T> void firePropertyChange(String welke, T oude, T nieuwe) {
+		System.out.println(welke);
+		if(welke.equals("gekozenSessieKalender")) {
+			subjectSessieKalender.firePropertyChange(welke, oude, nieuwe);
+		}
+		else {
+			subjectSessie.firePropertyChange(welke, oude, nieuwe);
+		}
 	}
 
-	public void addPropertyChangeListener(PropertyChangeListener pcl) {
-		subject.addPropertyChangeListener(pcl);
+	public void addPropertyChangeListenerSessie(PropertyChangeListener pcl) {
+		subjectSessie.addPropertyChangeListener(pcl);
 		pcl.propertyChange(new PropertyChangeEvent(pcl, "geselecteerdeSessie", null, this.sessie));
 	}
 
-	public void removePropertyChangeListener(PropertyChangeListener pcl) {
-		subject.removePropertyChangeListener(pcl);
+	public void removePropertyChangeListenerSessie(PropertyChangeListener pcl) {
+		subjectSessie.removePropertyChangeListener(pcl);
+	}
+
+	public  void addPropertyChangeListenerSessieKalender(PropertyChangeListener pcl) {
+		subjectSessieKalender.addPropertyChangeListener(pcl);
+		pcl.propertyChange(new PropertyChangeEvent(pcl, "gekozenSessieKalender", null, this.gekozenSessieKalender));
+	}
+
+	public void removePropertyChangeListenerSessieKalender(PropertyChangeListener pcl) {
+		subjectSessieKalender.removePropertyChangeListener(pcl);
 	}
 
 }

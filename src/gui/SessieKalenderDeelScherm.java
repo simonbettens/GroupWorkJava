@@ -53,7 +53,7 @@ public class SessieKalenderDeelScherm extends HBox implements DeelScherm<Applica
 			this.getChildren().add((Node) linkerPaneel);
 			this.getChildren().add((Node) rechterPaneel);
 			applyLayout();
-		}else {
+		} else {
 			changeBack();
 			changeGui(linkerPaneelChange,rechterPaneelChange);
 		}
