@@ -1,5 +1,5 @@
 package gui;
 
-public interface DeelScherm {
-	void buildGui(ApplicatieController parent);
+public interface  DeelScherm<T> {
+	void buildGui(T parent);
 }

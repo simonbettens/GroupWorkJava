@@ -7,7 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
-public class StartDeelSchermController extends GridPane implements DeelScherm{
+public class StartDeelSchermController extends GridPane implements DeelScherm<ApplicatieController>{
 	@FXML
 	private Label lblWelkom;
 	private ApplicatieController parent;

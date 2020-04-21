@@ -89,7 +89,8 @@ public class ConsoleApp {
 	}
 	
 	private void sessieControllerTest() {
-		SessieController sc = new SessieController();
+		/*
+		SessieController sc = new SessieController(null);
 		SessieKalender sk = sc.geefSessieKalender("0");
 		System.out.println(sk.getStartDatum() + "-" + sk.getEindDatum());
 		sk = sc.geefSessieKalender("2020");
@@ -99,6 +100,7 @@ public class ConsoleApp {
 		SessieKalender sk2 = sc.geefSessieKalender("2018");
 		System.out.println(sk2.getStartDatum());
 		sc.verwijderSessieKalender("2018");
+		*/
 	}
 	
 	private void sluitDatabank() {

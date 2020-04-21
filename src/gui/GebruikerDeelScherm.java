@@ -5,7 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 
-public class GebruikerDeelScherm extends HBox implements DeelScherm {
+public class GebruikerDeelScherm extends HBox implements DeelScherm<ApplicatieController> {
 	private GebruikerController gebruikerController;
 	private GebruikerLijstController glc;
 	private GebruikerDetailsController gdc;

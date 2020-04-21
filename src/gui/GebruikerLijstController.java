@@ -13,12 +13,18 @@ import domein.Gebruiker;
 import javafx.event.ActionEvent;
 
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.TableColumn;
 
 public class GebruikerLijstController extends VBox{
 	@FXML
 	private Button btnToevoegen;
+	@FXML
+	private Button btnMaakLeeg;
+	@FXML
+	private TextField txfZoek;
 	@FXML
 	private TableView<Gebruiker> gebruikerTable;
 	@FXML
@@ -64,6 +70,20 @@ public class GebruikerLijstController extends VBox{
 		gebruikerTable.getSelectionModel().clearSelection();
 		gc.setGeselecteerdeGebruiker(null);
 		details.maakGebruiker();
+	}
+	@FXML
+	public void search(KeyEvent e) {
+		String zoekwaarde = txfZoek.getText();
+		if(!zoekwaarde.isEmpty()||!zoekwaarde.isBlank()) {
+			gc.zoekOpNaam(zoekwaarde);
+			this.btnMaakLeeg.setDisable(false);
+		}
+	}
+	@FXML
+	public void maakLeeg(ActionEvent event) {
+		gc.zoekOpNaam("");
+		txfZoek.setText("");
+		this.btnMaakLeeg.setDisable(true);
 	}
 
 }

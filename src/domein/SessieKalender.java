@@ -38,7 +38,7 @@ public class SessieKalender implements Serializable{
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Sessie> sessies;
 	@Transient
-	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy 'om' hh:mm");
+	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 	public SessieKalender() {
 		
@@ -79,6 +79,11 @@ public class SessieKalender implements Serializable{
 	}
 	public void addSessie(Sessie sessie) {
 		this.sessies.add(sessie);
+	}
+
+	@Override
+	public String toString() {
+		return dtf.format(getStartDatum()) + " - " + dtf.format(getEindDatum());
 	} 
 	
 	

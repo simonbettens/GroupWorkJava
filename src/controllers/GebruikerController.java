@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import domein.Gebruiker;
 import domein.GebruikerType;
+import domein.Maand;
 import domein.StatusType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -97,7 +98,23 @@ public class GebruikerController {
 	public void rollBack() {
 		GenericDaoJpa.rollbackTransaction();
 	}
+	public void zoekOpNaam(String zoekwaarde) {
+		veranderFilter(zoekwaarde);
+		
+	}
+	private void veranderFilter( String naamWaarde) {
+		this.filteredGebruikerLijst.setPredicate(g -> {
+			boolean naamWaardeLeeg = naamWaarde == null || naamWaarde.isBlank();
+			if (naamWaardeLeeg) {
+				return true;
+			}
+			boolean conditieNaam = naamWaardeLeeg ? true
+					: g.getVolledigeNaam().toLowerCase().contains(naamWaarde)
+							|| g.getVolledigeNaam().toLowerCase().startsWith(naamWaarde);
 
+			return conditieNaam;
+		});
+	}
 	public void maakGebruiker(String voornaam, String achternaam, String userName, String passwoord, String email,
 			Long idNummer, GebruikerType type, StatusType status) {
 		Gebruiker gebruiker = new Gebruiker(voornaam, achternaam, userName, passwoord, email, idNummer, type, status);
@@ -136,5 +153,7 @@ public class GebruikerController {
 	public void removePropertyChangeListener(PropertyChangeListener pcl) {
 		subject.removePropertyChangeListener(pcl);
 	}
+
+	
 
 }

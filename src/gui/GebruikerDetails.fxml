@@ -17,7 +17,7 @@
 
 <fx:root id="light-background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="650.0" stylesheets="@../styles/styles.css" type="VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox id="grey-background" alignment="CENTER" prefHeight="631.0" prefWidth="580.0" stylesheets="@../styles/styles.css" VBox.vgrow="SOMETIMES">
+      <VBox id="grey-background" alignment="CENTER" prefHeight="630.0" prefWidth="580.0" stylesheets="@../styles/styles.css" VBox.vgrow="SOMETIMES">
          <children>
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -43,6 +43,8 @@
                   <TextField fx:id="txfAchternaam" GridPane.columnIndex="1" />
                   <TextField fx:id="txfVoornaam" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="txfEmail" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txfUsername" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txfIdNummer" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <TextField fx:id="txfWachtwoord" promptText="Vul nieuw wachtwoord in" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <Label text="Achternaam :">
                      <GridPane.margin>
@@ -79,8 +81,7 @@
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin></ChoiceBox>
-                  <TextField fx:id="txfUsername" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TextField fx:id="txfIdNummer" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  
                   <Label text="Gebruikersnaam :" GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets left="15.0" />

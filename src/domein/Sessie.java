@@ -21,6 +21,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import javafx.beans.property.SimpleStringProperty;
+
 @Entity(name="Sessie")
 @Table(name = "Sessie")
 public class Sessie implements Serializable{
@@ -53,7 +55,14 @@ public class Sessie implements Serializable{
 	private LocalDateTime startDatum;
 	@Column(name="EindDatum")
 	private LocalDateTime eindDatum;
-	
+	@Transient
+	 private final SimpleStringProperty titelProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty verantwoordelijkeNaamProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty startDatumProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty duurProperty = new SimpleStringProperty();
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "VerantwoordelijkeId",referencedColumnName = "Id")
@@ -70,7 +79,7 @@ public class Sessie implements Serializable{
 	@JoinColumn(name = "SessieId", referencedColumnName = "SessieId")
 	private List<SessieAankondiging> aankondigingen;
 	@Transient
-	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy 'om' hh:mm");
+	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy 'om' hh:mm");
 	//nodig voor jpa
 	public Sessie() {}
 	
@@ -151,6 +160,7 @@ public class Sessie implements Serializable{
 		this.gebruikersIngeschreven = gebruikersIngeschreven;
 	}
 	private void setVerantwoordelijke(Gebruiker verantwoordelijke) {
+		verantwoordelijkeNaamProperty.set(verantwoordelijke.getVolledigeNaam());
 		this.verantwoordelijke = verantwoordelijke;
 	}
 	private void setMedia(List<Media> media) {
@@ -163,12 +173,14 @@ public class Sessie implements Serializable{
 		if(naam.isEmpty() || naam.isBlank()) {
 			throw new IllegalArgumentException("Naam moet ingevuld zijn.");
 		}
+		titelProperty.set(naam);
 		this.naam = naam;
 	}
 	private void setStartDatum(LocalDateTime startDatum) {
 		if(startDatum.isBefore(LocalDateTime.now()))  {
 			throw new IllegalArgumentException("Datum is in het verleden.");
 		}
+		startDatumProperty.set(dtf.format(startDatum));
 		this.startDatum = startDatum;
 	}
 	private void setEindDatum(LocalDateTime eindDatum) {
@@ -203,6 +215,7 @@ public class Sessie implements Serializable{
 		if(duur.isNegative() || duur.isZero()) {
 			throw new IllegalArgumentException("Duur mag niet 0 of negatief zijn.");
 		}
+		duurProperty.set(String.format("%d minuten", duur.toMinutesPart()));
 		this.duur = duur;
 	}
 	private void setBezig(boolean bezig) {
@@ -233,6 +246,34 @@ public class Sessie implements Serializable{
 	}
 	public SessieGebruiker getInschrijvingByIndex(int index) {
 		return gebruikersIngeschreven.get(index);
+	}
+
+	public SimpleStringProperty getTitelProperty() {
+		titelProperty.set(getNaam());
+		return titelProperty;
+	}
+
+	public SimpleStringProperty getVerantwoordelijkeNaamProperty() {
+		verantwoordelijkeNaamProperty.set(verantwoordelijke.getVolledigeNaam());
+		return verantwoordelijkeNaamProperty;
+	}
+
+	public SimpleStringProperty getStartDatumProperty() {
+		startDatumProperty.set(dtf.format(getStartDatum()));
+		return startDatumProperty;
+	}
+
+	public SimpleStringProperty getDuurProperty() {
+		if(duur==null) {
+			setDuur(Duration.between(startDatum, eindDatum));
+		}
+		if(duur.toHoursPart()==0) {
+			duurProperty.set(String.format("%d minuten", duur.toMinutesPart()));
+		}else {
+			duurProperty.set(String.format("%d uur, %d minuten", duur.toHoursPart(),duur.toMinutesPart()));
+		}
+		
+		return duurProperty;
 	}
 
 	@Override

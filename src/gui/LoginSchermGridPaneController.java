@@ -190,7 +190,7 @@ public class LoginSchermGridPaneController extends GridPane {
         ApplicatieController nss = new ApplicatieController(gebruikerController);
         String s = "It-lab";
         Rectangle2D bounds= Screen.getPrimary().getVisualBounds();
-        Scene scene = new Scene(nss, 1500, 900);
+        Scene scene = new Scene(nss, 1500, 800);
         Stage stage = (Stage) this.getScene().getWindow();
         stage.setTitle(s);
         stage.setScene(scene);
