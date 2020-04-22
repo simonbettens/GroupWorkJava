@@ -61,9 +61,10 @@ public class SessieController {
 
 	private void vulLijsten() {
 		this.sessieKalenderLijst = sessiekalenderRepository.getAll();
-		this.sessieKalenderObservableLijst = FXCollections.observableArrayList(
-				sessieKalenderLijst.stream().sorted(Comparator.comparing(SessieKalender::getStartDatum).reversed())
-						.map(SessieKalender::toString).collect(Collectors.toList()));
+		this.sessieKalenderObservableLijst = FXCollections.observableArrayList(sessieKalenderLijst.stream().sorted(Comparator.comparing(SessieKalender::getStartDatum).reversed())
+				.map(SessieKalender::toString).collect(Collectors.toList()));
+		
+				
 		vulSessieLijsten();
 	}
 
@@ -248,5 +249,11 @@ public class SessieController {
 	public void removePropertyChangeListenerSessie(PropertyChangeListener pcl) {
 		subjectSessie.removePropertyChangeListener(pcl);
 	}
-
+	public boolean isKalenderUniek(SessieKalender kalender) {
+		boolean overlap = false;
+		for (SessieKalender k : sessieKalenderLijst ) {
+			overlap = k.getStartDatum().getYear() == kalender.getStartDatum().getYear();
+		}
+		return overlap;
+	}
 }

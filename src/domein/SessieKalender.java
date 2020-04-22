@@ -51,15 +51,16 @@ public class SessieKalender implements Serializable{
 	}
 
 	public final void setStartDatum(LocalDate startDatum) {
+		if(startDatum.isBefore(LocalDate.now())) {
+			throw new IllegalArgumentException("Datum is in het verleden");
+		}
 		this.startDatum = startDatum;
 	}
 
 	public final void setEindDatum(LocalDate eindDatum) {
+		if(startDatum == null || eindDatum.isBefore(LocalDate.now()) || eindDatum.isAfter(LocalDate.of(startDatum.getYear()+1, 9, 30)))
+			throw new IllegalArgumentException("Einddatum is ongeldig.");
 		this.eindDatum = eindDatum;
-	}
-
-	private void setSessies(List<Sessie> sessies) {
-		this.sessies = sessies;
 	}
 
 	public int getId() {
@@ -78,6 +79,8 @@ public class SessieKalender implements Serializable{
 		return sessies;
 	}
 	public void addSessie(Sessie sessie) {
+		if(sessie.getStartDatum().toLocalDate().isBefore(this.startDatum) || sessie.getEindDatum().toLocalDate().isAfter(this.eindDatum))
+			throw new IllegalArgumentException("Sessie valt de buiten de sessiekalender");
 		this.sessies.add(sessie);
 	}
 
