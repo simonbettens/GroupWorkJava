@@ -141,6 +141,11 @@ public class SessieController {
 		return this.sortedSessieLijst;
 	}
 
+	
+	public Gebruiker getIngelogdeGebruiker() {
+		return ingelogdeGebruiker;
+	}
+
 	public void changeSelectedSessieKalender(String waarde) {
 		gekozenSessieKalender = sessieKalenderLijst.stream().filter(sk -> sk.toString().equals(waarde)).findFirst()
 				.orElse(null);

@@ -17,6 +17,7 @@ import java.util.ListIterator;
 import java.util.stream.Collectors;
 
 import controllers.SessieController;
+import domein.GebruikerType;
 import domein.Maand;
 import domein.Sessie;
 import domein.SessieKalender;
@@ -78,6 +79,8 @@ public class SessieLijstController extends VBox
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		btnNieuweSessieKalender.setDisable(sc.getIngelogdeGebruiker().getType()==GebruikerType.VERANTWOORDELIJKE);
+		btnPasSessieKalender.setDisable(sc.getIngelogdeGebruiker().getType()==GebruikerType.VERANTWOORDELIJKE);
 		cbAcademiejaar.getItems().setAll(sc.getSessieKalenderObservableLijst());
 		cbMaand.getSelectionModel().select(Maand.of(LocalDate.now().getMonthValue()).toString());
 		cbMaand.getItems()
