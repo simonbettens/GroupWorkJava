@@ -76,6 +76,18 @@ public class SessieKalenderDeelScherm extends HBox implements DeelScherm<Applica
 		this.setSpacing(10);
 		this.setPadding(new Insets(5, 5, 20, 5));
 	}
+	public void rebuildGui() {
+		this.getChildren().removeAll((Node) this.linkerPaneel, (Node) this.rechterPaneel);
+		this.linkerPaneel = DeelSchermFactory.create(5);
+		this.rechterPaneel = DeelSchermFactory.create(6);
+		this.vorigLinkerPaneel=null;
+		this.vorigRechterPaneel=null;
+		linkerPaneel.buildGui(this);
+		rechterPaneel.buildGui(this);
+		this.getChildren().add((Node) linkerPaneel);
+		this.getChildren().add((Node) rechterPaneel);
+		applyLayout();
+	}
 
 	public SessieController getSessieController() {
 		return sc;

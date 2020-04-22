@@ -58,6 +58,7 @@ public class SessieKalenderDetailsController extends VBox implements DeelScherm<
 
 			btnOpslaan.setText("Maak aan");
 		}else {
+			
 			lblSessieKalender.setText(sc.getGekozenSessieKalender().toString());
 			dtStart.setValue(sc.getGekozenSessieKalender().getStartDatum());
 			dtEind.setValue(sc.getGekozenSessieKalender().getEindDatum());
@@ -72,10 +73,13 @@ public class SessieKalenderDetailsController extends VBox implements DeelScherm<
 		LocalDate einde = dtEind.getValue();
 		if(isNew) {
 			sc.maakNieuweSessieKalender(start, einde);
-		}else {
 			
+		}else {
 			sc.pasSessieKalender(start, einde);
 		}
+		System.out.println("Change");
+		parent.rebuildGui();
+		System.out.println("Na change");
 		
 	}
 	// Event Listener on Button[#btnAnnuleer].onAction

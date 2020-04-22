@@ -37,7 +37,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 
 public class SessieLijstController extends VBox
-		implements DeelScherm<SessieKalenderDeelScherm>, PropertyChangeListener {
+		implements DeelScherm<SessieKalenderDeelScherm> {
 	@FXML
 	private Button btnNieuweSessieKalender;
 	@FXML
@@ -78,9 +78,8 @@ public class SessieLijstController extends VBox
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		
+		cbAcademiejaar.getItems().setAll(sc.getSessieKalenderObservableLijst());
 		cbMaand.getSelectionModel().select(Maand.of(LocalDate.now().getMonthValue()).toString());
-		sc.addPropertyChangeListenerSessieKalender(this);
 		cbMaand.getItems()
 				.addAll(Arrays.asList(Maand.values()).stream().map(e -> e.toString()).collect(Collectors.toList()));
 		SessieKalender sk = sc.getGekozenSessieKalender();
@@ -154,24 +153,6 @@ public class SessieLijstController extends VBox
 		this.btnMaakLeeg.setDisable(true);
 	}
 
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
-		System.out.println("Voor if");
-		if (evt.getPropertyName().equals("gekozenSessieKalender")) {
-			System.out.println("PropChange start");
-			cbAcademiejaar.getSelectionModel().clearSelection();
-			cbAcademiejaar.getItems().clear();
-			cbAcademiejaar.getItems().addAll(sc.getSessieKalenderObservableLijst());
-			SessieKalender sk = (SessieKalender)evt.getNewValue();
-			if (sk != null) {
-				cbAcademiejaar.getSelectionModel().select(sk.toString());
-			}
-			System.out.println("PropChange end");
-		}
-		System.out.println("Na if");
-
-
-	}
+	
 
 }

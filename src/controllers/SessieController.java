@@ -187,25 +187,22 @@ public class SessieController {
 		GenericDaoJpa.commitTransaction();
 		sessieKalenderLijst.add(sk);
 		sessieKalenderObservableLijst.add(sk.toString());
-		firePropertyChange("gekozenSessieKalender", this.gekozenSessieKalender, sk);
 
 	}
 
 	public void pasSessieKalender(LocalDate startDatum, LocalDate eindDatum) {
-		System.out.println(sessieKalenderLijst.size() + " " + sessieKalenderObservableLijst.size()  );
+		System.out.println("Start" + startDatum.toString() + " - " + eindDatum.toString());
 		SessieKalender sk = this.gekozenSessieKalender;
-		sessieKalenderLijst.remove(this.gekozenSessieKalender);
-		sessieKalenderObservableLijst.remove(this.gekozenSessieKalender.toString());
+		sessieKalenderLijst.remove(sk);
+		sessieKalenderObservableLijst.remove(sk.toString());
 		sk.setStartDatum(startDatum);
 		sk.setEindDatum(eindDatum);
 		GenericDaoJpa.startTransaction();
-		System.out.println(this.gekozenSessieKalender.toString());
 		sessiekalenderRepository.update(this.gekozenSessieKalender);
 		GenericDaoJpa.commitTransaction();
 		sessieKalenderLijst.add(sk);
 		sessieKalenderObservableLijst.add(sk.toString());
 		this.gekozenSessieKalender = sk;
-		firePropertyChange("gekozenSessieKalender", this.gekozenSessieKalender, sk);
 		System.out.println("einde");
 		
 	}
@@ -234,14 +231,8 @@ public class SessieController {
 	}
 	// Sessie methods
 
-	private <T> void firePropertyChange(String welke, T oude, T nieuwe) {
-		System.out.println(welke);
-		if(welke.equals("gekozenSessieKalender")) {
-			subjectSessieKalender.firePropertyChange(welke, oude, nieuwe);
-		}
-		else {
+	private  void firePropertyChange(String welke, Sessie oude, Sessie nieuwe) {	
 			subjectSessie.firePropertyChange(welke, oude, nieuwe);
-		}
 	}
 
 	public void addPropertyChangeListenerSessie(PropertyChangeListener pcl) {
@@ -251,15 +242,6 @@ public class SessieController {
 
 	public void removePropertyChangeListenerSessie(PropertyChangeListener pcl) {
 		subjectSessie.removePropertyChangeListener(pcl);
-	}
-
-	public  void addPropertyChangeListenerSessieKalender(PropertyChangeListener pcl) {
-		subjectSessieKalender.addPropertyChangeListener(pcl);
-		pcl.propertyChange(new PropertyChangeEvent(pcl, "gekozenSessieKalender", null, this.gekozenSessieKalender));
-	}
-
-	public void removePropertyChangeListenerSessieKalender(PropertyChangeListener pcl) {
-		subjectSessieKalender.removePropertyChangeListener(pcl);
 	}
 
 }
