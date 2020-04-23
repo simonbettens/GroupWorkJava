@@ -177,6 +177,9 @@ public class Sessie implements Serializable{
 		this.naam = naam;
 	}
 	private void setStartDatum(LocalDateTime startDatum) {
+		if(startDatum == null) {
+			throw new IllegalArgumentException("Startdatum moet ingevuld zijn");
+		}
 		if(startDatum.isBefore(LocalDateTime.now()))  {
 			throw new IllegalArgumentException("Datum is in het verleden.");
 		}
@@ -184,6 +187,9 @@ public class Sessie implements Serializable{
 		this.startDatum = startDatum;
 	}
 	private void setEindDatum(LocalDateTime eindDatum) {
+		if(eindDatum == null) {
+			throw new IllegalArgumentException("Einddatum moet ingevuld zijn");
+		}
 		if(startDatum.isBefore(LocalDateTime.now())) {
 			throw new IllegalArgumentException("Datum is in het verleden.");
 		}
