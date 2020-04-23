@@ -4,6 +4,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -268,16 +270,30 @@ public class Gebruiker {
 	}
 
 	private void setVoornaam(String voornaam) {
-		if (voornaam.isEmpty() || voornaam.isBlank()) {
-			throw new IllegalArgumentException("voornaam van de gebruiker moet ingevuld zijn.");
+		boolean correctFormaat = true;
+		if(voornaam != null ) {
+			Pattern p = Pattern.compile("[a-zA-Z]{1,100}");
+			Matcher m = p.matcher(String.valueOf(voornaam));
+			correctFormaat = m.matches();
+		}
+		
+		if (voornaam == null || voornaam.isEmpty() || voornaam.isBlank() || !correctFormaat) {
+			throw new IllegalArgumentException("voornaam van de gebruiker moet ingevuld zijn en van het juiste formaat zijn.");
 		}
 		this.voornaam = voornaam;
 		volledigeNaamProperty.set(getVolledigeNaam());
 	}
 
 	private void setAchternaam(String achternaam) {
-		if (achternaam == null || achternaam.equals("")) {
-			throw new IllegalArgumentException("achternaam van de gebruiker moet ingevuld zijn.");
+		boolean correctFormaat = true;
+		if(achternaam != null ) {
+			Pattern p = Pattern.compile("[a-zA-Z\\s]{1,100}");
+			Matcher m = p.matcher(String.valueOf(achternaam));
+			correctFormaat = m.matches();
+		}
+		
+		if (achternaam == null || achternaam.isEmpty() || achternaam.isBlank() || !correctFormaat) {
+			throw new IllegalArgumentException("achternaam van de gebruiker moet ingevuld zijn en van het juiste formaat zijn.");
 		}
 		this.achternaam = achternaam;
 		volledigeNaamProperty.set(getVolledigeNaam());
@@ -298,12 +314,30 @@ public class Gebruiker {
 	}
 
 	public void setIdNumber(Long idNumber) {
+		boolean correctFormaat = true;
+		if(idNumber != null ) {
+			Pattern p = Pattern.compile("[0-9]{13}");
+			Matcher m = p.matcher(String.valueOf(idNumber));
+			correctFormaat = m.matches();
+		}
+				
+		if(idNumber == null || !correctFormaat) {
+			throw new IllegalArgumentException("idNumber moet ingevuld zijn en van het juiste formaat zijn.");
+		}
+		
 		this.idNumber = idNumber;
 	}
 
 	public void setUserName(String userName) {
-		if (userName.isEmpty() || userName.isBlank()) {
-			throw new IllegalArgumentException("userName van de gebruiker moet ingevuld zijn.");
+		boolean correctFormaat = true;
+		if(userName != null ) {
+			Pattern p = Pattern.compile("[a-zA-Z]{2,4}[0-9]{6}");
+			Matcher m = p.matcher(String.valueOf(userName));
+			correctFormaat = m.matches();
+		}
+			
+		if (userName == null || userName.isEmpty() || userName.isBlank() || !correctFormaat) {
+			throw new IllegalArgumentException("Username van de gebruiker moet ingevuld zijn.");
 		}
 		this.userName = userName;
 		gebruikerNaamProperty.set(getUserName());
@@ -314,17 +348,26 @@ public class Gebruiker {
 	}
 
 	public void setEmail(String email) {
-		if (email.isEmpty() || email.isBlank()) {
-			throw new IllegalArgumentException("email van de gebruiker moet ingevuld zijn.");
+		boolean correctFormaat = true;
+		if(email != null ) {
+			Pattern p = Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\""
+					+ "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\"
+					+ "x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)"
+					+ "+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.)"
+					+ "{3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\"
+					+ "x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
+			Matcher m = p.matcher(String.valueOf(email));
+			correctFormaat = m.matches();
+		}
+		
+		if (email == null || email.isEmpty() || email.isBlank() || !correctFormaat) {
+			throw new IllegalArgumentException("email van de gebruiker moet ingevuld zijn en van het juiste formaat zijn.");
 		}
 		this.email = email;
 	}
 
 	public void setNormalizedEmail(String normalizedEmail) {
-		if (normalizedEmail.isEmpty() || normalizedEmail.isBlank()) {
-			throw new IllegalArgumentException("email van de gebruiker moet ingevuld zijn.");
-		}
-		this.normalizedEmail = normalizedEmail;
+		this.normalizedEmail = this.email;
 	}
 
 	private void setEmailConfirmed(boolean emailConfirmed) {
@@ -352,10 +395,7 @@ public class Gebruiker {
 	}
 
 	private void setNormalizedUserName(String normalizedUserName) {
-		if (normalizedUserName.isEmpty() || normalizedUserName.isBlank()) {
-			throw new IllegalArgumentException("userName van de gebruiker moet ingevuld zijn.");
-		}
-		this.normalizedUserName = normalizedUserName;
+		this.normalizedUserName = this.userName;
 	}
 
 	private void setSecurityStamp(String securityStamp) {

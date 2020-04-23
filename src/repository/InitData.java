@@ -81,7 +81,9 @@ public class InitData {
 		// SessieKalender(LocalDate startDatum, LocalDate eindDatum)
 		GenericDaoJpa.startTransaction();
 		LocalDate start = LocalDate.of(2019, 9, 20);
-		SessieKalender kalender2019_2020 = new SessieKalender(start, start.plusDays(365));
+		SessieKalender kalender2019_2020 = new SessieKalender();
+		kalender2019_2020.setStartDatumInitData(start);
+		kalender2019_2020.setEindDatum(start.plusDays(365));
 		sessieKalenderRepo.insert(kalender2019_2020);
 		GenericDaoJpa.commitTransaction();
 

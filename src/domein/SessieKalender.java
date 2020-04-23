@@ -41,7 +41,7 @@ public class SessieKalender implements Serializable{
 	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 	public SessieKalender() {
-		
+		this.sessies = new ArrayList<Sessie>();
 	}
 
 	public SessieKalender(LocalDate startDatum, LocalDate eindDatum) {
@@ -54,6 +54,10 @@ public class SessieKalender implements Serializable{
 		if(startDatum.isBefore(LocalDate.now())) {
 			throw new IllegalArgumentException("Datum is in het verleden");
 		}
+		this.startDatum = startDatum;
+	}
+	
+	public final void setStartDatumInitData(LocalDate startDatum) {
 		this.startDatum = startDatum;
 	}
 
