@@ -84,8 +84,7 @@ public class Sessie implements Serializable{
 	public Sessie() {}
 	
 	//algemene constructor voor nieuwe instanties
-	public Sessie(Gebruiker verantwoordelijke, String naam, LocalDateTime startDatum, LocalDateTime eindDatum,
-			boolean gesloten, int maxCap,String lokaal, String beschrijving) {
+	public Sessie(Gebruiker verantwoordelijke, String naam, LocalDateTime startDatum, LocalDateTime eindDatum,int maxCap,String lokaal, String beschrijving) {
 		setVerantwoordelijke(verantwoordelijke);
 		setNaam(naam);
 		setStartDatum(startDatum);
@@ -181,7 +180,10 @@ public class Sessie implements Serializable{
 			throw new IllegalArgumentException("Startdatum moet ingevuld zijn");
 		}
 		if(startDatum.isBefore(LocalDateTime.now()))  {
-			throw new IllegalArgumentException("Datum is in het verleden.");
+			throw new IllegalArgumentException("Startdatum is in het verleden.");
+		}
+		if(startDatum.isBefore(LocalDateTime.now().plusDays(1)))  {
+			throw new IllegalArgumentException("Startdatum moet minstens een dag in de toekomst liggen");
 		}
 		startDatumProperty.set(dtf.format(startDatum));
 		this.startDatum = startDatum;
@@ -190,8 +192,11 @@ public class Sessie implements Serializable{
 		if(eindDatum == null) {
 			throw new IllegalArgumentException("Einddatum moet ingevuld zijn");
 		}
-		if(startDatum.isBefore(LocalDateTime.now())) {
-			throw new IllegalArgumentException("Datum is in het verleden.");
+		if(eindDatum.isBefore(LocalDateTime.now())) {
+			throw new IllegalArgumentException("Einddatum is in het verleden.");
+		}
+		if(eindDatum.isBefore(getStartDatum().plusMinutes(30))) {
+			throw new IllegalArgumentException("Einddatum moet minstens 30 na startdatum en tijd liggen");
 		}
 		this.eindDatum = eindDatum;
 	}
@@ -280,6 +285,59 @@ public class Sessie implements Serializable{
 		}
 		
 		return duurProperty;
+	}
+	
+	public int pasSessieAan(Gebruiker verantwoordelijke, String naam, LocalDateTime startDatum, LocalDateTime eindDatum, 
+			boolean staatOpen, boolean gesloten, int maxCap,String lokaal, String beschrijving) {
+		
+		int veranderingen = 0;
+		
+		if(!verantwoordelijke.getId().equals(getVerantwoordelijke().getId())) {
+			setVerantwoordelijke(verantwoordelijke);
+			veranderingen++;
+		}
+		
+		if(!naam.equals(getNaam())) {
+			setNaam(naam);
+			veranderingen++;
+		}
+		
+		if(!startDatum.equals(getStartDatum())) {
+			setStartDatum(startDatum);
+			veranderingen++;
+		}
+		
+		if(!eindDatum.equals(getEindDatum())) {
+			setEindDatum(eindDatum);
+			veranderingen++;
+		}
+		
+		if(staatOpen!=isStaatOpen()) {
+			setStaatOpen(staatOpen);
+			veranderingen++;
+		}
+		
+		if(gesloten!=isGesloten()) {
+			setGesloten(gesloten);
+			veranderingen++;
+		}
+		
+		if(maxCap != getMaxCap()) {
+			setMaxCap(maxCap);
+			veranderingen++;
+		}
+		
+		if(!lokaal.equals(getLokaal())) {
+			setLokaal(lokaal);
+			veranderingen++;
+		}
+		
+		if(!beschrijving.equals(getBeschrijving())) {
+			setBeschrijving(beschrijving);
+			veranderingen++;
+		}
+		
+		return veranderingen;
 	}
 
 	@Override

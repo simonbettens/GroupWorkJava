@@ -30,13 +30,13 @@ public class SessieTest {
 	@ParameterizedTest
 	@MethodSource("ongeldigeSessieData")
 	public void maakOngeldigeSessie_WerptException(String titel, LocalDateTime startuur, LocalDateTime einduur, int maxcap, String lokaal) {
-		Assertions.assertThrows(IllegalArgumentException.class, () -> new Sessie(new Gebruiker(), titel, startuur, einduur, false, maxcap, lokaal, ""));
+		Assertions.assertThrows(IllegalArgumentException.class, () -> new Sessie(new Gebruiker(), titel, startuur, einduur, maxcap, lokaal, ""));
 	}
 	
 	@ParameterizedTest
 	@MethodSource("geldigeSessieData")
 	public void maakGeldigeSessie_Slaagt(String titel, LocalDateTime startuur, LocalDateTime einduur, int maxcap, String lokaal) {
-		Sessie testSessie = new Sessie(new Gebruiker(), titel, startuur, einduur, false, maxcap, lokaal, "");
+		Sessie testSessie = new Sessie(new Gebruiker(), titel, startuur, einduur, maxcap, lokaal, "");
 		Assertions.assertEquals(titel, testSessie.getTitelProperty().getValue());
 	}
 	

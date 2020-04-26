@@ -1,5 +1,7 @@
 package repository;
 
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
 
@@ -20,5 +22,16 @@ public class GebruikerDaoJpa extends GenericDaoJpa<Gebruiker> implements Gebruik
         } catch (NoResultException ex) {
             throw new EntityNotFoundException();
         } 
+	}
+
+	@Override
+	public List<Gebruiker> getByDiscriminator(String discriminator) {
+		try {
+            return em.createNamedQuery("Gebruiker.findByDiscriminator", Gebruiker.class)
+                 .setParameter("discriminator", discriminator)
+                .getResultList();
+        } catch (NoResultException ex) {
+            throw new EntityNotFoundException();
+        }
 	}
 }

@@ -27,7 +27,9 @@ import javafx.beans.property.StringProperty;
 
 @Entity(name = "Gebruiker")
 @NamedQueries({
-		@NamedQuery(name = "Gebruiker.findByUsername", query = "select g from Gebruiker g where g.userName = :username") })
+		@NamedQuery(name = "Gebruiker.findByUsername", query = "select g from Gebruiker g where g.userName = :username"),
+		@NamedQuery(name = "Gebruiker.findByDiscriminator", query = "select g from Gebruiker g where g.discriminator = :discriminator"),
+})
 
 @Table(name = "AspNetUsers")
 public class Gebruiker {

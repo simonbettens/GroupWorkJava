@@ -19,10 +19,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root id="light-background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="650.0" stylesheets="@../styles/styles.css" type="VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root id="light-background" prefHeight="750.0" prefWidth="650.0" stylesheets="@../styles/styles.css" type="VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox id="grey-background" alignment="TOP_CENTER" prefHeight="600.0" prefWidth="650.0">
+      <VBox id="grey-background" alignment="TOP_CENTER" prefHeight="632.0" prefWidth="630.0">
          <children>
+            <Label text="Details van een sessie" textFill="#fefefe">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
             <ImageView fitHeight="125.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/pngkit_events-png_2653338.png" />
@@ -34,7 +39,7 @@
                   <Insets />
                </VBox.margin>
             </ImageView>
-            <GridPane alignment="CENTER" focusTraversable="true" prefHeight="300.0" prefWidth="640.0">
+            <GridPane alignment="CENTER" focusTraversable="true" prefHeight="410.0" prefWidth="608.0">
               <columnConstraints>
                 <ColumnConstraints halignment="RIGHT" maxWidth="157.39996337890625" minWidth="15.0" prefWidth="80.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="273.9999862670898" minWidth="10.0" prefWidth="210.0" />
@@ -43,72 +48,109 @@
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="51.600006103515625" minHeight="10.0" prefHeight="37.20000457763672" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="47.80000915527344" minHeight="10.0" prefHeight="36.79999542236328" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="61.19999694824219" minHeight="1.600006103515625" prefHeight="35.79999084472655" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="98.39999389648438" minHeight="10.0" prefHeight="67.20001831054688" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="98.39999389648438" minHeight="10.0" prefHeight="50.39998168945314" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="98.39999389648438" minHeight="10.0" prefHeight="50.39998168945314" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="98.39999389648438" minHeight="10.0" prefHeight="75.60001220703126" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="98.39999389648438" minHeight="10.0" prefHeight="25.199987792968727" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label text="Naam :" />
-                  <Label text="Lokaal :" GridPane.columnIndex="2" />
-                  <DatePicker fx:id="dtStart" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Label text="Lokaal :" GridPane.rowIndex="1" />
+                  <TextField fx:id="txfNaam" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  <TextField fx:id="txfLokaal" prefWidth="200.0" promptText="GSCHB4.026" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  <Label text="Gastspreker :" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <TextField fx:id="txfGastspreker" promptText="Naam gastspreker" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  
+                  
+                  <Label text="Start datum : " GridPane.rowIndex="2" />
+                  <DatePicker fx:id="dtStart" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </DatePicker>
-                  <DatePicker fx:id="dtEind" prefHeight="25.0" prefWidth="200.0" promptText="Leeg laten voor zelfde datum" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                  <Label text="Eind datum : " GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <DatePicker fx:id="dtEind" prefHeight="25.0" prefWidth="200.0" promptText="Leeg laten voor zelfde datum" GridPane.columnIndex="3" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin>
                   </DatePicker>
-                  <TextField fx:id="txfNaam" prefWidth="200.0" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <TextField fx:id="txfLokaal" prefWidth="200.0" GridPane.columnIndex="3">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <ChoiceBox fx:id="cbVerantwoordelijke" prefWidth="150.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="3">
+                  <Label text="Start uur :" GridPane.rowIndex="3" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <children>
+                        <TextField fx:id="txfStartuur" alignment="CENTER" prefHeight="25.0" prefWidth="35.0" promptText="12" />
+                        <Label text=":" />
+                        <TextField fx:id="txfStartmin" alignment="CENTER" prefWidth="35.0" promptText="30" />
+                     </children>
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                  </HBox>
+                  <Label text="Eind uur :" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                     <children>
+                        <TextField fx:id="txfEinduur" alignment="CENTER" prefWidth="35.0" promptText="13" />
+                        <Label text=":" />
+                        <TextField fx:id="txfEindmin" alignment="CENTER" prefWidth="35.0" promptText="30" />
+                     </children>
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin>
-                  </ChoiceBox>
-                  <Label text="Start datum : " GridPane.rowIndex="1" />
-                  <Label text="Eind datum : " GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Label text="Start uur :" GridPane.rowIndex="2" />
-                  <Label text="Eind uur :" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <TextField fx:id="txfStartuur" promptText="Bv : 12:30" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <TextField fx:id="txfEinduur" promptText="Bv : 13:30" GridPane.columnIndex="3" GridPane.rowIndex="2">
-                     <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <Label alignment="CENTER_RIGHT" text="Verantwoordelijke :" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                  <Label text="Beschrijving :" GridPane.rowIndex="4" GridPane.valignment="TOP" />
-                  <TextArea fx:id="txaBeschrijving" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="4" GridPane.rowSpan="2">
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="4">
+                     <children>
+                        <Label alignment="CENTER_RIGHT" text="Verantwoordelijke :">
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ChoiceBox fx:id="cbVerantwoordelijke" prefWidth="150.0">
+                           <HBox.margin>
+                              <Insets right="100.0" />
+                           </HBox.margin>
+                        </ChoiceBox>
+                        <Label text="Maximum capaciteit :">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="txfCap" prefWidth="35.0">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <Label text="Beschrijving :" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+                  <TextArea fx:id="txaBeschrijving" prefHeight="154.0" prefWidth="517.0" promptText="..." GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="5" GridPane.rowSpan="2">
                      <GridPane.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                   </TextArea>
-                  <Label GridPane.rowIndex="6" />
-                  <CheckBox fx:id="chbStaatOpen" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Staat open : " GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                  <CheckBox fx:id="chbGesloten" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Gesloten : " GridPane.columnIndex="3" GridPane.rowIndex="6" />
+                  <Label GridPane.rowIndex="7" />
+                  <CheckBox fx:id="chbStaatOpen" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Staat open : " GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <CheckBox fx:id="chbGesloten" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" text="Gesloten : " GridPane.columnIndex="3" GridPane.rowIndex="7" />
                </children>
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </GridPane>
             <Separator prefWidth="200.0" style="-fx-background-color: black;" />
-            <Label text="ERROR" textFill="RED">
+            <Label fx:id="lblError" text="ERROR" textFill="RED">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -121,6 +163,11 @@
                      </HBox.margin>
                   </Button>
                   <Button fx:id="btnInschrijvingen" mnemonicParsing="false" onAction="#loadInschrijvingen" styleClass="greyButton" text="Inschrijvingen ">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnAankondigingen" mnemonicParsing="false" onAction="#loadAankondigingen" styleClass="greyButton" text="Aankondigingen">
                      <HBox.margin>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </HBox.margin>
@@ -149,7 +196,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </VBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="80.0" prefWidth="650.0">
          <children>
             <Button fx:id="btnOpslaan" mnemonicParsing="false" onAction="#opslaan" styleClass="greyButton" text="Wijzigingen opslaan">
                <HBox.margin>

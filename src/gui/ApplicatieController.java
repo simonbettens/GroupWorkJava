@@ -14,10 +14,9 @@ public class ApplicatieController extends HBox{
 	private SessieController sessieController;
 	private Gebruiker ingelogdeGebruiker;
 	public ApplicatieController(GebruikerController gebruikerController) {
-		
 		this.gebruikerController = gebruikerController;
 		ingelogdeGebruiker= gebruikerController.getIngelogdeGebruiker();
-		this.sessieController = new SessieController(this.ingelogdeGebruiker);
+		this.sessieController = new SessieController(this.ingelogdeGebruiker,gebruikerController.getGebruikerRepository());
 		//ingelogde gebruiker moet nog mee gegeven worden aan de sessiecontroller
 		buildGui(0);
 	}

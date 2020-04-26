@@ -111,11 +111,7 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 	// Event Listener on Button[#btnOpslaan].onAction
 	@FXML
 	public void opslaan(ActionEvent event) {
-		try {
-			
-			
-			
-			
+		try {			
 			if (isEdit) {
 				if(gc.getGeselecteerdeGebruiker() == null) {
 					throw new IllegalArgumentException("Je moet een gebruiker selecteren");

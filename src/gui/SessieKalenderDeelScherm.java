@@ -92,5 +92,8 @@ public class SessieKalenderDeelScherm extends HBox implements DeelScherm<Applica
 	public SessieController getSessieController() {
 		return sc;
 	}
+	public void changeToCreate() {
+		
+	}
 
 }

@@ -44,7 +44,10 @@ public class GebruikerController {
 				Comparator.comparing(Gebruiker::getVolledigeNaam).thenComparing(Gebruiker::getUserName)
 						.thenComparing(Gebruiker::getType));
 	}
-
+	public List<Gebruiker> getVerantwoordelijkeList(){
+		return gebruikerRepository.getByDiscriminator("Verantwoordelijke");
+		
+	}
 	public Gebruiker getIngelogdeGebruiker() {
 		return ingelogdeGebruiker;
 	}
@@ -76,6 +79,10 @@ public class GebruikerController {
 
 	public Gebruiker getGebruikerByUsername(String username) {
 		return gebruikerRepository.getByUsername(username);
+	}
+
+	public GebruikerDaoJpa getGebruikerRepository() {
+		return gebruikerRepository;
 	}
 
 	public void deleteGebruiker() {

@@ -4,21 +4,31 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import domein.Gebruiker;
 import domein.GebruikerType;
 import domein.Maand;
+import domein.Media;
 import domein.Sessie;
+import domein.SessieAankondiging;
+import domein.SessieGebruiker;
 import domein.SessieKalender;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import repository.GebruikerDao;
 import repository.GenericDaoJpa;
 import repository.SessieDao;
 import repository.SessieDaoJpa;
@@ -30,41 +40,64 @@ public class SessieController {
 	// Properties
 	private SessieKalenderDao sessiekalenderRepository;
 	private SessieDao sessieRepository;
-	private PropertyChangeSupport subjectSessie;
-	private PropertyChangeSupport subjectSessieKalender;
+	private GebruikerDao gebruikerRepo;
 	private Gebruiker ingelogdeGebruiker;
+	private List<Gebruiker> verantwoordelijkeLijstBijSessie;
 	private Maand gekozenMaand;
-	// Lijst van sessieKalenders
+	private PropertyChangeSupport subject;
+	// SessieKalenders
 	private SessieKalender gekozenSessieKalender;
 	private List<SessieKalender> sessieKalenderLijst;
 	private ObservableList<String> sessieKalenderObservableLijst;
 	private SortedList<SessieKalender> sortedSessieKalenderLijst;
-	// Lijst van sessies
-	private Sessie sessie;
+
+	// Sessies
+	private Sessie gekozenSessie;
 	private List<Sessie> sessieLijst;
 	private ObservableList<Sessie> sessieObservableLijst;
 	private FilteredList<Sessie> filteredSessieLijst;
 	private SortedList<Sessie> sortedSessieLijst;
 
+	// media bij een gekozen Sessie;
+	private Media gekozenMedia;
+	private List<Media> mediaLijst;
+	private ObservableList<Media> mediaObservableLijst;
+	private FilteredList<Media> filteredMediaLijst;
+	private SortedList<Media> sortedMediaLijst;
+
+	// SessieAankondigingen bij een gekozen Sessie;
+	private SessieAankondiging gekozenSessieAankondiging;
+	private List<SessieAankondiging> sessieAankondigingenLijst;
+	private ObservableList<SessieAankondiging> sessieAankondigingObservableLijst;
+	private FilteredList<SessieAankondiging> filteredSessieAankondigingenLijst;
+	private SortedList<SessieAankondiging> sortedSessieAankondigingenLijst;
+
+	// SessieGebruikers bij een gekozen Sessie;
+	private SessieGebruiker gekozenInschrijving;
+	private List<SessieGebruiker> inschrijvingenLijst;
+	private ObservableList<SessieGebruiker> inschrijvingenObservableLijst;
+	private FilteredList<SessieGebruiker> filteredInschrijvingenLijst;
+	private SortedList<SessieGebruiker> sortedInschrijvingenLijst;
+
 	// Constructor
-	public SessieController(Gebruiker ingelogdeGebruiker) {
+	public SessieController(Gebruiker ingelogdeGebruiker,GebruikerDao gebruikerrepo) {
 		setSessiekalenderRepository(new SessieKalenderDaoJpa());
+		this.gebruikerRepo = gebruikerrepo;
 		setSessieRepository(new SessieDaoJpa());
 		setIngelogdeGebruiker(ingelogdeGebruiker);
-		this.subjectSessie = new PropertyChangeSupport(this);
-		this.subjectSessieKalender = new PropertyChangeSupport(this);
+		this.subject = new PropertyChangeSupport(this);
 		setSessieKalender("0");
 		gekozenMaand = Maand.of(LocalDate.now().getMonthValue());
 		vulLijsten();
-		sessie = null;
+		gekozenSessie = null;
 	}
 
 	private void vulLijsten() {
 		this.sessieKalenderLijst = sessiekalenderRepository.getAll();
-		this.sessieKalenderObservableLijst = FXCollections.observableArrayList(sessieKalenderLijst.stream().sorted(Comparator.comparing(SessieKalender::getStartDatum).reversed())
-				.map(SessieKalender::toString).collect(Collectors.toList()));
-		
-				
+		this.sessieKalenderObservableLijst = FXCollections.observableArrayList(
+				sessieKalenderLijst.stream().sorted(Comparator.comparing(SessieKalender::getStartDatum).reversed())
+						.map(SessieKalender::toString).collect(Collectors.toList()));
+
 		vulSessieLijsten();
 	}
 
@@ -81,8 +114,7 @@ public class SessieController {
 			this.filteredSessieLijst = new FilteredList<>(sessieObservableLijst, e -> true);
 			this.sortedSessieLijst = new SortedList<Sessie>(filteredSessieLijst,
 					Comparator.comparing(Sessie::getStartDatum).thenComparing(Sessie::getNaam));
-		}
-		else {
+		} else {
 			System.out.println("Sessiekalender is null");
 		}
 	}
@@ -121,6 +153,24 @@ public class SessieController {
 		this.sessieRepository = mock;
 	}
 
+	public void changeSelectedSessieKalender(String waarde) {
+		gekozenSessieKalender = sessieKalenderLijst.stream().filter(sk -> sk.toString().equals(waarde)).findFirst()
+				.orElse(null);
+		vulSessieLijsten();
+	}
+
+	public void changeSelectedMaand(String waarde) {
+		gekozenMaand = Arrays.asList(Maand.values()).stream().filter(sk -> sk.toString().equals(waarde)).findFirst()
+				.orElse(null);
+		veranderFilter(gekozenMaand, "");
+	}
+
+	public void setSessie(Sessie sessie) {
+		setVerantwoordelijkeLijstBijSessie(sessie.getVerantwoordelijke());
+		firePropertyChange("sessie", this.gekozenSessie, sessie);
+		this.gekozenSessie = sessie;
+	}
+
 	// getters
 	public List<SessieKalender> getSessieKalenderLijst() {
 		return sessieKalenderLijst;
@@ -142,21 +192,15 @@ public class SessieController {
 		return this.sortedSessieLijst;
 	}
 
-	
 	public Gebruiker getIngelogdeGebruiker() {
 		return ingelogdeGebruiker;
 	}
 
-	public void changeSelectedSessieKalender(String waarde) {
-		gekozenSessieKalender = sessieKalenderLijst.stream().filter(sk -> sk.toString().equals(waarde)).findFirst()
-				.orElse(null);
-		vulSessieLijsten();
-	}
-
-	public void changeSelectedMaand(String waarde) {
-		gekozenMaand = Arrays.asList(Maand.values()).stream().filter(sk -> sk.toString().equals(waarde)).findFirst()
-				.orElse(null);
-		veranderFilter(gekozenMaand, "");
+	private List<SessieKalender> getSessieKalenderList() {
+		if (sessieKalenderLijst == null) {
+			sessieKalenderLijst = sessiekalenderRepository.getAll();
+		}
+		return sessieKalenderLijst;
 	}
 
 	// Sessiekalender methods
@@ -193,11 +237,9 @@ public class SessieController {
 		GenericDaoJpa.commitTransaction();
 		sessieKalenderLijst.add(sk);
 		sessieKalenderObservableLijst.add(sk.toString());
-
 	}
 
 	public void pasSessieKalender(LocalDate startDatum, LocalDate eindDatum) {
-		System.out.println("Start" + startDatum.toString() + " - " + eindDatum.toString());
 		SessieKalender sk = this.gekozenSessieKalender;
 		sessieKalenderLijst.remove(sk);
 		sessieKalenderObservableLijst.remove(sk.toString());
@@ -209,8 +251,6 @@ public class SessieController {
 		sessieKalenderLijst.add(sk);
 		sessieKalenderObservableLijst.add(sk.toString());
 		this.gekozenSessieKalender = sk;
-		System.out.println("einde");
-		
 	}
 
 	public void verwijderSessieKalender(String beginjaar) {
@@ -220,40 +260,185 @@ public class SessieController {
 		GenericDaoJpa.commitTransaction();
 	}
 
-	private List<SessieKalender> getSessieKalenderList() {
-		if (sessieKalenderLijst == null) {
-			sessieKalenderLijst = sessiekalenderRepository.getAll();
-		}
-		return sessieKalenderLijst;
-	}
-
-	public Sessie getSessie() {
-		return sessie;
-	}
-
-	public void setSessie(Sessie sessie) {
-		firePropertyChange("geselecteerdeSessie", this.sessie, sessie);
-		this.sessie = sessie;
-	}
-	// Sessie methods
-
-	private  void firePropertyChange(String welke, Sessie oude, Sessie nieuwe) {	
-			subjectSessie.firePropertyChange(welke, oude, nieuwe);
-	}
-
-	public void addPropertyChangeListenerSessie(PropertyChangeListener pcl) {
-		subjectSessie.addPropertyChangeListener(pcl);
-		pcl.propertyChange(new PropertyChangeEvent(pcl, "geselecteerdeSessie", null, this.sessie));
-	}
-
-	public void removePropertyChangeListenerSessie(PropertyChangeListener pcl) {
-		subjectSessie.removePropertyChangeListener(pcl);
-	}
 	public boolean isKalenderUniek(SessieKalender kalender) {
 		boolean overlap = false;
-		for (SessieKalender k : sessieKalenderLijst ) {
+		for (SessieKalender k : sessieKalenderLijst) {
 			overlap = k.getStartDatum().getYear() == kalender.getStartDatum().getYear();
 		}
 		return overlap;
 	}
+
+	// Sessie methods
+
+	public Sessie getSessie() {
+		return gekozenSessie;
+	}
+
+	public ObservableList<String> getVerantwoordelijkeNamen() {
+		return FXCollections.observableArrayList(
+				verantwoordelijkeLijstBijSessie.stream().map(Gebruiker::getVolledigeNaam).collect(Collectors.toList()));
+	}
+
+	public void setVerantwoordelijkeLijstBijSessie(Gebruiker verantwoordelijkeBijSessie) {
+		// verantwoordelijke van de sessie kan op dit moment geen verantwoordelijke meer
+		// zijn en moet daarom bij de lijst gestoken worden maar als hij  niet meer bestaat dan niet :
+		List<Gebruiker> huidigeVerantwoordelijkeList = gebruikerRepo.getByDiscriminator("Verantwoordelijke");
+		if (verantwoordelijkeBijSessie != null) {
+			boolean zitErIn = huidigeVerantwoordelijkeList.stream()
+					.filter(v -> v.getId().equals(verantwoordelijkeBijSessie.getId())).findFirst().orElse(null) != null;
+			if (zitErIn) {
+				this.verantwoordelijkeLijstBijSessie = huidigeVerantwoordelijkeList;
+			} else {
+				List<Gebruiker> lijst = new ArrayList<>(huidigeVerantwoordelijkeList);
+				lijst.add(verantwoordelijkeBijSessie);
+				this.verantwoordelijkeLijstBijSessie = lijst;
+			}
+		}
+		else {
+			this.verantwoordelijkeLijstBijSessie = huidigeVerantwoordelijkeList;
+		}
+	}
+	public void maakSessieAan(String titel, String lokaal,String gastSpreker, String startuur, String startmin, String einduur,
+			String eindmin, String volledigeNaamVerantwoordelijke,String beschrijving,String maxCap,LocalDate start,LocalDate einde) {
+		
+		
+		if(start==null) {
+			System.out.println("datum is null");
+			String fout = String.format("Voer een geldige datum in bij het %sdatum", "start");
+			System.out.println(fout);
+			throw new IllegalArgumentException(fout);
+			
+		}
+		LocalDateTime startDatum = maakLocalDateTime(start, startuur, startmin, "start");
+		if(einde==null) {
+			einde=start;
+		}
+		LocalDateTime eindDatum= maakLocalDateTime(einde, einduur, eindmin, "eind");
+		Gebruiker verantwoordelijke = verantwoordelijkeLijstBijSessie.stream()
+				.filter(v -> v.getVolledigeNaam().equals(volledigeNaamVerantwoordelijke)).findFirst().orElse(null);
+		boolean correctFormaat = true;
+		int maxCapaciteit;
+		Pattern p = Pattern.compile("[0-9]{1,3}");
+		Matcher m = p.matcher(String.valueOf(maxCap));
+		correctFormaat = m.matches();
+		if(correctFormaat) {
+			maxCapaciteit = Integer.parseInt(maxCap);
+		}else {
+			String fout = String.format("%s is geen geldige waarde bij maximum capaciteit", maxCap);
+			throw new NumberFormatException(fout);
+		}
+		Sessie nieuweSessie = new Sessie(verantwoordelijke, titel, startDatum, eindDatum, maxCapaciteit, lokaal, beschrijving);
+		insertSessie(nieuweSessie);
+		sessieLijst.add(nieuweSessie);
+		sessieObservableLijst.add(nieuweSessie);
+	}
+	public void pasSessieAan(String titel, String lokaal,String gastSpreker, String startuur, String startmin, String einduur,
+			String eindmin, String volledigeNaamVerantwoordelijke,String beschrijving,String maxCap, boolean staatOpen,boolean gesloten,
+			LocalDate start,LocalDate einde) {
+		
+		if(start==null) {
+			System.out.println("datum is null");
+			String fout = String.format("Voer een geldige datum in bij het %sdatum", "start");
+			throw new IllegalArgumentException(fout);
+		}
+		LocalDateTime startDatum = maakLocalDateTime(start, startuur, startmin, "start");
+		
+		if(einde==null) {
+			einde=start;
+		}
+		LocalDateTime eindDatum= maakLocalDateTime(einde, einduur, eindmin, "eind");
+		Gebruiker verantwoordelijke = verantwoordelijkeLijstBijSessie.stream()
+				.filter(v -> v.getVolledigeNaam().equals(volledigeNaamVerantwoordelijke)).findFirst().orElse(null);
+		boolean correctFormaat = true;
+		int maxCapaciteit;
+		Pattern p = Pattern.compile("[0-9]{1,3}");
+		Matcher m = p.matcher(String.valueOf(maxCap));
+		correctFormaat = m.matches();
+		if(correctFormaat) {
+			maxCapaciteit = Integer.parseInt(maxCap);
+		}else {
+			String fout = String.format("%s is geen geldige waarde bij maximum capaciteit", maxCap);
+			throw new NumberFormatException(fout);
+		}
+		Sessie sessie = this.gekozenSessie;
+		int veranderingen = sessie.pasSessieAan(verantwoordelijke, titel, startDatum, eindDatum,staatOpen, gesloten, maxCapaciteit,
+				 lokaal, beschrijving);
+		if (veranderingen > 0) {
+			updateSessie(this.gekozenSessie);
+			firePropertyChange("sessie", this.gekozenSessie, sessie);
+			this.gekozenSessie = sessie;
+		}
+	}
+	private LocalDateTime maakLocalDateTime(LocalDate datum, String uur, String min, String welke) {
+		//strings naar localdatetimes
+		int uurInt,minInt;
+		
+		if( !(uur.isEmpty() || min.isEmpty() || uur.isBlank()|| min.isBlank())) {
+			boolean correctFormaat = true;
+			Pattern p = Pattern.compile("[0-9]{1,2}");
+			Matcher m = p.matcher(String.valueOf(uur));
+			correctFormaat = m.matches();
+			if(correctFormaat) {
+				uurInt = Integer.parseInt(uur);
+			}else {
+				String fout = String.format("Voer een geldig formaat in bij als %s uur", welke);
+				throw new NumberFormatException(fout);
+			}
+			
+			m = p.matcher(String.valueOf(min));
+			correctFormaat = m.matches();
+			if(correctFormaat) {
+				minInt = Integer.parseInt(min);
+			}else {
+				String fout = String.format("Voer een geldig formaat in bij als %s minuten", welke);
+				throw new NumberFormatException(fout);
+			}
+			LocalTime tijd =LocalTime.of(uurInt, minInt);
+			return LocalDateTime.of(datum, tijd);
+		}else {
+			System.out.println(welke+" : "+datum.toString() + " " + uur + " " + min);
+			String fout = String.format("Voer een geldig formaat in bij het %suur", welke);
+			throw new IllegalArgumentException(fout);
+		}
+	}
+	//Databank operaties
+	public void deleteSessie() {
+		Sessie teVerwijderenSessie = this.gekozenSessie;
+		sessieLijst.remove(teVerwijderenSessie);
+		sessieObservableLijst.remove(teVerwijderenSessie);
+		GenericDaoJpa.startTransaction();
+		sessieRepository.delete(teVerwijderenSessie);
+		GenericDaoJpa.commitTransaction();
+		firePropertyChange("geselecteerdeGebruiker", this.gekozenSessie, null);
+		this.gekozenSessie = null;
+	}
+
+	public void insertSessie(Sessie sessie) {
+		GenericDaoJpa.startTransaction();
+		sessieRepository.insert(sessie);
+		GenericDaoJpa.commitTransaction();
+	}
+	public void updateSessie(Sessie sessie) {
+		GenericDaoJpa.startTransaction();
+		sessieRepository.update(sessie);
+		GenericDaoJpa.commitTransaction();
+	}
+	
+	public void rollBack() {
+		GenericDaoJpa.rollbackTransaction();
+	}
+	// changeSupport
+	private <T> void firePropertyChange(String welke, T oude, T nieuwe) {
+		subject.firePropertyChange(welke, oude, nieuwe);
+	}
+
+	public void addPropertyChangeListenerSessie(PropertyChangeListener pcl, String welke) {
+		subject.addPropertyChangeListener(pcl);
+		pcl.propertyChange(new PropertyChangeEvent(pcl, welke, null, null));
+	}
+
+	public void removePropertyChangeListenerSessie(PropertyChangeListener pcl) {
+		subject.removePropertyChangeListener(pcl);
+	}
+
 }
