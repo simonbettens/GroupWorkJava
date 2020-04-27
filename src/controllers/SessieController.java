@@ -166,7 +166,9 @@ public class SessieController {
 	}
 
 	public void setSessie(Sessie sessie) {
-		setVerantwoordelijkeLijstBijSessie(sessie.getVerantwoordelijke());
+		if(sessie!=null) {
+			setVerantwoordelijkeLijstBijSessie(sessie.getVerantwoordelijke());
+		}
 		firePropertyChange("sessie", this.gekozenSessie, sessie);
 		this.gekozenSessie = sessie;
 	}

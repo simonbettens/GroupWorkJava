@@ -61,4 +61,5 @@ public class SessieKalenderTest {
 		sk.addSessie(geldigeSessie);
 		Assertions.assertEquals(sk.getSessies().get(0), geldigeSessie);
 	}
+	
 }

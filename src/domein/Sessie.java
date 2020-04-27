@@ -22,6 +22,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import javafx.beans.property.SimpleStringProperty;
+//import jdk.vm.ci.meta.Local;
 
 @Entity(name="Sessie")
 @Table(name = "Sessie")
@@ -99,6 +100,12 @@ public class Sessie implements Serializable{
 		this.gebruikersIngeschreven = new ArrayList<SessieGebruiker>();
 		this.media = new ArrayList<Media>();
 		this.aankondigingen = new ArrayList<SessieAankondiging>();
+	}
+	
+	//constructor voor tests
+	public Sessie(LocalDateTime startDatum, LocalDateTime eindDatum) {
+		this.startDatum=startDatum;
+		this.eindDatum=eindDatum;
 	}
 	
 	// ----------  getters
