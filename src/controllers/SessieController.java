@@ -80,7 +80,7 @@ public class SessieController {
 	private SortedList<SessieGebruiker> sortedInschrijvingenLijst;
 
 	// Constructor
-	public SessieController(Gebruiker ingelogdeGebruiker,GebruikerDao gebruikerrepo) {
+	public SessieController(Gebruiker ingelogdeGebruiker, GebruikerDao gebruikerrepo) {
 		setSessiekalenderRepository(new SessieKalenderDaoJpa());
 		this.gebruikerRepo = gebruikerrepo;
 		setSessieRepository(new SessieDaoJpa());
@@ -281,39 +281,48 @@ public class SessieController {
 
 	public void setVerantwoordelijkeLijstBijSessie(Gebruiker verantwoordelijkeBijSessie) {
 		// verantwoordelijke van de sessie kan op dit moment geen verantwoordelijke meer
-		// zijn en moet daarom bij de lijst gestoken worden maar als hij  niet meer bestaat dan niet :
-		List<Gebruiker> huidigeVerantwoordelijkeList = gebruikerRepo.getByDiscriminator("Verantwoordelijke");
-		if (verantwoordelijkeBijSessie != null) {
-			boolean zitErIn = huidigeVerantwoordelijkeList.stream()
-					.filter(v -> v.getId().equals(verantwoordelijkeBijSessie.getId())).findFirst().orElse(null) != null;
-			if (zitErIn) {
-				this.verantwoordelijkeLijstBijSessie = huidigeVerantwoordelijkeList;
+		// zijn en moet daarom bij de lijst gestoken worden maar als hij niet meer
+		// bestaat dan niet :
+		if (ingelogdeGebruiker.getType() == GebruikerType.HOOFDVERANTWOORDELIJKE) {
+			List<Gebruiker> huidigeVerantwoordelijkeList = gebruikerRepo.getByDiscriminator("Verantwoordelijke");
+			if (verantwoordelijkeBijSessie != null) {
+				boolean zitErIn = huidigeVerantwoordelijkeList.stream()
+						.filter(v -> v.getId().equals(verantwoordelijkeBijSessie.getId())).findFirst()
+						.orElse(null) != null;
+				if (zitErIn) {
+					this.verantwoordelijkeLijstBijSessie = huidigeVerantwoordelijkeList;
+				} else {
+					List<Gebruiker> lijst = new ArrayList<>(huidigeVerantwoordelijkeList);
+					lijst.add(verantwoordelijkeBijSessie);
+					this.verantwoordelijkeLijstBijSessie = lijst;
+				}
 			} else {
-				List<Gebruiker> lijst = new ArrayList<>(huidigeVerantwoordelijkeList);
-				lijst.add(verantwoordelijkeBijSessie);
-				this.verantwoordelijkeLijstBijSessie = lijst;
+				this.verantwoordelijkeLijstBijSessie = huidigeVerantwoordelijkeList;
 			}
 		}
 		else {
+			List<Gebruiker> huidigeVerantwoordelijkeList = new ArrayList<>();
+			huidigeVerantwoordelijkeList.add(ingelogdeGebruiker);
 			this.verantwoordelijkeLijstBijSessie = huidigeVerantwoordelijkeList;
 		}
 	}
-	public void maakSessieAan(String titel, String lokaal,String gastSpreker, String startuur, String startmin, String einduur,
-			String eindmin, String volledigeNaamVerantwoordelijke,String beschrijving,String maxCap,LocalDate start,LocalDate einde) {
-		
-		
-		if(start==null) {
+
+	public void maakSessieAan(String titel, String lokaal, String gastSpreker, String startuur, String startmin,
+			String einduur, String eindmin, String volledigeNaamVerantwoordelijke, String beschrijving, String maxCap,
+			LocalDate start, LocalDate einde) {
+
+		if (start == null) {
 			System.out.println("datum is null");
 			String fout = String.format("Voer een geldige datum in bij het %sdatum", "start");
 			System.out.println(fout);
 			throw new IllegalArgumentException(fout);
-			
+
 		}
 		LocalDateTime startDatum = maakLocalDateTime(start, startuur, startmin, "start");
-		if(einde==null) {
-			einde=start;
+		if (einde == null) {
+			einde = start;
 		}
-		LocalDateTime eindDatum= maakLocalDateTime(einde, einduur, eindmin, "eind");
+		LocalDateTime eindDatum = maakLocalDateTime(einde, einduur, eindmin, "eind");
 		Gebruiker verantwoordelijke = verantwoordelijkeLijstBijSessie.stream()
 				.filter(v -> v.getVolledigeNaam().equals(volledigeNaamVerantwoordelijke)).findFirst().orElse(null);
 		boolean correctFormaat = true;
@@ -321,32 +330,34 @@ public class SessieController {
 		Pattern p = Pattern.compile("[0-9]{1,3}");
 		Matcher m = p.matcher(String.valueOf(maxCap));
 		correctFormaat = m.matches();
-		if(correctFormaat) {
+		if (correctFormaat) {
 			maxCapaciteit = Integer.parseInt(maxCap);
-		}else {
+		} else {
 			String fout = String.format("%s is geen geldige waarde bij maximum capaciteit", maxCap);
 			throw new NumberFormatException(fout);
 		}
-		Sessie nieuweSessie = new Sessie(verantwoordelijke, titel, startDatum, eindDatum, maxCapaciteit, lokaal, beschrijving);
+		Sessie nieuweSessie = new Sessie(verantwoordelijke, titel, startDatum, eindDatum, maxCapaciteit, lokaal,
+				beschrijving);
 		insertSessie(nieuweSessie);
 		sessieLijst.add(nieuweSessie);
 		sessieObservableLijst.add(nieuweSessie);
 	}
-	public void pasSessieAan(String titel, String lokaal,String gastSpreker, String startuur, String startmin, String einduur,
-			String eindmin, String volledigeNaamVerantwoordelijke,String beschrijving,String maxCap, boolean staatOpen,boolean gesloten,
-			LocalDate start,LocalDate einde) {
-		
-		if(start==null) {
+
+	public void pasSessieAan(String titel, String lokaal, String gastSpreker, String startuur, String startmin,
+			String einduur, String eindmin, String volledigeNaamVerantwoordelijke, String beschrijving, String maxCap,
+			boolean staatOpen, boolean gesloten, LocalDate start, LocalDate einde) {
+
+		if (start == null) {
 			System.out.println("datum is null");
 			String fout = String.format("Voer een geldige datum in bij het %sdatum", "start");
 			throw new IllegalArgumentException(fout);
 		}
 		LocalDateTime startDatum = maakLocalDateTime(start, startuur, startmin, "start");
-		
-		if(einde==null) {
-			einde=start;
+
+		if (einde == null) {
+			einde = start;
 		}
-		LocalDateTime eindDatum= maakLocalDateTime(einde, einduur, eindmin, "eind");
+		LocalDateTime eindDatum = maakLocalDateTime(einde, einduur, eindmin, "eind");
 		Gebruiker verantwoordelijke = verantwoordelijkeLijstBijSessie.stream()
 				.filter(v -> v.getVolledigeNaam().equals(volledigeNaamVerantwoordelijke)).findFirst().orElse(null);
 		boolean correctFormaat = true;
@@ -354,54 +365,56 @@ public class SessieController {
 		Pattern p = Pattern.compile("[0-9]{1,3}");
 		Matcher m = p.matcher(String.valueOf(maxCap));
 		correctFormaat = m.matches();
-		if(correctFormaat) {
+		if (correctFormaat) {
 			maxCapaciteit = Integer.parseInt(maxCap);
-		}else {
+		} else {
 			String fout = String.format("%s is geen geldige waarde bij maximum capaciteit", maxCap);
 			throw new NumberFormatException(fout);
 		}
 		Sessie sessie = this.gekozenSessie;
-		int veranderingen = sessie.pasSessieAan(verantwoordelijke, titel, startDatum, eindDatum,staatOpen, gesloten, maxCapaciteit,
-				 lokaal, beschrijving);
+		int veranderingen = sessie.pasSessieAan(verantwoordelijke, titel, startDatum, eindDatum, staatOpen, gesloten,
+				maxCapaciteit, lokaal, beschrijving);
 		if (veranderingen > 0) {
 			updateSessie(this.gekozenSessie);
 			firePropertyChange("sessie", this.gekozenSessie, sessie);
 			this.gekozenSessie = sessie;
 		}
 	}
+
 	private LocalDateTime maakLocalDateTime(LocalDate datum, String uur, String min, String welke) {
-		//strings naar localdatetimes
-		int uurInt,minInt;
-		
-		if( !(uur.isEmpty() || min.isEmpty() || uur.isBlank()|| min.isBlank())) {
+		// strings naar localdatetimes
+		int uurInt, minInt;
+
+		if (!(uur.isEmpty() || min.isEmpty() || uur.isBlank() || min.isBlank())) {
 			boolean correctFormaat = true;
 			Pattern p = Pattern.compile("[0-9]{1,2}");
 			Matcher m = p.matcher(String.valueOf(uur));
 			correctFormaat = m.matches();
-			if(correctFormaat) {
+			if (correctFormaat) {
 				uurInt = Integer.parseInt(uur);
-			}else {
+			} else {
 				String fout = String.format("Voer een geldig formaat in bij als %s uur", welke);
 				throw new NumberFormatException(fout);
 			}
-			
+
 			m = p.matcher(String.valueOf(min));
 			correctFormaat = m.matches();
-			if(correctFormaat) {
+			if (correctFormaat) {
 				minInt = Integer.parseInt(min);
-			}else {
+			} else {
 				String fout = String.format("Voer een geldig formaat in bij als %s minuten", welke);
 				throw new NumberFormatException(fout);
 			}
-			LocalTime tijd =LocalTime.of(uurInt, minInt);
+			LocalTime tijd = LocalTime.of(uurInt, minInt);
 			return LocalDateTime.of(datum, tijd);
-		}else {
-			System.out.println(welke+" : "+datum.toString() + " " + uur + " " + min);
+		} else {
+			System.out.println(welke + " : " + datum.toString() + " " + uur + " " + min);
 			String fout = String.format("Voer een geldig formaat in bij het %suur", welke);
 			throw new IllegalArgumentException(fout);
 		}
 	}
-	//Databank operaties
+
+	// Databank operaties
 	public void deleteSessie() {
 		Sessie teVerwijderenSessie = this.gekozenSessie;
 		sessieLijst.remove(teVerwijderenSessie);
@@ -418,15 +431,17 @@ public class SessieController {
 		sessieRepository.insert(sessie);
 		GenericDaoJpa.commitTransaction();
 	}
+
 	public void updateSessie(Sessie sessie) {
 		GenericDaoJpa.startTransaction();
 		sessieRepository.update(sessie);
 		GenericDaoJpa.commitTransaction();
 	}
-	
+
 	public void rollBack() {
 		GenericDaoJpa.rollbackTransaction();
 	}
+
 	// changeSupport
 	private <T> void firePropertyChange(String welke, T oude, T nieuwe) {
 		subject.firePropertyChange(welke, oude, nieuwe);

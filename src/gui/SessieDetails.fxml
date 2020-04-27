@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root id="light-background" prefHeight="750.0" prefWidth="650.0" stylesheets="@../styles/styles.css" type="VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root id="light-background" minHeight="750.0" minWidth="600.0" prefHeight="750.0" prefWidth="650.0" stylesheets="@../styles/styles.css" type="VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox id="grey-background" alignment="TOP_CENTER" prefHeight="632.0" prefWidth="630.0">
          <children>

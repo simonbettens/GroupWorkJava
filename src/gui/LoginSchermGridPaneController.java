@@ -197,7 +197,8 @@ public class LoginSchermGridPaneController extends GridPane {
         stage.setX((bounds.getWidth() - stage.getWidth()) / 2);
         stage.setY((bounds.getHeight() - stage.getHeight()) / 2);
 		scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
-		stage.setResizable(false);
+		stage.setResizable(true);
+		stage.setMaximized(true);
         stage.show();
 	}
 
