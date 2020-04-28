@@ -78,8 +78,8 @@ public class Media implements Serializable{
 	public Media() {}
 	//voor nieuwe instantie
 	public Media(Sessie sessie,String adress, String naam, LocalDateTime tijdToegevoegd, MediaType mediaType) {
-		setAdress(adress);
 		setNaam(naam);
+		setAdress(adress);
 		setTijdToegevoegd(tijdToegevoegd);
 		setMediaType(mediaType);
 		this.sessie = sessie;
@@ -123,6 +123,23 @@ public class Media implements Serializable{
 	public TypeMedia getSpecifiekeKlasse() {
 		return specifiekeKlasse;
 	}
+	
+	
+	public SimpleStringProperty getNaamProperty() {
+		naamProperty.setValue(naam);
+		return naamProperty;
+	}
+
+	public SimpleStringProperty getTijdToegevoegdProperty() {
+		tijdToegevoegdProperty.setValue(dtf.format(tijdToegevoegd));
+		return tijdToegevoegdProperty;
+	}
+
+	public SimpleStringProperty getTypeProperty() {
+		typeProperty.setValue(MediaType.MediaTypeToString(mediaType));
+		return typeProperty;
+	}
+
 	private void setAdress(String adress) {
 		if(adress.isEmpty()|| adress.isBlank()) {
 			throw new IllegalArgumentException("adress moet ingevuld zijn");
@@ -149,6 +166,27 @@ public class Media implements Serializable{
 	}
 	private void setSpecifiekeKlasse(TypeMedia specifiekeKlasse) {
 		this.specifiekeKlasse = specifiekeKlasse;
+	}
+	public int pasMediaAan(String adress, String naam, LocalDateTime tijdToegevoegd, MediaType mediaType) {
+		int verandering = 0;
+		if(adress != this.adress) {
+			verandering++;
+			setAdress(adress);
+		}
+		if(naam != this.naam) {
+			verandering++;
+			setNaam(naam);
+		}
+		if(tijdToegevoegd != this.tijdToegevoegd) {
+			verandering++;
+			setTijdToegevoegd(tijdToegevoegd);
+		}
+		if(mediaType != this.mediaType) {
+			verandering++;
+			setMediaType(mediaType);
+		}
+		
+		return verandering;
 	}
 
 	@Override

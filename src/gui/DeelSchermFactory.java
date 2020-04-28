@@ -12,7 +12,10 @@ public class DeelSchermFactory {
 		case 6:deelScherm = new SessieDetailsController();break;
 		case 7:deelScherm = new SessieKalenderDetailsController(false);break;
 		case 8:deelScherm = new SessieKalenderDetailsController(true);break;
-		case 9:break;
+		case 9: deelScherm = new MediaLijstController(); break;
+		case 10: deelScherm = new MediaDetailsController(); break;
+		case 11:break;
+		case 12:break;
 		default: 
 			deelScherm = new StartDeelSchermController();
 		}

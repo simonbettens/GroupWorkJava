@@ -20,6 +20,7 @@ import domein.Gebruiker;
 import domein.GebruikerType;
 import domein.Maand;
 import domein.Media;
+import domein.MediaType;
 import domein.Sessie;
 import domein.SessieAankondiging;
 import domein.SessieGebruiker;
@@ -30,6 +31,8 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import repository.GebruikerDao;
 import repository.GenericDaoJpa;
+import repository.MediaDao;
+import repository.MediaDaoJpa;
 import repository.SessieDao;
 import repository.SessieDaoJpa;
 import repository.SessieKalenderDao;
@@ -41,6 +44,7 @@ public class SessieController {
 	private SessieKalenderDao sessiekalenderRepository;
 	private SessieDao sessieRepository;
 	private GebruikerDao gebruikerRepo;
+	private MediaDao mediaRepository;
 	private Gebruiker ingelogdeGebruiker;
 	private List<Gebruiker> verantwoordelijkeLijstBijSessie;
 	private Maand gekozenMaand;
@@ -83,6 +87,7 @@ public class SessieController {
 	public SessieController(Gebruiker ingelogdeGebruiker, GebruikerDao gebruikerrepo) {
 		setSessiekalenderRepository(new SessieKalenderDaoJpa());
 		this.gebruikerRepo = gebruikerrepo;
+		this.mediaRepository = new MediaDaoJpa();
 		setSessieRepository(new SessieDaoJpa());
 		setIngelogdeGebruiker(ingelogdeGebruiker);
 		this.subject = new PropertyChangeSupport(this);
@@ -273,7 +278,7 @@ public class SessieController {
 	// Sessie methods
 
 	public Sessie getSessie() {
-		return gekozenSessie;
+		return this.gekozenSessie;
 	}
 
 	public ObservableList<String> getVerantwoordelijkeNamen() {
@@ -415,6 +420,43 @@ public class SessieController {
 			throw new IllegalArgumentException(fout);
 		}
 	}
+	
+	// Media methods
+	public void vulLijstMedia() {
+		System.out.println(gekozenSessie==null?"null":"notnull");
+		mediaLijst = gekozenSessie.getMedia();
+		mediaObservableLijst = FXCollections.observableArrayList(mediaLijst);
+		this.filteredMediaLijst = new FilteredList<>(mediaObservableLijst, e -> true);
+		this.sortedMediaLijst = new SortedList<Media>(filteredMediaLijst,
+				Comparator.comparing(Media::getMediaType).thenComparing(Media::getNaam));
+	}
+	
+	public ObservableList<Media> getMedia(){
+		return sortedMediaLijst;
+	}
+	public void setGeselecteerdeMedia(Media md) {
+		firePropertyChange("media",this.gekozenMedia,md);
+		this.gekozenMedia = md;
+	}
+	public void maakMedia(String naam,String bestandnaam,MediaType type) {
+		Media media = new Media(gekozenSessie, bestandnaam, naam, LocalDateTime.now(), type);
+		gekozenSessie.addMediaItem(media);
+		mediaLijst.add(media);
+		mediaObservableLijst.add(media);
+		insertMedia(media);
+	}
+	public void pasMedia(String naam,String bestandnaam,MediaType type) {
+		Media media = this.gekozenMedia;
+		int ver = media.pasMediaAan(bestandnaam,naam , LocalDateTime.now(), type);
+		if(ver!=0) {
+			updateMedia(media);
+			firePropertyChange("media", this.gekozenMedia, media);
+			this.gekozenMedia= media;
+		}
+	}
+	
+	
+	
 
 	// Databank operaties
 	public void deleteSessie() {
@@ -424,7 +466,7 @@ public class SessieController {
 		GenericDaoJpa.startTransaction();
 		sessieRepository.delete(teVerwijderenSessie);
 		GenericDaoJpa.commitTransaction();
-		firePropertyChange("geselecteerdeGebruiker", this.gekozenSessie, null);
+		firePropertyChange("sessie", this.gekozenSessie, null);
 		this.gekozenSessie = null;
 	}
 
@@ -438,6 +480,31 @@ public class SessieController {
 		GenericDaoJpa.startTransaction();
 		sessieRepository.update(sessie);
 		GenericDaoJpa.commitTransaction();
+	}
+	public void insertMedia(Media media) {
+		GenericDaoJpa.startTransaction();
+		mediaRepository.insert(media);
+		sessieRepository.update(gekozenSessie);
+		GenericDaoJpa.commitTransaction();
+	}
+
+	public void updateMedia(Media media) {
+		GenericDaoJpa.startTransaction();
+		mediaRepository.update(media);
+		sessieRepository.update(gekozenSessie);
+		GenericDaoJpa.commitTransaction();
+	}
+	public void deleteMedia() {
+		Media teVerwijderenMedia = this.gekozenMedia;
+		mediaLijst.remove(teVerwijderenMedia);
+		gekozenSessie.removeMediaItem(gekozenMedia);
+		mediaObservableLijst.remove(teVerwijderenMedia);
+		GenericDaoJpa.startTransaction();
+		mediaRepository.delete(teVerwijderenMedia);
+		sessieRepository.update(gekozenSessie);
+		GenericDaoJpa.commitTransaction();
+		firePropertyChange("media", this.gekozenMedia, null);
+		this.gekozenMedia = null;
 	}
 
 	public void rollBack() {

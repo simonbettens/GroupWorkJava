@@ -10,63 +10,83 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root id="light-background" minHeight="750.0" minWidth="600.0" prefHeight="750.0" prefWidth="600.0" stylesheets="@../styles/styles.css" type="VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0">
-         <children>
-            <TextField fx:id="txfZoek" alignment="CENTER" onKeyReleased="#search" prefWidth="350.0" promptText="Zoek op naam van de Sessie">
-               <HBox.margin>
-                  <Insets right="10.0" />
-               </HBox.margin>
-            </TextField>
-            <Button fx:id="btnMaakLeeg" disable="true" mnemonicParsing="false" onAction="#maakLeeg" text="Maak leeg" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="47.0" prefWidth="600.0">
-         <children>
-            <Button fx:id="btnNieuweSessieKalender" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#maakNieuweSessiekalender" text="Nieuwe Sessiekalender">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </Button>
-            <Button fx:id="btnPasSessieKalender" mnemonicParsing="false" onAction="#pasSessieKalender" text="Pas Sessiekalender Aan">
-               <HBox.margin>
-                  <Insets left="5.0" right="50.0" />
-               </HBox.margin></Button>
-            <Button fx:id="btnNieuweSessie" mnemonicParsing="false" onAction="#maakSessie" text="Nieuwe Sessie">
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-            </Button>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="33.0" prefWidth="600.0">
-         <children>
-            <ComboBox fx:id="cbAcademiejaar" prefHeight="25.0" prefWidth="160.0">
-               <HBox.margin>
-                  <Insets left="20.0" right="133.0" />
-               </HBox.margin>
-            </ComboBox>
-            <ChoiceBox fx:id="cbMaand" prefHeight="25.0" prefWidth="160.0">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </ChoiceBox>
-         </children>
-         <VBox.margin>
-            <Insets bottom="5.0" />
-         </VBox.margin>
-      </HBox>
-      <TableView fx:id="tblSessies" fixedCellSize="24.0" prefHeight="649.0" prefWidth="600.0">
-        <columns>
-            <TableColumn fx:id="clnStartdatum" editable="false" prefWidth="160.0" sortable="false" text="Startdatum" />
-          <TableColumn fx:id="clnTitel" editable="false" prefWidth="200.0" sortable="false" text="Titel" />
-          <TableColumn fx:id="clnVerantwoordelijke" editable="false" prefWidth="125.0" sortable="false" text="Verantwoordelijke" />
-            <TableColumn fx:id="clnDuur" editable="false" prefWidth="110.800048828125" sortable="false" text="Duur" />
-        </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-      </TableView>
-   </children>
+<fx:root id="light-background" minHeight="750.0"
+	minWidth="600.0" prefHeight="750.0" prefWidth="600.0"
+	stylesheets="@../styles/styles.css" type="VBox"
+	xmlns="http://javafx.com/javafx/11.0.1"
+	xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0">
+			<children>
+				<TextField fx:id="txfZoek" alignment="CENTER"
+					onKeyReleased="#search" prefWidth="350.0"
+					promptText="Zoek op naam van de Sessie">
+					<HBox.margin>
+						<Insets right="10.0" />
+					</HBox.margin>
+				</TextField>
+				<Button fx:id="btnMaakLeeg" disable="true"
+					mnemonicParsing="false" onAction="#maakLeeg" text="Maak leeg" />
+			</children>
+		</HBox>
+		<HBox alignment="CENTER" prefHeight="47.0" prefWidth="600.0">
+			<children>
+				<Button fx:id="btnNieuweSessieKalender" alignment="CENTER"
+					contentDisplay="CENTER" mnemonicParsing="false"
+					onAction="#maakNieuweSessiekalender" text="Nieuwe Sessiekalender">
+					<HBox.margin>
+						<Insets />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="btnPasSessieKalender" mnemonicParsing="false"
+					onAction="#pasSessieKalender" text="Pas Sessiekalender Aan">
+					<HBox.margin>
+						<Insets left="5.0" right="50.0" />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="btnNieuweSessie" mnemonicParsing="false"
+					onAction="#maakSessie" text="Nieuwe Sessie">
+					<HBox.margin>
+						<Insets left="10.0" />
+					</HBox.margin>
+				</Button>
+			</children>
+		</HBox>
+		<HBox alignment="CENTER" prefHeight="33.0" prefWidth="600.0">
+			<children>
+				<ComboBox fx:id="cbAcademiejaar" prefHeight="25.0"
+					prefWidth="160.0">
+					<HBox.margin>
+						<Insets left="20.0" right="133.0" />
+					</HBox.margin>
+				</ComboBox>
+				<ChoiceBox fx:id="cbMaand" prefHeight="25.0"
+					prefWidth="160.0">
+					<HBox.margin>
+						<Insets />
+					</HBox.margin>
+				</ChoiceBox>
+			</children>
+			<VBox.margin>
+				<Insets bottom="5.0" />
+			</VBox.margin>
+		</HBox>
+		<TableView fx:id="tblSessies" fixedCellSize="24.0"
+			prefHeight="649.0" prefWidth="600.0">
+			<columns>
+				<TableColumn fx:id="clnStartdatum" editable="false"
+					prefWidth="160.0" sortable="false" text="Startdatum" />
+				<TableColumn fx:id="clnTitel" editable="false"
+					prefWidth="200.0" sortable="false" text="Titel" />
+				<TableColumn fx:id="clnVerantwoordelijke"
+					editable="false" prefWidth="125.0" sortable="false"
+					text="Verantwoordelijke" />
+				<TableColumn fx:id="clnDuur" editable="false"
+					prefWidth="110.800048828125" sortable="false" text="Duur" />
+			</columns>
+			<columnResizePolicy>
+				<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+			</columnResizePolicy>
+		</TableView>
+	</children>
 </fx:root>

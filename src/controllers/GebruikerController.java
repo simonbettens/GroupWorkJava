@@ -27,7 +27,7 @@ public class GebruikerController {
 	private Gebruiker ingelogdeGebruiker;
 	private Gebruiker geselecteerdeGebruiker;
 	private PropertyChangeSupport subject;
-	public GebruikerDaoJpa gebruikerRepository;
+	private GebruikerDaoJpa gebruikerRepository;
 
 	public GebruikerController() {
 		setGebruikerRepository(new GebruikerDaoJpa());

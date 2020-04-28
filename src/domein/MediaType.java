@@ -58,4 +58,32 @@ public enum MediaType {
     	}
     	return waarde;
     }
+    public static MediaType StringToMediaType(String type) {
+    	MediaType waarde = MediaType.ANDERDOCUMENT;
+    	switch (type) {
+		case "Afbeelding": waarde = MediaType.AFBEELDING ;
+			break;
+		case "Ander document": waarde = MediaType.ANDERDOCUMENT;
+			break;
+		case "Excel": waarde = MediaType.EXCEL;
+			break;
+		case "Link": waarde = MediaType.LINK;
+			break;
+		case "Pdf": waarde = MediaType.PDF;
+			break;
+		case "Powerpoint": waarde = MediaType.POWERPOINT;
+			break;
+		case "Video": waarde = MediaType.VIDEO;
+			break;
+		case "Word": waarde = MediaType.WORD;
+			break;
+		case "Youtube Video":waarde = MediaType.YOUTUBEVIDEO;
+			break;
+		case "Zip": waarde = MediaType.ZIP;
+			break;
+		default:
+			break;
+    	}
+    	return waarde;
+    }
 }
