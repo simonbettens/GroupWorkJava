@@ -19,6 +19,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import javafx.beans.property.SimpleStringProperty;
+
 @Entity(name="Media")
 @Table(name = "Media")
 public class Media implements Serializable{
@@ -66,7 +68,12 @@ public class Media implements Serializable{
             this.mediaTypeValue = mediaType.getMediaTypeValue();
         }
     }
-	
+    @Transient
+	 private final SimpleStringProperty naamProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty tijdToegevoegdProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty typeProperty = new SimpleStringProperty();
 	//voor jpa
 	public Media() {}
 	//voor nieuwe instantie
@@ -102,12 +109,15 @@ public class Media implements Serializable{
 		return adress;
 	}
 	public String getNaam() {
+		naamProperty.setValue(this.naam);
 		return naam;
 	}
 	public LocalDateTime getTijdToegevoegd() {
+		typeProperty.setValue(dtf.format(tijdToegevoegd));
 		return tijdToegevoegd;
 	}
 	public MediaType getMediaType() {
+		typeProperty.setValue(MediaType.MediaTypeToString(mediaType));
 		return mediaType;
 	}
 	public TypeMedia getSpecifiekeKlasse() {
@@ -123,15 +133,18 @@ public class Media implements Serializable{
 		if(naam.isEmpty() || naam.isBlank()) {
 			throw new IllegalArgumentException("naam moet ingevuld zijn");
 		}
+		naamProperty.setValue(naam);
 		this.naam = naam;
 	}
 	private void setTijdToegevoegd(LocalDateTime tijdToegevoegd) {
 		if(tijdToegevoegd.isBefore(LocalDateTime.now())) {
 			throw new IllegalArgumentException("je kan geen media toevoegen waarvan de tijd in het verleden ligt");
 		}
+		typeProperty.setValue(dtf.format(tijdToegevoegd));
 		this.tijdToegevoegd = tijdToegevoegd;
 	}
 	private void setMediaType(MediaType mediaType) {
+		typeProperty.setValue(MediaType.MediaTypeToString(mediaType));
 		this.mediaType = mediaType;
 	}
 	private void setSpecifiekeKlasse(TypeMedia specifiekeKlasse) {

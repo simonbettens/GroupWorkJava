@@ -30,4 +30,32 @@ public enum MediaType {
           .findFirst()
           .orElseThrow(IllegalArgumentException::new);
     }
+    public static String MediaTypeToString(MediaType type) {
+    	String waarde = "";
+    	switch (type) {
+		case AFBEELDING: waarde = "Afbeelding";
+			break;
+		case ANDERDOCUMENT: waarde = "Ander document";
+			break;
+		case EXCEL:waarde = "Excel";
+			break;
+		case LINK:waarde = "Link";
+			break;
+		case PDF:waarde = "Pdf";
+			break;
+		case POWERPOINT:waarde = "Powerpoint";
+			break;
+		case VIDEO:waarde = "Video";
+			break;
+		case WORD:waarde = "Word";
+			break;
+		case YOUTUBEVIDEO:waarde = "Youtube Video";
+			break;
+		case ZIP:waarde = "Zip";
+			break;
+		default:
+			break;
+    	}
+    	return waarde;
+    }
 }
