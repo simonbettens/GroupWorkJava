@@ -51,13 +51,13 @@ public class SessieKalenderTest {
 	@Test
 	public void voegOngeldigeSessieToeAanSessiekalender_WerptException() {
 		SessieKalender sk = new SessieKalender(LocalDate.of(2028, 9, 24), LocalDate.of(2029, 9, 22));
-		Sessie ongeldigeSessie = new Sessie(new Gebruiker(), "Joris", LocalDateTime.now().plusMinutes(1), LocalDateTime.now().plusMinutes(20), 20, "B301", "geen");
+		Sessie ongeldigeSessie = new Sessie(new Gebruiker(), "Joris", LocalDateTime.now().plusMinutes(1), LocalDateTime.now().plusMinutes(20), 20, "B301", "geen","");
 		Assertions.assertThrows(IllegalArgumentException.class, () -> sk.addSessie(ongeldigeSessie));
 	}
 	@Test
 	public void voegGeldigeSessieToeAanSessiekalender_Slaagt() {
 		SessieKalender sk = new SessieKalender(LocalDate.of(2028, 9, 24), LocalDate.of(2029, 9, 22));
-		Sessie geldigeSessie = new Sessie(new Gebruiker(), "Joris", LocalDateTime.of(2028, 11, 14, 10, 0),LocalDateTime.of(2028, 11, 14, 10, 20), 20, "B301", "geen");
+		Sessie geldigeSessie = new Sessie(new Gebruiker(), "Joris", LocalDateTime.of(2028, 11, 14, 10, 0),LocalDateTime.of(2028, 11, 14, 10, 20), 20, "B301", "geen","");
 		sk.addSessie(geldigeSessie);
 		Assertions.assertEquals(sk.getSessies().get(0), geldigeSessie);
 	}

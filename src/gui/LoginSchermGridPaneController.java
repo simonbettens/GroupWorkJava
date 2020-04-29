@@ -156,7 +156,7 @@ public class LoginSchermGridPaneController extends GridPane {
 				try {
 					gebruiker = gebruikerController.getGebruikerByUsername(gebruikerNaam);
 					if(gebruiker.getType()!=GebruikerType.GEBRUIKER) {
-						gelijkaardig = PasswoordHasher.verifyPasswordHash(gebruiker.getPasswoordHash(), wachtwoord);
+						gelijkaardig = PasswoordHasher.verifyPasswordHash(gebruiker.getJavaPasswoord(), wachtwoord);
 					}else {
 						System.out.println("Enkel (hoofd-)verantwoordelijken kunnen zich inloggen op deze applicatie");
 						lblFout.setText("Enkel (hoofd-)verantwoordelijke \nkunnen zich inloggen");

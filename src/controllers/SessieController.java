@@ -38,6 +38,8 @@ import repository.SessieAankondigingDao;
 import repository.SessieAankondigingDaoJpa;
 import repository.SessieDao;
 import repository.SessieDaoJpa;
+import repository.SessieGebruikerDao;
+import repository.SessieGebruikerDaoJpa;
 import repository.SessieKalenderDao;
 import repository.SessieKalenderDaoJpa;
 
@@ -49,6 +51,7 @@ public class SessieController {
 	private GebruikerDao gebruikerRepo;
 	private MediaDao mediaRepository;
 	private SessieAankondigingDao sessieAankondigingRepository;
+	private SessieGebruikerDao sessieGebruikerRepository;
 	private Gebruiker ingelogdeGebruiker;
 	private List<Gebruiker> verantwoordelijkeLijstBijSessie;
 	private Maand gekozenMaand;
@@ -93,6 +96,7 @@ public class SessieController {
 		this.gebruikerRepo = gebruikerrepo;
 		this.mediaRepository = new MediaDaoJpa();
 		this.sessieAankondigingRepository = new SessieAankondigingDaoJpa();
+		this.sessieGebruikerRepository = new SessieGebruikerDaoJpa();
 		setSessieRepository(new SessieDaoJpa());
 		setIngelogdeGebruiker(ingelogdeGebruiker);
 		this.subject = new PropertyChangeSupport(this);
@@ -176,7 +180,7 @@ public class SessieController {
 	}
 
 	public void setSessie(Sessie sessie) {
-		if(sessie!=null) {
+		if (sessie != null) {
 			setVerantwoordelijkeLijstBijSessie(sessie.getVerantwoordelijke());
 		}
 		firePropertyChange("sessie", this.gekozenSessie, sessie);
@@ -214,7 +218,6 @@ public class SessieController {
 		}
 		return sessieKalenderLijst;
 	}
-	
 
 	public Media getGekozenMedia() {
 		return gekozenMedia;
@@ -324,8 +327,7 @@ public class SessieController {
 			} else {
 				this.verantwoordelijkeLijstBijSessie = huidigeVerantwoordelijkeList;
 			}
-		}
-		else {
+		} else {
 			List<Gebruiker> huidigeVerantwoordelijkeList = new ArrayList<>();
 			huidigeVerantwoordelijkeList.add(ingelogdeGebruiker);
 			this.verantwoordelijkeLijstBijSessie = huidigeVerantwoordelijkeList;
@@ -362,7 +364,7 @@ public class SessieController {
 			throw new NumberFormatException(fout);
 		}
 		Sessie nieuweSessie = new Sessie(verantwoordelijke, titel, startDatum, eindDatum, maxCapaciteit, lokaal,
-				beschrijving);
+				beschrijving,gastSpreker);
 		insertSessie(nieuweSessie);
 		sessieLijst.add(nieuweSessie);
 		sessieObservableLijst.add(nieuweSessie);
@@ -371,38 +373,39 @@ public class SessieController {
 	public void pasSessieAan(String titel, String lokaal, String gastSpreker, String startuur, String startmin,
 			String einduur, String eindmin, String volledigeNaamVerantwoordelijke, String beschrijving, String maxCap,
 			boolean staatOpen, boolean gesloten, LocalDate start, LocalDate einde) {
+		if (this.gekozenSessie != null) {
+			if (start == null) {
+				System.out.println("datum is null");
+				String fout = String.format("Voer een geldige datum in bij het %sdatum", "start");
+				throw new IllegalArgumentException(fout);
+			}
+			LocalDateTime startDatum = maakLocalDateTime(start, startuur, startmin, "start");
 
-		if (start == null) {
-			System.out.println("datum is null");
-			String fout = String.format("Voer een geldige datum in bij het %sdatum", "start");
-			throw new IllegalArgumentException(fout);
-		}
-		LocalDateTime startDatum = maakLocalDateTime(start, startuur, startmin, "start");
-
-		if (einde == null) {
-			einde = start;
-		}
-		LocalDateTime eindDatum = maakLocalDateTime(einde, einduur, eindmin, "eind");
-		Gebruiker verantwoordelijke = verantwoordelijkeLijstBijSessie.stream()
-				.filter(v -> v.getVolledigeNaam().equals(volledigeNaamVerantwoordelijke)).findFirst().orElse(null);
-		boolean correctFormaat = true;
-		int maxCapaciteit;
-		Pattern p = Pattern.compile("[0-9]{1,3}");
-		Matcher m = p.matcher(String.valueOf(maxCap));
-		correctFormaat = m.matches();
-		if (correctFormaat) {
-			maxCapaciteit = Integer.parseInt(maxCap);
-		} else {
-			String fout = String.format("%s is geen geldige waarde bij maximum capaciteit", maxCap);
-			throw new NumberFormatException(fout);
-		}
-		Sessie sessie = this.gekozenSessie;
-		int veranderingen = sessie.pasSessieAan(verantwoordelijke, titel, startDatum, eindDatum, staatOpen, gesloten,
-				maxCapaciteit, lokaal, beschrijving);
-		if (veranderingen > 0) {
-			updateSessie(this.gekozenSessie);
-			firePropertyChange("sessie", this.gekozenSessie, sessie);
-			this.gekozenSessie = sessie;
+			if (einde == null) {
+				einde = start;
+			}
+			LocalDateTime eindDatum = maakLocalDateTime(einde, einduur, eindmin, "eind");
+			Gebruiker verantwoordelijke = verantwoordelijkeLijstBijSessie.stream()
+					.filter(v -> v.getVolledigeNaam().equals(volledigeNaamVerantwoordelijke)).findFirst().orElse(null);
+			boolean correctFormaat = true;
+			int maxCapaciteit;
+			Pattern p = Pattern.compile("[0-9]{1,3}");
+			Matcher m = p.matcher(String.valueOf(maxCap));
+			correctFormaat = m.matches();
+			if (correctFormaat) {
+				maxCapaciteit = Integer.parseInt(maxCap);
+			} else {
+				String fout = String.format("%s is geen geldige waarde bij maximum capaciteit", maxCap);
+				throw new NumberFormatException(fout);
+			}
+			Sessie sessie = this.gekozenSessie;
+			int veranderingen = sessie.pasSessieAan(verantwoordelijke, titel, startDatum, eindDatum, staatOpen,
+					gesloten, maxCapaciteit, lokaal, beschrijving,gastSpreker);
+			if (veranderingen > 0) {
+				updateSessie(this.gekozenSessie);
+				firePropertyChange("sessie", this.gekozenSessie, sessie);
+				this.gekozenSessie = sessie;
+			}
 		}
 	}
 
@@ -438,40 +441,47 @@ public class SessieController {
 			throw new IllegalArgumentException(fout);
 		}
 	}
-	
+
 	// Media methods
 	public void vulLijstMedia() {
-		System.out.println(gekozenSessie==null?"null":"notnull");
+		System.out.println(gekozenSessie == null ? "null" : "notnull");
 		mediaLijst = new ArrayList<>(gekozenSessie.getMedia());
 		mediaObservableLijst = FXCollections.observableArrayList(mediaLijst);
 		this.filteredMediaLijst = new FilteredList<>(mediaObservableLijst, e -> true);
 		this.sortedMediaLijst = new SortedList<Media>(filteredMediaLijst,
 				Comparator.comparing(Media::getMediaType).thenComparing(Media::getNaam));
 	}
-	public ObservableList<Media> getMedia(){
+
+	public ObservableList<Media> getMedia() {
 		return sortedMediaLijst;
 	}
+
 	public void setGeselecteerdeMedia(Media md) {
-		firePropertyChange("media",this.gekozenMedia,md);
+		firePropertyChange("media", this.gekozenMedia, md);
 		this.gekozenMedia = md;
-	}	
-	public void maakMedia(String naam,String bestandnaam,MediaType type) {
+	}
+
+	public void maakMedia(String naam, String bestandnaam, MediaType type) {
 		Media media = new Media(gekozenSessie, bestandnaam, naam, LocalDateTime.now(), type);
 		gekozenSessie.addMediaItem(media);
 		mediaLijst.add(media);
 		mediaObservableLijst.add(media);
 		insertMedia(media);
 	}
-	public void pasMedia(String naam,String bestandnaam,MediaType type) {
+
+	public void pasMedia(String naam, String bestandnaam, MediaType type) {
 		Media media = this.gekozenMedia;
-		int ver = media.pasMediaAan(bestandnaam,naam , LocalDateTime.now(), type);
-		if(ver!=0) {
-			updateMedia(media);
-			firePropertyChange("media", this.gekozenMedia, media);
-			this.gekozenMedia= media;
+		if (media != null) {
+			int ver = media.pasMediaAan(bestandnaam, naam, LocalDateTime.now(), type);
+			if (ver != 0) {
+				updateMedia(media);
+				firePropertyChange("media", this.gekozenMedia, media);
+				this.gekozenMedia = media;
+			}
 		}
 	}
-	public void zoekOpMedia(String bestandnaam,MediaType type) {
+
+	public void zoekOpMedia(String bestandnaam, MediaType type) {
 		this.filteredMediaLijst.setPredicate(media -> {
 			boolean typeWaardeLeeg = type == null;
 			boolean naamWaardeLeeg = bestandnaam == null || bestandnaam.isBlank();
@@ -479,18 +489,17 @@ public class SessieController {
 			if (typeWaardeLeeg && naamWaardeLeeg) {
 				return true;
 			}
-			boolean conditieMaand = typeWaardeLeeg ? true
-					: media.getMediaType() == type;
+			boolean conditieMaand = typeWaardeLeeg ? true : media.getMediaType() == type;
 			boolean conditieNaam = naamWaardeLeeg ? true
 					: media.getNaam().toLowerCase().contains(bestandnaam)
 							|| media.getNaam().toLowerCase().startsWith(bestandnaam);
 			return conditieMaand && conditieNaam;
 		});
 	}
-	
-	//SessieAankondiging methodes
+
+	// SessieAankondiging methodes
 	public void vulLijstSessieAankondigingen() {
-		System.out.println(gekozenSessie==null?"null":"notnull");
+		System.out.println(gekozenSessie == null ? "null" : "notnull");
 		sessieAankondigingenLijst = new ArrayList<>(gekozenSessie.getAankondigingen());
 		sessieAankondigingObservableLijst = FXCollections.observableArrayList(sessieAankondigingenLijst);
 		System.out.println(sessieAankondigingObservableLijst.size());
@@ -498,36 +507,88 @@ public class SessieController {
 		this.sortedSessieAankondigingenLijst = new SortedList<SessieAankondiging>(filteredSessieAankondigingenLijst,
 				Comparator.comparing(SessieAankondiging::getPrioriteit).thenComparing(SessieAankondiging::getGepost));
 	}
-	
-	public ObservableList<SessieAankondiging> getSessieAankondigingen(){
+
+	public ObservableList<SessieAankondiging> getSessieAankondigingen() {
 		return sortedSessieAankondigingenLijst;
 	}
-	
+
 	public void setGeselecteerdeSessieAankondiging(SessieAankondiging sa) {
-		firePropertyChange("sessieAankondiging",this.gekozenSessieAankondiging, sa);
+		firePropertyChange("sessieAankondiging", this.gekozenSessieAankondiging, sa);
 		this.gekozenSessieAankondiging = sa;
 	}
-	
+
 	public void maakSessieAankondiging(String inhoud, AankondigingPrioriteit prioriteit) {
-		SessieAankondiging sessieAankondiging = new SessieAankondiging(ingelogdeGebruiker, LocalDateTime.now(), inhoud, prioriteit, gekozenSessie);
+		SessieAankondiging sessieAankondiging = new SessieAankondiging(ingelogdeGebruiker, LocalDateTime.now(), inhoud,
+				prioriteit, gekozenSessie);
 		gekozenSessie.addAankondiging(sessieAankondiging);
 		sessieAankondigingenLijst.add(sessieAankondiging);
 		sessieAankondigingObservableLijst.add(sessieAankondiging);
 		insertSessieAankondiging(sessieAankondiging);
 	}
-	
+
 	public void pasSessieAankondigingAan(String inhoud, AankondigingPrioriteit prioriteit) {
 		SessieAankondiging sessieAankondiging = this.gekozenSessieAankondiging;
-		int ver = sessieAankondiging.pasSessieAankondigingAan(inhoud, prioriteit);
-		if(ver!=0) {
-			updateSessieAankondiging(sessieAankondiging);
-			firePropertyChange("sessieAankondiging", this.gekozenSessieAankondiging, sessieAankondiging);
-			this.gekozenSessieAankondiging= sessieAankondiging;
+		if (sessieAankondiging != null) {
+			int ver = sessieAankondiging.pasSessieAankondigingAan(inhoud, prioriteit);
+			if (ver != 0) {
+				updateSessieAankondiging(sessieAankondiging);
+				firePropertyChange("sessieAankondiging", this.gekozenSessieAankondiging, sessieAankondiging);
+				this.gekozenSessieAankondiging = sessieAankondiging;
+			}
 		}
 	}
-	
+
+	// Inschrijvingen
+	public void vulLijstSessieGebruikers() {
+		System.out.println(gekozenSessie == null ? "null" : "notnull");
+		inschrijvingenLijst = new ArrayList<>(gekozenSessie.getGebruikersIngeschreven());
+		inschrijvingenObservableLijst = FXCollections.observableArrayList(inschrijvingenLijst);
+		this.filteredInschrijvingenLijst = new FilteredList<>(inschrijvingenObservableLijst, e -> true);
+		this.sortedInschrijvingenLijst = new SortedList<SessieGebruiker>(filteredInschrijvingenLijst,
+				Comparator.comparing(SessieGebruiker::getVoornaam).thenComparing(SessieGebruiker::getUserName));
+	}
+
+	public int getAantalInschrijvingen() {
+		return inschrijvingenLijst.size();
+	}
+
+	public ObservableList<SessieGebruiker> getSessieGebruikersLijst() {
+		return sortedInschrijvingenLijst;
+	}
+
+	public void setGeselecteerdeSessieGebruiker(SessieGebruiker sg) {
+		firePropertyChange("inschrijving", this.gekozenInschrijving, sg);
+		this.gekozenInschrijving = sg;
+	}
+
+	public void pasSessieGebruikerAan(boolean aanwezig, boolean aanwezigBevestigd) {
+		SessieGebruiker sessieGebruiker = this.gekozenInschrijving;
+		if (sessieGebruiker != null) {
+			int ver = sessieGebruiker.pasSessieGebruikerAan(aanwezig, aanwezigBevestigd);
+			if (ver != 0) {
+				updateSessieGebruiker(sessieGebruiker);
+				firePropertyChange("inschrijving", this.gekozenInschrijving, sessieGebruiker);
+				this.gekozenInschrijving = sessieGebruiker;
+			}
+		}
+	}
+
+	public void zoekOpNaamSessieGebruiker(String naam) {
+		this.filteredInschrijvingenLijst.setPredicate(sessieg -> {
+			boolean naamWaardeLeeg = naam == null || naam.isBlank();
+			if (naamWaardeLeeg) {
+				return true;
+			}
+			boolean conditieNaam = naamWaardeLeeg ? true
+					: sessieg.getGebruiker().getVolledigeNaam().toLowerCase().contains(naam)
+							|| sessieg.getGebruiker().getVolledigeNaam().toLowerCase().startsWith(naam);
+			return conditieNaam;
+		});
+	}
 
 	// Databank operaties
+
+	// ---Sessie databank operaties
 	public void deleteSessie() {
 		Sessie teVerwijderenSessie = this.gekozenSessie;
 		sessieLijst.remove(teVerwijderenSessie);
@@ -538,28 +599,34 @@ public class SessieController {
 		firePropertyChange("sessie", this.gekozenSessie, null);
 		this.gekozenSessie = null;
 	}
+
 	public void insertSessie(Sessie sessie) {
 		GenericDaoJpa.startTransaction();
 		sessieRepository.insert(sessie);
 		GenericDaoJpa.commitTransaction();
 	}
+
 	public void updateSessie(Sessie sessie) {
 		GenericDaoJpa.startTransaction();
 		sessieRepository.update(sessie);
 		GenericDaoJpa.commitTransaction();
 	}
+
+	// ---Media databank operaties
 	public void insertMedia(Media media) {
 		GenericDaoJpa.startTransaction();
 		mediaRepository.insert(media);
 		sessieRepository.update(gekozenSessie);
 		GenericDaoJpa.commitTransaction();
 	}
+
 	public void updateMedia(Media media) {
 		GenericDaoJpa.startTransaction();
 		mediaRepository.update(media);
 		sessieRepository.update(gekozenSessie);
 		GenericDaoJpa.commitTransaction();
 	}
+
 	public void deleteMedia() {
 		Media teVerwijderenMedia = this.gekozenMedia;
 		mediaLijst.remove(teVerwijderenMedia);
@@ -572,7 +639,8 @@ public class SessieController {
 		firePropertyChange("media", this.gekozenMedia, null);
 		this.gekozenMedia = null;
 	}
-	
+
+	// ---SessieAankondiging databank operaties
 	public void insertSessieAankondiging(SessieAankondiging sa) {
 		GenericDaoJpa.startTransaction();
 		sessieAankondigingRepository.insert(sa);
@@ -586,6 +654,7 @@ public class SessieController {
 		sessieRepository.update(gekozenSessie);
 		GenericDaoJpa.commitTransaction();
 	}
+
 	public void deleteSessieAankondiging() {
 		SessieAankondiging teVerwijderenSessieAankondiging = this.gekozenSessieAankondiging;
 		sessieAankondigingenLijst.remove(teVerwijderenSessieAankondiging);
@@ -597,8 +666,29 @@ public class SessieController {
 		GenericDaoJpa.commitTransaction();
 		firePropertyChange("sessieAankondiging", this.gekozenSessieAankondiging, null);
 		this.gekozenSessieAankondiging = null;
-	}	
-	
+	}
+
+	// ---Inschrijvingen databank operaties
+	public void updateSessieGebruiker(SessieGebruiker sa) {
+		GenericDaoJpa.startTransaction();
+		sessieGebruikerRepository.update(sa);
+		sessieRepository.update(gekozenSessie);
+		GenericDaoJpa.commitTransaction();
+	}
+
+	public void deleteSessieGebruiker() {
+		SessieGebruiker teVerwijderenSessieGebruiker = this.gekozenInschrijving;
+		inschrijvingenLijst.remove(teVerwijderenSessieGebruiker);
+		gekozenSessie.removeInschrijving(teVerwijderenSessieGebruiker);
+		inschrijvingenObservableLijst.remove(teVerwijderenSessieGebruiker);
+		GenericDaoJpa.startTransaction();
+		sessieGebruikerRepository.delete(teVerwijderenSessieGebruiker);
+		sessieRepository.update(gekozenSessie);
+		GenericDaoJpa.commitTransaction();
+		firePropertyChange("inschrijving", this.gekozenSessieAankondiging, null);
+		this.gekozenSessieAankondiging = null;
+	}
+
 	public void rollBack() {
 		GenericDaoJpa.rollbackTransaction();
 	}

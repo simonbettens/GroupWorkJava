@@ -12,7 +12,7 @@
 
 <fx:root id="light-background" alignment="TOP_CENTER" minHeight="750.0" minWidth="600.0" prefHeight="750.0" prefWidth="600.0" stylesheets="@../styles/styles.css" type="VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<HBox prefHeight="31.0" prefWidth="600.0">
+		<HBox alignment="CENTER" prefHeight="31.0" prefWidth="600.0">
 			<children>
 				<Label text="Overzicht van de aankondigingen :" textFill="WHITE">
 					<font>
@@ -22,21 +22,18 @@
 						<Insets left="7.0" top="7.0" />
 					</HBox.margin>
 				</Label>
-				<Label fx:id="lblSessieNaam" text="Naam Sessie" textFill="WHITE">
-					<font>
-						<Font name="System Bold Italic" size="14.0" />
-					</font>
-					<HBox.margin>
-						<Insets left="3.0" top="7.0" />
-					</HBox.margin>
-				</Label>
             <Button fx:id="btnGaTerug" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#gaTerug" styleClass="greyButton" text="Ga terug">
                <HBox.margin>
-                  <Insets left="190.0" top="7.0" />
+                  <Insets left="20.0" top="7.0" />
                </HBox.margin>
             </Button>
 			</children>
 		</HBox>
+				<Label fx:id="lblSessieNaam" text="Naam Sessie" textFill="WHITE">
+					<font>
+						<Font name="System Bold Italic" size="14.0" />
+					</font>
+				</Label>
 		<HBox alignment="CENTER" prefHeight="50.0" prefWidth="600.0">
 			<children>
 				<TextField fx:id="txfZoek" alignment="CENTER" onKeyReleased="#search" prefWidth="350.0" promptText="Zoek op naam">

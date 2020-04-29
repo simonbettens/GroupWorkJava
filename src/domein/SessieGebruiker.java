@@ -1,6 +1,8 @@
 package domein;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import javafx.beans.property.SimpleStringProperty;
 
 @Entity(name="SessieGebruiker")
 @Table(name = "SessieGebruiker")
@@ -34,6 +39,8 @@ public class SessieGebruiker implements Serializable {
 	private String voornaam;
 	@Column(name="Achternaam")
 	private String achternaam;
+	@Column(name="DatumIngeschreven")
+	private LocalDateTime tijdIngeschreven;
 	
 	@MapsId(value = "id")
 	@ManyToOne(optional = false)
@@ -45,8 +52,16 @@ public class SessieGebruiker implements Serializable {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "SessieId",referencedColumnName = "SessieId")
 	private Sessie sessie;
-	
-	
+	@Transient
+	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy 'om' hh:mm");
+	@Transient
+	 private final SimpleStringProperty volledigeNaamProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty gebruikerNaamProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty aanwezigProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty tijdProperty = new SimpleStringProperty();
 	
 	//voor jpa
 	public SessieGebruiker() {}
@@ -61,6 +76,7 @@ public class SessieGebruiker implements Serializable {
 		setUserName(gebruiker.getUserName());
 		setVoornaam(gebruiker.getVoornaam());
 		setAchternaam(gebruiker.getAchternaam());
+		setTijdIngeschreven(LocalDateTime.now());
 	}
 	public Gebruiker getGebruiker() {
 		return gebruiker;
@@ -87,10 +103,35 @@ public class SessieGebruiker implements Serializable {
 	public String getAchternaam() {
 		return achternaam;
 	}
+	
+	public LocalDateTime getTijdIngeschreven() {
+		return tijdIngeschreven;
+	}
+	
+	public SimpleStringProperty getVolledigeNaamProperty() {
+		volledigeNaamProperty.setValue(gebruiker.getVolledigeNaam());
+		return volledigeNaamProperty;
+	}
+	public SimpleStringProperty getGebruikerNaamProperty() {
+		gebruikerNaamProperty.setValue(userName);
+		return gebruikerNaamProperty;
+	}
+	public SimpleStringProperty getAanwezigProperty() {
+		aanwezigProperty.setValue(aanwezigheidBevestigd?"Aanwezig":"Niet aanwezig");
+		return aanwezigProperty;
+	}
+	public SimpleStringProperty getTijdProperty() {
+		tijdProperty.setValue(dtf.format(tijdIngeschreven));
+		return tijdProperty;
+	}
+	private void setTijdIngeschreven(LocalDateTime tijdIngeschreven) {
+		this.tijdIngeschreven = tijdIngeschreven;
+	}
 	private void setGebruiker(Gebruiker gebruiker) {
 		if(gebruiker ==null) {
 			throw new IllegalArgumentException("Gebruiker bestaat niet");
 		}
+		volledigeNaamProperty.setValue(gebruiker.getVolledigeNaam());
 		this.gebruiker = gebruiker;
 	}
 	private void setSessie(Sessie sessie) {
@@ -103,6 +144,7 @@ public class SessieGebruiker implements Serializable {
 		this.aanwezig = aanwezig;
 	}
 	private void setAanwezigheidBevestigd(boolean aanwezigheidBevestigd) {
+		aanwezigProperty.setValue(aanwezigheidBevestigd?"Aanwezig":"Niet aanwezig");
 		this.aanwezigheidBevestigd = aanwezigheidBevestigd;
 	}
 	
@@ -110,6 +152,7 @@ public class SessieGebruiker implements Serializable {
 		this.idNummer = idNummer;
 	}
 	private void setUserName(String userName) {
+		gebruikerNaamProperty.setValue(userName);
 		this.userName = userName;
 	}
 	private void setVoornaam(String voornaam) {
@@ -123,6 +166,18 @@ public class SessieGebruiker implements Serializable {
 		return "SessieGebruiker [aanwezig=" + aanwezig + ", aanwezigheidBevestigd=" + aanwezigheidBevestigd
 				+ ", gebruikerId=" + combindedId.getGebruikerId() + ", sessieId="
 				+ combindedId.getSessieId() + "]";
+	}
+	public int pasSessieGebruikerAan(boolean aanwezig, boolean aanwezigBevestigd) {
+		int verandering = 0;
+		if(isAanwezig()!=aanwezig) {
+			setAanwezig(aanwezig);
+			verandering++;
+		}
+		if(isAanwezigheidBevestigd()!=aanwezigBevestigd) {
+			setAanwezigheidBevestigd(aanwezigBevestigd);
+			verandering++;
+		}
+		return verandering;
 	}
 	
 }

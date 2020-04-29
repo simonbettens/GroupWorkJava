@@ -44,13 +44,13 @@ public class SessieTest {
 	@ParameterizedTest
 	@MethodSource("ongeldigeSessieData")
 	public void maakOngeldigeSessie_WerptException(String titel, LocalDateTime startuur, LocalDateTime einduur, int maxcap, String lokaal) {
-		Assertions.assertThrows(IllegalArgumentException.class, () -> new Sessie(new Gebruiker(), titel, startuur, einduur, maxcap, lokaal, ""));
+		Assertions.assertThrows(IllegalArgumentException.class, () -> new Sessie(new Gebruiker(), titel, startuur, einduur, maxcap, lokaal, "",""));
 	}
 	
 	@ParameterizedTest
 	@MethodSource("geldigeSessieData")
 	public void maakGeldigeSessie_Slaagt(String titel, LocalDateTime startuur, LocalDateTime einduur, int maxcap, String lokaal) {
-		Sessie testSessie = new Sessie(new Gebruiker(), titel, startuur, einduur, maxcap, lokaal, "");
+		Sessie testSessie = new Sessie(new Gebruiker(), titel, startuur, einduur, maxcap, lokaal, "","");
 		Assertions.assertEquals(titel, testSessie.getTitelProperty().getValue());
 	}
 	
@@ -73,10 +73,10 @@ public class SessieTest {
 	@MethodSource("pasSessieAanData")
 	public void pasSessieAanTest(String titel, LocalDateTime startuur, LocalDateTime einduur, int maxcap, String lokaal, String titel2, LocalDateTime startuur2, LocalDateTime einduur2, int maxcap2, String lokaal2, int changes) {
 		Gebruiker gebruiker= new Gebruiker("Piet", "Piraat", "Ppr123456", "randompass", "piet.piraat@student.hogent.be", 1234567890123l, GebruikerType.GEBRUIKER, StatusType.ACTIEF);
-		Sessie sessie = new Sessie(gebruiker, titel, startuur, einduur, maxcap, lokaal, "");
+		Sessie sessie = new Sessie(gebruiker, titel, startuur, einduur, maxcap, lokaal, "","");
 		Assertions.assertEquals(
 				changes, 
-				sessie.pasSessieAan(gebruiker, titel2, startuur2, einduur2, false, true, maxcap2, lokaal2, "")
+				sessie.pasSessieAan(gebruiker, titel2, startuur2, einduur2, false, true, maxcap2, lokaal2, "","")
 				);
 	}
 }

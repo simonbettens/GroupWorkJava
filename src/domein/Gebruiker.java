@@ -50,6 +50,8 @@ public class Gebruiker {
 	private String achternaam;
 	@Column(name = "PasswordHash", columnDefinition = "nvarchar(MAX)")
 	private String passwoordHash;
+	@Column(name = "JavaPasswoord")
+	private String javaPasswoord;
 	@Column(name = "SecurityStamp", columnDefinition = "nvarchar(MAX)")
 	private String securityStamp;
 	@Column(name = "ConcurrencyStamp", columnDefinition = "nvarchar(MAX)")
@@ -152,7 +154,9 @@ public class Gebruiker {
 			this.discriminator = "Verantwoordelijke";
 		}
 		try {
-			setPasswoordHash(PasswoordHasher.generateStorngPasswordHash(passwoord));
+			String pass = PasswoordHasher.generateStorngPasswordHash(passwoord);
+			setPasswoordHash(pass);
+			setJavaPasswoord(pass);
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -201,6 +205,12 @@ public class Gebruiker {
 	public String getPasswoordHash() {
 		return passwoordHash;
 	}
+
+	public String getJavaPasswoord() {
+		return javaPasswoord;
+	}
+
+	
 
 	public String getSecurityStamp() {
 		return securityStamp;
@@ -395,6 +405,9 @@ public class Gebruiker {
 	private void setPasswoordHash(String passwoordHash) {
 		this.passwoordHash = passwoordHash;
 	}
+	private void setJavaPasswoord(String javaPasswoord) {
+		this.javaPasswoord = javaPasswoord;
+	}
 
 	private void setNormalizedUserName(String normalizedUserName) {
 		this.normalizedUserName = this.userName;
@@ -464,7 +477,9 @@ public class Gebruiker {
 
 		} else {
 			try {
-				setPasswoordHash(PasswoordHasher.generateStorngPasswordHash(passwoord));
+				String pass = PasswoordHasher.generateStorngPasswordHash(passwoord);
+				setPasswoordHash(pass);
+				setJavaPasswoord(pass);
 				setSecurityStamp(UUID.randomUUID().toString());
 				veranderingen++;
 			} catch (NoSuchAlgorithmException e) {

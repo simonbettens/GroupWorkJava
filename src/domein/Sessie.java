@@ -56,6 +56,8 @@ public class Sessie implements Serializable{
 	private LocalDateTime startDatum;
 	@Column(name="EindDatum")
 	private LocalDateTime eindDatum;
+	@Column(name="Gastspreker")
+	private String gastspreker;
 	@Transient
 	 private final SimpleStringProperty titelProperty = new SimpleStringProperty();
 	@Transient
@@ -85,7 +87,8 @@ public class Sessie implements Serializable{
 	public Sessie() {}
 	
 	//algemene constructor voor nieuwe instanties
-	public Sessie(Gebruiker verantwoordelijke, String naam, LocalDateTime startDatum, LocalDateTime eindDatum,int maxCap,String lokaal, String beschrijving) {
+	public Sessie(Gebruiker verantwoordelijke, String naam, LocalDateTime startDatum, LocalDateTime eindDatum,int maxCap,String lokaal,
+			String beschrijving,String gastspreker) {
 		setVerantwoordelijke(verantwoordelijke);
 		setNaam(naam);
 		setStartDatum(startDatum);
@@ -97,6 +100,7 @@ public class Sessie implements Serializable{
 		setStaatOpen(false);
 		setDuur(Duration.between(startDatum, eindDatum));
 		setBezig(false);
+		setGastspreker(gastspreker);
 		this.gebruikersIngeschreven = new ArrayList<SessieGebruiker>();
 		this.media = new ArrayList<Media>();
 		this.aankondigingen = new ArrayList<SessieAankondiging>();
@@ -161,7 +165,16 @@ public class Sessie implements Serializable{
 		return bezig;
 	}
 	
+	public String getGastspreker() {
+		return gastspreker;
+	}
+
+	
+
 	// ------- setters
+	private void setGastspreker(String gastspreker) {
+		this.gastspreker = gastspreker;
+	}
 	private void setGebruikersIngeschreven(List<SessieGebruiker> gebruikersIngeschreven) {
 		this.gebruikersIngeschreven = gebruikersIngeschreven;
 	}
@@ -265,7 +278,9 @@ public class Sessie implements Serializable{
 	public SessieGebruiker getInschrijvingByIndex(int index) {
 		return gebruikersIngeschreven.get(index);
 	}
-
+	public void removeInschrijving(SessieGebruiker ins) {
+		this.gebruikersIngeschreven.remove(ins);
+	}
 	public SimpleStringProperty getTitelProperty() {
 		titelProperty.set(getNaam());
 		return titelProperty;
@@ -295,7 +310,7 @@ public class Sessie implements Serializable{
 	}
 	
 	public int pasSessieAan(Gebruiker verantwoordelijke, String naam, LocalDateTime startDatum, LocalDateTime eindDatum, 
-			boolean staatOpen, boolean gesloten, int maxCap,String lokaal, String beschrijving) {
+			boolean staatOpen, boolean gesloten, int maxCap,String lokaal, String beschrijving,String gastspreker) {
 		
 		int veranderingen = 0;
 		
@@ -341,6 +356,10 @@ public class Sessie implements Serializable{
 		
 		if(!beschrijving.equals(getBeschrijving())) {
 			setBeschrijving(beschrijving);
+			veranderingen++;
+		}
+		if(!gastspreker.equals(getGastspreker())) {
+			setGastspreker(gastspreker);
 			veranderingen++;
 		}
 		

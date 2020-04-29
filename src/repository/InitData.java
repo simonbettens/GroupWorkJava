@@ -96,32 +96,32 @@ public class InitData {
 		Sessie sessie1 = new Sessie(admin, "The Three Laws of TDD (featuring Kotlin)",
 				huidigetijd.plusDays(1), huidigetijd.plusDays(1).plusHours(1), 20,
 				"GSCHB4.026",
-				"Testen is moeilijk aan te brengen tijdens je opleiding want je komt toch niet vaak terug op oude code omdat de \"klant\" aanpassing wilt. Maar iedereen heeft al veel tijd verloren omdat er bugs waren, of omdat de code niet goed te lezen was. \n Maar Uncle Bob is terug, en deze keer legt hij de drie wetten van Test - Driven Development uit, en toont ze ook in actie. Dit zijn de drie regels:\n 1.You are not allowed to write any production code unless it is to make a failing unit test pass. \n 2.You are not allowed to write any more of a unit test than is sufficient to fail; and compilation failures are failures. \n 3.You are not allowed to write any more production code than is sufficient to pass the one failing unit test. \n Door deze drie regels te volgen garandeer je dat je code altijd doet wat ze moet doen! Als je code bijschrijft of aanpast kan je altijd vertrouwen op je tests.");
+				"Testen is moeilijk aan te brengen tijdens je opleiding want je komt toch niet vaak terug op oude code omdat de \"klant\" aanpassing wilt. Maar iedereen heeft al veel tijd verloren omdat er bugs waren, of omdat de code niet goed te lezen was. \n Maar Uncle Bob is terug, en deze keer legt hij de drie wetten van Test - Driven Development uit, en toont ze ook in actie. Dit zijn de drie regels:\n 1.You are not allowed to write any production code unless it is to make a failing unit test pass. \n 2.You are not allowed to write any more of a unit test than is sufficient to fail; and compilation failures are failures. \n 3.You are not allowed to write any more production code than is sufficient to pass the one failing unit test. \n Door deze drie regels te volgen garandeer je dat je code altijd doet wat ze moet doen! Als je code bijschrijft of aanpast kan je altijd vertrouwen op je tests.","");
 
 		Sessie sessie2 = new Sessie(verantwoordelijke, "Life is terrible: let's talk about the web",
 				huidigetijd.plusDays(2), huidigetijd.plusDays(2).plusHours(1), 10,
-				"GSCHB4.026", "");
+				"GSCHB4.026", "","");
 
 		Sessie sessie3 = new Sessie(admin, "TDD: Where did it all go wrong?", huidigetijd.plusDays(3), huidigetijd.plusDays(3).plusHours(1), 30, "GSCHB4.026",
-				"In Ontwerpen 1 leerde je al over het testen van software, en hoe TDD vitaal is voor het afleveren van werkende software. En in de volgende semesters bleef die focus op het schrijven van testen aanwezig. Maar moet die focus op TDD er wel zo sterk zijn ? Is wat nuance niet aan de orde ? Ian Cooper brengt in deze talk een duidelijk antwoord op deze vraag.Hij heeft al meer dan 20 jaar ervaring en heeft vooral gewerkt aan de architectuur van grote.NET - projecten.");
+				"In Ontwerpen 1 leerde je al over het testen van software, en hoe TDD vitaal is voor het afleveren van werkende software. En in de volgende semesters bleef die focus op het schrijven van testen aanwezig. Maar moet die focus op TDD er wel zo sterk zijn ? Is wat nuance niet aan de orde ? Ian Cooper brengt in deze talk een duidelijk antwoord op deze vraag.Hij heeft al meer dan 20 jaar ervaring en heeft vooral gewerkt aan de architectuur van grote.NET - projecten.","");
 
-		Sessie sessie4 = new Sessie(admin, "De weg naar de Cloud", huidigetijd.plusDays(4), huidigetijd.plusDays(4).plusHours(1), 20, "GSCHB4.026", "");
+		Sessie sessie4 = new Sessie(admin, "De weg naar de Cloud", huidigetijd.plusDays(4), huidigetijd.plusDays(4).plusHours(1), 20, "GSCHB4.026", "","");
 
 		Sessie sessie5 = new Sessie(admin, "Improving Security Is Possible?", huidigetijd.plusDays(5), huidigetijd.plusDays(5).plusHours(1), 20, "GSCHB4.026",
-				"In deze talk geeft James Mickens van Harvard University zijn ongezouten mening over de mysteries van Machine Learning (\"The stuff is what the stuff is, brother.\") en andere \"hippe en innovatieve\" frameworks en technologieën, en hoe de focus op innovatie ervoor zorgt dat er nooit tijd is voor security.");
+				"In deze talk geeft James Mickens van Harvard University zijn ongezouten mening over de mysteries van Machine Learning (\"The stuff is what the stuff is, brother.\") en andere \"hippe en innovatieve\" frameworks en technologieën, en hoe de focus op innovatie ervoor zorgt dat er nooit tijd is voor security.","");
 
 		Sessie bijnaGestarteSessie1 = new Sessie(admin, "Power use of Unix", huidigetijd.plusDays(1).plusMinutes(45),
 				huidigetijd.plusDays(1).plusMinutes(75), 20, "GSCHB4.026",
-				"Kennis van de commandline gecombineerd met de basis van reguliere expressies laten je toe om een hoger niveau van productiviteit te bereiken. Deze talk introduceert in een halfuur de meest bruikbare UNIX commando's om je workflow te optimaliseren. De perfecte sessie voor iedereen die wil kennismaken met de kracht van de commandline!");
+				"Kennis van de commandline gecombineerd met de basis van reguliere expressies laten je toe om een hoger niveau van productiviteit te bereiken. Deze talk introduceert in een halfuur de meest bruikbare UNIX commando's om je workflow te optimaliseren. De perfecte sessie voor iedereen die wil kennismaken met de kracht van de commandline!","");
 
 		Sessie sessie6 = new Sessie(verantwoordelijke, "How to be a happy Developer. Now!",
 				huidigetijd.plusDays(6), huidigetijd.plusDays(6).plusHours(1), 20,
 				"GSCHB4.026",
-				"Veel ontwikkelaars claimen dat ze van hun hobby hun beroep hebben gemaakt. \nDus, wat kunnen we doen om de huidige situatie te verbeteren ? Hoe kunnen we onszelf beter laten voelen ? Dieze talk richt zich op een aantal eenvoudig te implementeren tactieken die ieder van ons kan gebruiken vanaf morgen, waardoor ons leven een beetje makkelijker en leuker wordt: stuk voor stuk, dag na dag.");
+				"Veel ontwikkelaars claimen dat ze van hun hobby hun beroep hebben gemaakt. \nDus, wat kunnen we doen om de huidige situatie te verbeteren ? Hoe kunnen we onszelf beter laten voelen ? Dieze talk richt zich op een aantal eenvoudig te implementeren tactieken die ieder van ons kan gebruiken vanaf morgen, waardoor ons leven een beetje makkelijker en leuker wordt: stuk voor stuk, dag na dag.","");
 
 		Sessie gestartSessie1 = new Sessie(admin, "How Netflix thinks of DevOps", huidigetijd.plusDays(1),
 				huidigetijd.plusDays(1).plusMinutes(45), 20, "GSCHB4.026",
-				"Netflix wordt gezien als een grote DevOps omgeving. Toch is “DevOps” niet iets waar ze veel over spreken. Als het dan toch zo’n kritisch deel is voor het succes van de organisatie, waarom horen we er niet meer over?\nNetflix ziet DevOps als het resultaat van een duidelijke bedrijfscultuur, niet als oplossing van een bepaald probleem. Alles begint bij de bedrijfscultuur, chaos is je vriend en vertrouwen is van absoluut belang.");
+				"Netflix wordt gezien als een grote DevOps omgeving. Toch is “DevOps” niet iets waar ze veel over spreken. Als het dan toch zo’n kritisch deel is voor het succes van de organisatie, waarom horen we er niet meer over?\nNetflix ziet DevOps als het resultaat van een duidelijke bedrijfscultuur, niet als oplossing van een bepaald probleem. Alles begint bij de bedrijfscultuur, chaos is je vriend en vertrouwen is van absoluut belang.","");
 
 		Sessie[] sessies = { sessie1, sessie2, sessie3, sessie4, sessie5, sessie6, gestartSessie1,
 				bijnaGestarteSessie1 };
