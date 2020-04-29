@@ -22,6 +22,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import javafx.beans.property.SimpleStringProperty;
+
 @Entity(name="Aankondiging")
 @Table(name = "Aankondiging")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
@@ -40,7 +42,7 @@ public class Aankondiging implements Serializable{
 	@Column(name="Gepost")
 	private LocalDateTime gepost;
 	@Column(name="Inhoud")
-	private String inhoud;
+	protected String inhoud;
 	@Transient
 	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy 'om' hh:mm");
 	
@@ -48,7 +50,7 @@ public class Aankondiging implements Serializable{
 	@Column(name="Prioriteit")
     private int prioriteitValue;
     @Transient
-	private AankondigingPrioriteit prioriteit;
+	protected AankondigingPrioriteit prioriteit;
     @JoinColumn(name="VerantwoordelijkeId",referencedColumnName = "Id" )
     @ManyToOne(fetch = FetchType.EAGER)
 	private Gebruiker verantwoordelijke;
@@ -67,6 +69,15 @@ public class Aankondiging implements Serializable{
         }
     }
 
+    @Transient
+	 private final SimpleStringProperty verantwoordelijkeProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty tijdToegevoegdProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty prioriteitProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty inhoudProperty = new SimpleStringProperty();
+    
 	//voor jpa
 	public Aankondiging() {}
 	//voor nieuwe instanties
@@ -78,6 +89,7 @@ public class Aankondiging implements Serializable{
 	}
 	
 	public Gebruiker getVerantwoordelijke() {
+		verantwoordelijkeProperty.setValue(verantwoordelijke.getVoornaam() + verantwoordelijke.getAchternaam());
 		return verantwoordelijke;
 	}
 	
@@ -85,31 +97,69 @@ public class Aankondiging implements Serializable{
 		return aankondingId;
 	}
 	public LocalDateTime getGepost() {
+		tijdToegevoegdProperty.setValue(dtf.format(gepost));
 		return gepost;
 	}
 	public String getInhoud() {
+		inhoudProperty.setValue(inhoud);
 		return inhoud;
 	}
 	public AankondigingPrioriteit getPrioriteit() {
+		//prioriteitProperty.setValue(AankondigingPrioriteit.AankondigingPrioriteitToString(prioriteit));
 		return prioriteit;
 	}
+	
+	
+	public int getPrioriteitValue() {
+		return prioriteitValue;
+	}
+	
+	public void setPrioriteitValue(int prioriteitValue) {
+		this.prioriteitValue = prioriteitValue;
+	}
+
 	private void setVerantwoordelijke(Gebruiker verantwoordelijke) {
+		verantwoordelijkeProperty.setValue(verantwoordelijke.getVoornaam() + verantwoordelijke.getAchternaam());
 		this.verantwoordelijke = verantwoordelijke;
 	}
 	private void setGepost(LocalDateTime gepost) {
 		if(gepost.isBefore(LocalDateTime.now())) {
 			throw new IllegalArgumentException("tijd gepost is in het verleden.");
 		}
+		tijdToegevoegdProperty.setValue(dtf.format(gepost));
 		this.gepost = gepost;
 	}
-	private void setInhoud(String inhoud) {
+	protected void setInhoud(String inhoud) {
 		if(inhoud.isEmpty() || inhoud.isBlank()) {
 			throw new IllegalArgumentException("Inhoud van de aankondiging moet ingevuld zijn");
 		}
+		inhoudProperty.setValue(inhoud);
 		this.inhoud = inhoud;
 	}
-	private void setPrioriteit(AankondigingPrioriteit prioriteit) {
+	protected void setPrioriteit(AankondigingPrioriteit prioriteit) {
+		prioriteitProperty.setValue(AankondigingPrioriteit.AankondigingPrioriteitToString(prioriteit));
+		setPrioriteitValue(prioriteit.getPriority());
 		this.prioriteit = prioriteit;
+	}
+	
+	public SimpleStringProperty getVerantwoordelijkeProperty() {
+		verantwoordelijkeProperty.setValue(verantwoordelijke.getVoornaam() + verantwoordelijke.getAchternaam());
+		return verantwoordelijkeProperty;
+	}
+
+	public SimpleStringProperty getTijdToegevoegdProperty() {
+		tijdToegevoegdProperty.setValue(dtf.format(gepost));
+		return tijdToegevoegdProperty;
+	}
+
+	public SimpleStringProperty getPrioriteitProperty() {
+		prioriteitProperty.setValue(AankondigingPrioriteit.AankondigingPrioriteitToString(prioriteit));
+		return prioriteitProperty;
+	}
+
+	public SimpleStringProperty getInhoudProperty() {
+		inhoudProperty.setValue(inhoud);
+		return inhoudProperty;
 	}
 	
 	@Override

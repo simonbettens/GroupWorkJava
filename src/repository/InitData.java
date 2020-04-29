@@ -110,8 +110,8 @@ public class InitData {
 		Sessie sessie5 = new Sessie(admin, "Improving Security Is Possible?", huidigetijd.plusDays(5), huidigetijd.plusDays(5).plusHours(1), 20, "GSCHB4.026",
 				"In deze talk geeft James Mickens van Harvard University zijn ongezouten mening over de mysteries van Machine Learning (\"The stuff is what the stuff is, brother.\") en andere \"hippe en innovatieve\" frameworks en technologieën, en hoe de focus op innovatie ervoor zorgt dat er nooit tijd is voor security.");
 
-		Sessie bijnaGestarteSessie1 = new Sessie(admin, "Power use of Unix", huidigetijd.plusMinutes(45),
-				huidigetijd.plusMinutes(75), 20, "GSCHB4.026",
+		Sessie bijnaGestarteSessie1 = new Sessie(admin, "Power use of Unix", huidigetijd.plusDays(1).plusMinutes(45),
+				huidigetijd.plusDays(1).plusMinutes(75), 20, "GSCHB4.026",
 				"Kennis van de commandline gecombineerd met de basis van reguliere expressies laten je toe om een hoger niveau van productiviteit te bereiken. Deze talk introduceert in een halfuur de meest bruikbare UNIX commando's om je workflow te optimaliseren. De perfecte sessie voor iedereen die wil kennismaken met de kracht van de commandline!");
 
 		Sessie sessie6 = new Sessie(verantwoordelijke, "How to be a happy Developer. Now!",
@@ -119,8 +119,8 @@ public class InitData {
 				"GSCHB4.026",
 				"Veel ontwikkelaars claimen dat ze van hun hobby hun beroep hebben gemaakt. \nDus, wat kunnen we doen om de huidige situatie te verbeteren ? Hoe kunnen we onszelf beter laten voelen ? Dieze talk richt zich op een aantal eenvoudig te implementeren tactieken die ieder van ons kan gebruiken vanaf morgen, waardoor ons leven een beetje makkelijker en leuker wordt: stuk voor stuk, dag na dag.");
 
-		Sessie gestartSessie1 = new Sessie(admin, "How Netflix thinks of DevOps", huidigetijd,
-				huidigetijd.plusMinutes(45), 20, "GSCHB4.026",
+		Sessie gestartSessie1 = new Sessie(admin, "How Netflix thinks of DevOps", huidigetijd.plusDays(1),
+				huidigetijd.plusDays(1).plusMinutes(45), 20, "GSCHB4.026",
 				"Netflix wordt gezien als een grote DevOps omgeving. Toch is “DevOps” niet iets waar ze veel over spreken. Als het dan toch zo’n kritisch deel is voor het succes van de organisatie, waarom horen we er niet meer over?\nNetflix ziet DevOps als het resultaat van een duidelijke bedrijfscultuur, niet als oplossing van een bepaald probleem. Alles begint bij de bedrijfscultuur, chaos is je vriend en vertrouwen is van absoluut belang.");
 
 		Sessie[] sessies = { sessie1, sessie2, sessie3, sessie4, sessie5, sessie6, gestartSessie1,
@@ -181,16 +181,22 @@ public class InitData {
         		"Studenten die nog steeds interesse vertonen kunnen mij een mailtje sturen, ik zal het filmpje van de sessie doorsturen" ,
         		AankondigingPrioriteit.LAAG,sessie1); 
         sessie1.addAankondiging(sessieAankonding1);
+        System.out.println(sessieAankonding1.getPrioriteit());
+        System.out.println(sessieAankonding1.getPrioriteitValue());
         sessieRepo.update(sessie1);
         
         SessieAankondiging sessieAankonding2 = new SessieAankondiging(admin,huidigetijd, "Deze sessie zal afgelast worden door de huidige coronamaatregelen",
         		AankondigingPrioriteit.HOOG,sessie1);
         sessie1.addAankondiging(sessieAankonding2);
+        System.out.println(sessieAankonding2.getPrioriteit());
+        System.out.println(sessieAankonding2.getPrioriteitValue());
         sessieRepo.update(sessie1);
         
         SessieAankondiging sessieAankonding3 = new SessieAankondiging(admin,huidigetijd, 
         		"Deze sessie zal afgelast worden door de huidige coronamaatregelen", AankondigingPrioriteit.HOOG, sessie2);
-        sessie2.addAankondiging(sessieAankonding1);
+        sessie2.addAankondiging(sessieAankonding3);
+        System.out.println(sessieAankonding3.getPrioriteit());
+        System.out.println(sessieAankonding3.getPrioriteitValue());
         sessieRepo.update(sessie2);
         
         Aankondiging[] aankondingen = { algemeneAankonding1, algemeneAankonding2, algemeneAankonding3, algemeneAankonding4, 

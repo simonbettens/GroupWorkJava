@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import domein.AankondigingPrioriteit;
 import domein.Gebruiker;
 import domein.GebruikerType;
 import domein.Maand;
@@ -33,6 +34,8 @@ import repository.GebruikerDao;
 import repository.GenericDaoJpa;
 import repository.MediaDao;
 import repository.MediaDaoJpa;
+import repository.SessieAankondigingDao;
+import repository.SessieAankondigingDaoJpa;
 import repository.SessieDao;
 import repository.SessieDaoJpa;
 import repository.SessieKalenderDao;
@@ -45,6 +48,7 @@ public class SessieController {
 	private SessieDao sessieRepository;
 	private GebruikerDao gebruikerRepo;
 	private MediaDao mediaRepository;
+	private SessieAankondigingDao sessieAankondigingRepository;
 	private Gebruiker ingelogdeGebruiker;
 	private List<Gebruiker> verantwoordelijkeLijstBijSessie;
 	private Maand gekozenMaand;
@@ -88,6 +92,7 @@ public class SessieController {
 		setSessiekalenderRepository(new SessieKalenderDaoJpa());
 		this.gebruikerRepo = gebruikerrepo;
 		this.mediaRepository = new MediaDaoJpa();
+		this.sessieAankondigingRepository = new SessieAankondigingDaoJpa();
 		setSessieRepository(new SessieDaoJpa());
 		setIngelogdeGebruiker(ingelogdeGebruiker);
 		this.subject = new PropertyChangeSupport(this);
@@ -483,7 +488,43 @@ public class SessieController {
 		});
 	}
 	
-	//
+	//SessieAankondiging methodes
+	public void vulLijstSessieAankondigingen() {
+		System.out.println(gekozenSessie==null?"null":"notnull");
+		sessieAankondigingenLijst = new ArrayList<>(gekozenSessie.getAankondigingen());
+		sessieAankondigingObservableLijst = FXCollections.observableArrayList(sessieAankondigingenLijst);
+		System.out.println(sessieAankondigingObservableLijst.size());
+		this.filteredSessieAankondigingenLijst = new FilteredList<>(sessieAankondigingObservableLijst, e -> true);
+		this.sortedSessieAankondigingenLijst = new SortedList<SessieAankondiging>(filteredSessieAankondigingenLijst,
+				Comparator.comparing(SessieAankondiging::getPrioriteit).thenComparing(SessieAankondiging::getGepost));
+	}
+	
+	public ObservableList<SessieAankondiging> getSessieAankondigingen(){
+		return sortedSessieAankondigingenLijst;
+	}
+	
+	public void setGeselecteerdeSessieAankondiging(SessieAankondiging sa) {
+		firePropertyChange("sessieAankondiging",this.gekozenSessieAankondiging, sa);
+		this.gekozenSessieAankondiging = sa;
+	}
+	
+	public void maakSessieAankondiging(String inhoud, AankondigingPrioriteit prioriteit) {
+		SessieAankondiging sessieAankondiging = new SessieAankondiging(ingelogdeGebruiker, LocalDateTime.now(), inhoud, prioriteit, gekozenSessie);
+		gekozenSessie.addAankondiging(sessieAankondiging);
+		sessieAankondigingenLijst.add(sessieAankondiging);
+		sessieAankondigingObservableLijst.add(sessieAankondiging);
+		insertSessieAankondiging(sessieAankondiging);
+	}
+	
+	public void pasSessieAankondigingAan(String inhoud, AankondigingPrioriteit prioriteit) {
+		SessieAankondiging sessieAankondiging = this.gekozenSessieAankondiging;
+		int ver = sessieAankondiging.pasSessieAankondigingAan(inhoud, prioriteit);
+		if(ver!=0) {
+			updateSessieAankondiging(sessieAankondiging);
+			firePropertyChange("sessieAankondiging", this.gekozenSessieAankondiging, sessieAankondiging);
+			this.gekozenSessieAankondiging= sessieAankondiging;
+		}
+	}
 	
 
 	// Databank operaties
@@ -531,7 +572,32 @@ public class SessieController {
 		firePropertyChange("media", this.gekozenMedia, null);
 		this.gekozenMedia = null;
 	}
+	
+	public void insertSessieAankondiging(SessieAankondiging sa) {
+		GenericDaoJpa.startTransaction();
+		sessieAankondigingRepository.insert(sa);
+		sessieRepository.update(gekozenSessie);
+		GenericDaoJpa.commitTransaction();
+	}
 
+	public void updateSessieAankondiging(SessieAankondiging sa) {
+		GenericDaoJpa.startTransaction();
+		sessieAankondigingRepository.update(sa);
+		sessieRepository.update(gekozenSessie);
+		GenericDaoJpa.commitTransaction();
+	}
+	public void deleteSessieAankondiging() {
+		SessieAankondiging teVerwijderenSessieAankondiging = this.gekozenSessieAankondiging;
+		sessieAankondigingenLijst.remove(teVerwijderenSessieAankondiging);
+		gekozenSessie.removeAankondiging(teVerwijderenSessieAankondiging);
+		sessieAankondigingObservableLijst.remove(teVerwijderenSessieAankondiging);
+		GenericDaoJpa.startTransaction();
+		sessieAankondigingRepository.delete(teVerwijderenSessieAankondiging);
+		sessieRepository.update(gekozenSessie);
+		GenericDaoJpa.commitTransaction();
+		firePropertyChange("sessieAankondiging", this.gekozenSessieAankondiging, null);
+		this.gekozenSessieAankondiging = null;
+	}	
 	
 	public void rollBack() {
 		GenericDaoJpa.rollbackTransaction();

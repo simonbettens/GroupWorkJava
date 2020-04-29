@@ -14,8 +14,8 @@ public class DeelSchermFactory {
 		case 8:deelScherm = new SessieKalenderDetailsController(true);break;
 		case 9: deelScherm = new MediaLijstController(); break;
 		case 10: deelScherm = new MediaDetailsController(); break;
-		case 11:break;
-		case 12:break;
+		case 11: deelScherm = new SessieAankondigingLijstController(); break;
+		case 12: deelScherm = new SessieAankondigingDetailsController(); break;
 		default: 
 			System.out.println("Fout bij het laden van het juiste component :"+welke+" bestaat niet");
 			deelScherm = new SessieKalenderDeelScherm();

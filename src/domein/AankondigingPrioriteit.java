@@ -21,4 +21,33 @@ public enum AankondigingPrioriteit {
           .findFirst()
           .orElseThrow(IllegalArgumentException::new);
     }
+    
+    public static String AankondigingPrioriteitToString(AankondigingPrioriteit prioriteit) {
+    	String waarde = "";
+    	
+    	switch (prioriteit) {
+		case LAAG: waarde = "Laag";
+			break;
+		case HOOG: waarde = "Hoog";
+			break;
+		default:
+			break;
+    	}
+    	
+    	return waarde;
+    }
+    
+    public static AankondigingPrioriteit StringToAankondigingPrioriteit(String prioriteit) {
+    	AankondigingPrioriteit waarde = AankondigingPrioriteit.LAAG;
+    	
+    	switch (prioriteit) {
+		case "Laag": waarde = AankondigingPrioriteit.LAAG ;
+			break;
+		case "Hoog": waarde = AankondigingPrioriteit.HOOG;
+			break;
+		default:
+			break;
+    	}
+    	return waarde;
+    }
 }
