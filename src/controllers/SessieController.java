@@ -209,6 +209,19 @@ public class SessieController {
 		}
 		return sessieKalenderLijst;
 	}
+	
+
+	public Media getGekozenMedia() {
+		return gekozenMedia;
+	}
+
+	public SessieAankondiging getGekozenSessieAankondiging() {
+		return gekozenSessieAankondiging;
+	}
+
+	public SessieGebruiker getGekozenInschrijving() {
+		return gekozenInschrijving;
+	}
 
 	// Sessiekalender methods
 	public void setSessieKalender(String beginjaar) {
@@ -424,20 +437,19 @@ public class SessieController {
 	// Media methods
 	public void vulLijstMedia() {
 		System.out.println(gekozenSessie==null?"null":"notnull");
-		mediaLijst = gekozenSessie.getMedia();
+		mediaLijst = new ArrayList<>(gekozenSessie.getMedia());
 		mediaObservableLijst = FXCollections.observableArrayList(mediaLijst);
 		this.filteredMediaLijst = new FilteredList<>(mediaObservableLijst, e -> true);
 		this.sortedMediaLijst = new SortedList<Media>(filteredMediaLijst,
 				Comparator.comparing(Media::getMediaType).thenComparing(Media::getNaam));
 	}
-	
 	public ObservableList<Media> getMedia(){
 		return sortedMediaLijst;
 	}
 	public void setGeselecteerdeMedia(Media md) {
 		firePropertyChange("media",this.gekozenMedia,md);
 		this.gekozenMedia = md;
-	}
+	}	
 	public void maakMedia(String naam,String bestandnaam,MediaType type) {
 		Media media = new Media(gekozenSessie, bestandnaam, naam, LocalDateTime.now(), type);
 		gekozenSessie.addMediaItem(media);
@@ -454,8 +466,24 @@ public class SessieController {
 			this.gekozenMedia= media;
 		}
 	}
+	public void zoekOpMedia(String bestandnaam,MediaType type) {
+		this.filteredMediaLijst.setPredicate(media -> {
+			boolean typeWaardeLeeg = type == null;
+			boolean naamWaardeLeeg = bestandnaam == null || bestandnaam.isBlank();
+
+			if (typeWaardeLeeg && naamWaardeLeeg) {
+				return true;
+			}
+			boolean conditieMaand = typeWaardeLeeg ? true
+					: media.getMediaType() == type;
+			boolean conditieNaam = naamWaardeLeeg ? true
+					: media.getNaam().toLowerCase().contains(bestandnaam)
+							|| media.getNaam().toLowerCase().startsWith(bestandnaam);
+			return conditieMaand && conditieNaam;
+		});
+	}
 	
-	
+	//
 	
 
 	// Databank operaties
@@ -469,13 +497,11 @@ public class SessieController {
 		firePropertyChange("sessie", this.gekozenSessie, null);
 		this.gekozenSessie = null;
 	}
-
 	public void insertSessie(Sessie sessie) {
 		GenericDaoJpa.startTransaction();
 		sessieRepository.insert(sessie);
 		GenericDaoJpa.commitTransaction();
 	}
-
 	public void updateSessie(Sessie sessie) {
 		GenericDaoJpa.startTransaction();
 		sessieRepository.update(sessie);
@@ -487,7 +513,6 @@ public class SessieController {
 		sessieRepository.update(gekozenSessie);
 		GenericDaoJpa.commitTransaction();
 	}
-
 	public void updateMedia(Media media) {
 		GenericDaoJpa.startTransaction();
 		mediaRepository.update(media);
@@ -507,6 +532,7 @@ public class SessieController {
 		this.gekozenMedia = null;
 	}
 
+	
 	public void rollBack() {
 		GenericDaoJpa.rollbackTransaction();
 	}

@@ -17,7 +17,8 @@ public class DeelSchermFactory {
 		case 11:break;
 		case 12:break;
 		default: 
-			deelScherm = new StartDeelSchermController();
+			System.out.println("Fout bij het laden van het juiste component :"+welke+" bestaat niet");
+			deelScherm = new SessieKalenderDeelScherm();
 		}
 		return deelScherm;
 	}

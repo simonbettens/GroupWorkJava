@@ -18,7 +18,7 @@ public class ApplicatieController extends HBox{
 		ingelogdeGebruiker= gebruikerController.getIngelogdeGebruiker();
 		this.sessieController = new SessieController(this.ingelogdeGebruiker,gebruikerController.getGebruikerRepository());
 		//ingelogde gebruiker moet nog mee gegeven worden aan de sessiecontroller
-		buildGui(0);
+		buildGui(1);
 	}
 
 	public void buildGui(int welkeDeelScherm) {

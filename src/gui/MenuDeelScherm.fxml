@@ -13,14 +13,6 @@
             <Image url="@../images/itLab.jpg" />
          </image>
       </ImageView>
-      <Button fx:id="btnStart" mnemonicParsing="false" onAction="#switchStart" styleClass="rich-blue" stylesheets="@../styles/styles.css" text="StartPagina">
-         <VBox.margin>
-            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-         </VBox.margin>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-      </Button>
       <Button fx:id="btnSessieKalender" minHeight="30.0" minWidth="135.0" mnemonicParsing="false" onAction="#switchSessieKalender" styleClass="rich-blue" text="SessieKalender">
          <VBox.margin>
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />

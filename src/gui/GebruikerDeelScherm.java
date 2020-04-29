@@ -21,6 +21,7 @@ public class GebruikerDeelScherm extends HBox implements DeelScherm<ApplicatieCo
 		this.getChildren().add(gdc);
 		this.setSpacing(10);
         this.setPadding(new Insets(5, 5, 20, 5));
+        
 		gebruikerController.addPropertyChangeListener(gdc);
 	}
 
