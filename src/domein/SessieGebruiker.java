@@ -52,8 +52,7 @@ public class SessieGebruiker implements Serializable {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "SessieId",referencedColumnName = "SessieId")
 	private Sessie sessie;
-	@Transient
-	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy 'om' hh:mm");
+	
 	@Transient
 	 private final SimpleStringProperty volledigeNaamProperty = new SimpleStringProperty();
 	@Transient
@@ -121,7 +120,7 @@ public class SessieGebruiker implements Serializable {
 		return aanwezigProperty;
 	}
 	public SimpleStringProperty getTijdProperty() {
-		tijdProperty.setValue(dtf.format(tijdIngeschreven));
+		tijdProperty.setValue(DatumEnTijdFormater.dateTimeFormat(tijdIngeschreven));
 		return tijdProperty;
 	}
 	private void setTijdIngeschreven(LocalDateTime tijdIngeschreven) {

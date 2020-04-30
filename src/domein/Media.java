@@ -42,8 +42,6 @@ public class Media implements Serializable{
 	private String naam;
 	@Column(name="TijdToegevoegd")
 	private LocalDateTime tijdToegevoegd;
-	@Transient
-	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy 'om' hh:mm");
 	
 	@Basic
 	@Column(name="MediaType")
@@ -113,7 +111,7 @@ public class Media implements Serializable{
 		return naam;
 	}
 	public LocalDateTime getTijdToegevoegd() {
-		typeProperty.setValue(dtf.format(tijdToegevoegd));
+		typeProperty.setValue(DatumEnTijdFormater.dateTimeFormat(tijdToegevoegd));
 		return tijdToegevoegd;
 	}
 	public MediaType getMediaType() {
@@ -131,7 +129,7 @@ public class Media implements Serializable{
 	}
 
 	public SimpleStringProperty getTijdToegevoegdProperty() {
-		tijdToegevoegdProperty.setValue(dtf.format(tijdToegevoegd));
+		tijdToegevoegdProperty.setValue(DatumEnTijdFormater.dateTimeFormat(tijdToegevoegd));
 		return tijdToegevoegdProperty;
 	}
 
@@ -157,7 +155,7 @@ public class Media implements Serializable{
 		if(tijdToegevoegd.isBefore(LocalDateTime.now())) {
 			throw new IllegalArgumentException("je kan geen media toevoegen waarvan de tijd in het verleden ligt");
 		}
-		typeProperty.setValue(dtf.format(tijdToegevoegd));
+		typeProperty.setValue(DatumEnTijdFormater.dateTimeFormat(tijdToegevoegd));
 		this.tijdToegevoegd = tijdToegevoegd;
 	}
 	private void setMediaType(MediaType mediaType) {

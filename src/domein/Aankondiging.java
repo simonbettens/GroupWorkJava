@@ -42,9 +42,7 @@ public class Aankondiging implements Serializable{
 	@Column(name="Gepost")
 	private LocalDateTime gepost;
 	@Column(name="Inhoud")
-	protected String inhoud;
-	@Transient
-	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy 'om' hh:mm");
+	private String inhoud;
 	
 	@Basic
 	@Column(name="Prioriteit")
@@ -97,7 +95,7 @@ public class Aankondiging implements Serializable{
 		return aankondingId;
 	}
 	public LocalDateTime getGepost() {
-		tijdToegevoegdProperty.setValue(dtf.format(gepost));
+		tijdToegevoegdProperty.setValue(DatumEnTijdFormater.dateTimeFormat(gepost));
 		return gepost;
 	}
 	public String getInhoud() {
@@ -126,7 +124,7 @@ public class Aankondiging implements Serializable{
 		if(gepost.isBefore(LocalDateTime.now())) {
 			throw new IllegalArgumentException("tijd gepost is in het verleden.");
 		}
-		tijdToegevoegdProperty.setValue(dtf.format(gepost));
+		tijdToegevoegdProperty.setValue(DatumEnTijdFormater.dateTimeFormat(gepost));
 		this.gepost = gepost;
 	}
 	protected void setInhoud(String inhoud) {
@@ -148,7 +146,7 @@ public class Aankondiging implements Serializable{
 	}
 
 	public SimpleStringProperty getTijdToegevoegdProperty() {
-		tijdToegevoegdProperty.setValue(dtf.format(gepost));
+		tijdToegevoegdProperty.setValue(DatumEnTijdFormater.dateTimeFormat(gepost));
 		return tijdToegevoegdProperty;
 	}
 

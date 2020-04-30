@@ -54,7 +54,7 @@ public class SessieAankondiging extends Aankondiging {
 	
 	public int pasSessieAankondigingAan(String inhoud, AankondigingPrioriteit prioriteit) {
 		int verandering = 0;
-		if(inhoud != this.inhoud) {
+		if(inhoud != getInhoud()) {
 			verandering++;
 			setInhoud(inhoud);
 		}

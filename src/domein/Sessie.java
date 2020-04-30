@@ -81,8 +81,7 @@ public class Sessie implements Serializable{
 	@OneToMany(fetch = FetchType.EAGER,mappedBy = "Sessie")
 	@JoinColumn(name = "SessieId", referencedColumnName = "SessieId")
 	private List<SessieAankondiging> aankondigingen;
-	@Transient
-	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy 'om' hh:mm");
+	
 	//nodig voor jpa
 	public Sessie() {}
 	
@@ -205,7 +204,7 @@ public class Sessie implements Serializable{
 		if(startDatum.isBefore(LocalDateTime.now().plusDays(1)))  {
 			throw new IllegalArgumentException("Startdatum moet minstens een dag in de toekomst liggen");
 		}
-		startDatumProperty.set(dtf.format(startDatum));
+		startDatumProperty.set(DatumEnTijdFormater.dateTimeFormat(startDatum));
 		this.startDatum = startDatum;
 	}
 	private void setEindDatum(LocalDateTime eindDatum) {
@@ -292,7 +291,7 @@ public class Sessie implements Serializable{
 	}
 
 	public SimpleStringProperty getStartDatumProperty() {
-		startDatumProperty.set(dtf.format(getStartDatum()));
+		startDatumProperty.set(DatumEnTijdFormater.dateTimeFormat(getStartDatum()));
 		return startDatumProperty;
 	}
 

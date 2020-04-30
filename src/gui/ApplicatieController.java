@@ -1,23 +1,34 @@
 package gui;
 
+import controllers.AankondigingController;
 import controllers.GebruikerController;
+import controllers.InschrijvingController;
+import controllers.MediaController;
 import controllers.SessieController;
 import domein.Gebruiker;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
+import repository.SessieDao;
+import repository.SessieDaoJpa;
 
 public class ApplicatieController extends HBox{
 	private MenuDeelSchermController menu;
 	private DeelScherm deelScherm;
 	private GebruikerController gebruikerController;
 	private SessieController sessieController;
+	private MediaController mediaController;
+	private AankondigingController aankondigingController;
+	private InschrijvingController inschrijvingController;
 	private Gebruiker ingelogdeGebruiker;
 	public ApplicatieController(GebruikerController gebruikerController) {
 		this.gebruikerController = gebruikerController;
 		ingelogdeGebruiker= gebruikerController.getIngelogdeGebruiker();
-		this.sessieController = new SessieController(this.ingelogdeGebruiker,gebruikerController.getGebruikerRepository());
-		//ingelogde gebruiker moet nog mee gegeven worden aan de sessiecontroller
+		SessieDao sessierepo = new SessieDaoJpa();
+		sessieController = new SessieController(this.ingelogdeGebruiker,gebruikerController.getGebruikerRepository(),sessierepo);
+		mediaController = new MediaController(ingelogdeGebruiker, sessierepo);
+		aankondigingController = new AankondigingController(ingelogdeGebruiker, sessierepo);
+		inschrijvingController = new InschrijvingController(ingelogdeGebruiker,sessierepo);
 		buildGui(1);
 	}
 
@@ -42,6 +53,18 @@ public class ApplicatieController extends HBox{
 	
 	public SessieController getSessieController() {
 		return sessieController;
+	}
+	
+	public MediaController getMediaController() {
+		return mediaController;
+	}
+	
+	public AankondigingController getAankondigingController() {
+		return aankondigingController;
+	}
+
+	public InschrijvingController getInschrijvingController() {
+		return inschrijvingController;
 	}
 
 	public Gebruiker getIngelogdeGebruiker() {

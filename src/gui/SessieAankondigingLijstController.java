@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import controllers.AankondigingController;
 import controllers.SessieController;
 import domein.AankondigingPrioriteit;
 import domein.SessieAankondiging;
@@ -47,12 +48,15 @@ public class SessieAankondigingLijstController extends VBox implements DeelScher
 	private TableColumn<SessieAankondiging, String> colInhoud;
 	private SessieController sc;
 	private SessieKalenderDeelScherm parent;
+	private AankondigingController ac;
+
 	@Override
 	public void buildGui(SessieKalenderDeelScherm parent) {
 		// TODO Auto-generated method stub
 		this.parent = parent;
-		this.sc=parent.getSessieController();
-		sc.vulLijstSessieAankondigingen();
+		this.sc= parent.getSessieController();
+		this.ac = parent.getAankondigingController();
+		ac.setGekozenSessie(sc.getSessie());
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("SessieAankondigingLijst.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
@@ -65,14 +69,14 @@ public class SessieAankondigingLijstController extends VBox implements DeelScher
 		
 		lblSessieNaam.setText(sc.getSessie().getNaam());
 		//List<String> sessieAankondigingLijst = Arrays.asList(AankondigingPrioriteit.values()).stream().sorted().map(sa->AankondigingPrioriteit.AankondigingPrioriteitToString(sa)).collect(Collectors.toList());
-		ObservableList<SessieAankondiging> testje = sc.getSessieAankondigingen();
+		ObservableList<SessieAankondiging> testje = ac.getSessieAankondigingen();
 		testje.forEach(s -> System.out.println(s.toString()));
 		aankondigingenTable.setItems(testje);
 		colVerantwoordelijke.setCellValueFactory(cel -> cel.getValue().getVerantwoordelijkeProperty());
 		colTijd.setCellValueFactory(cel -> cel.getValue().getTijdToegevoegdProperty());
 		colInhoud.setCellValueFactory(cel -> cel.getValue().getInhoudProperty());
 		aankondigingenTable.getSelectionModel().selectedItemProperty().addListener((obs,oldV,newV)->{
-			sc.setGeselecteerdeSessieAankondiging(newV);
+			ac.setGeselecteerdeSessieAankondiging(newV);
         });
 	}
 	

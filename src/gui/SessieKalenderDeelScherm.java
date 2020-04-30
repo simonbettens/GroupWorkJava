@@ -1,5 +1,8 @@
 package gui;
 
+import controllers.AankondigingController;
+import controllers.InschrijvingController;
+import controllers.MediaController;
 import controllers.SessieController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,6 +12,9 @@ import javafx.scene.layout.HBox;
 public class SessieKalenderDeelScherm extends HBox implements DeelScherm<ApplicatieController> {
 
 	private SessieController sc;
+	private MediaController mc;
+	private AankondigingController ac;
+	private InschrijvingController ic;
 	private DeelScherm<SessieKalenderDeelScherm> linkerPaneel;
 	private DeelScherm<SessieKalenderDeelScherm> rechterPaneel;
 	private DeelScherm<SessieKalenderDeelScherm> vorigLinkerPaneel;
@@ -18,6 +24,9 @@ public class SessieKalenderDeelScherm extends HBox implements DeelScherm<Applica
 	public void buildGui(ApplicatieController parent) {
 		// TODO Auto-generated method stub
 		this.sc = parent.getSessieController();
+		this.mc = parent.getMediaController();
+		this.ac = parent.getAankondigingController();
+		this.ic= parent.getInschrijvingController();
 		this.linkerPaneel = DeelSchermFactory.create(5);
 		this.rechterPaneel = DeelSchermFactory.create(6);
 		this.vorigLinkerPaneel=null;
@@ -92,6 +101,17 @@ public class SessieKalenderDeelScherm extends HBox implements DeelScherm<Applica
 	public SessieController getSessieController() {
 		return sc;
 	}
+	
+	public MediaController getMediaController() {
+		return mc;
+	}
+	public AankondigingController getAankondigingController() {
+		return ac;
+	}
+	public InschrijvingController getInschrijvingController() {
+		return ic;
+	}
+
 	public void changeToCreate() {
 		
 	}
