@@ -5,7 +5,7 @@ public class DeelSchermFactory {
 		DeelScherm deelScherm = null;
 		switch(welke) {
 		case 1:deelScherm = new SessieKalenderDeelScherm();break;
-		case 2:break;
+		case 2:deelScherm = new StatistiekScherm();break;
 		
 		case 3:deelScherm = new GebruikerDeelScherm();break;
 		case 4:break;

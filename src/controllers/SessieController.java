@@ -152,6 +152,10 @@ public class SessieController {
 				.orElse(null);
 		veranderFilter(gekozenMaand, "");
 	}
+	public void changeSelectedSessie(String waarde) {
+		gekozenSessie = sessieLijst.stream().filter(s -> s.toString().equals(waarde)).findFirst().orElse(null);
+		//TODO roep functie voor gegevens?
+	}
 
 	public void setSessie(Sessie sessie) {
 		if (sessie != null) {
@@ -457,5 +461,7 @@ public class SessieController {
 	public void removePropertyChangeListenerSessie(PropertyChangeListener pcl) {
 		subject.removePropertyChangeListener(pcl);
 	}
+
+
 
 }

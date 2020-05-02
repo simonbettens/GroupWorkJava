@@ -3,6 +3,7 @@ package gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import controllers.SessieController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -21,6 +22,8 @@ public class StatistiekScherm extends AnchorPane implements Initializable, DeelS
 
 	    @FXML
 	    private NumberAxis yAs;
+	    
+	    private SessieController sc;
 
 		@Override
 		public void initialize(URL arg0, ResourceBundle arg1) {
@@ -34,6 +37,10 @@ public class StatistiekScherm extends AnchorPane implements Initializable, DeelS
 		public void buildGui(ApplicatieController parent) {
 			// TODO Auto-generated method stub
 			
+		}
+
+		public SessieController getSessieController() {
+			return sc;
 		}
 		
 	    
