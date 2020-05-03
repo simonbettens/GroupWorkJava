@@ -37,14 +37,14 @@
         <xAxis>
           <CategoryAxis label="Sessie" side="BOTTOM" fx:id="xAs">
                <tickLabelFont>
-                  <Font name="Verdana" size="18.0" />
+                  <Font name="Verdana" size="30.0" />
                </tickLabelFont>
             </CategoryAxis>
         </xAxis>
         <yAxis>
           <NumberAxis fx:id="yAs" autoRanging="false" label="Aanwezigheden" prefWidth="61.0" side="LEFT" upperBound="30.0">
                <tickLabelFont>
-                  <Font size="18.0" />
+                  <Font size="30.0" />
                </tickLabelFont>
             </NumberAxis>
         </yAxis>

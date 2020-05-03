@@ -6,6 +6,7 @@ import controllers.GebruikerController;
 import controllers.InschrijvingController;
 import controllers.MediaController;
 import controllers.SessieController;
+import controllers.StatistiekController;
 import domein.Gebruiker;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -24,6 +25,7 @@ public class ApplicatieController extends HBox{
 	private InschrijvingController inschrijvingController;
 	private FeedbackController feedbackController;
 	private Gebruiker ingelogdeGebruiker;
+	private StatistiekController statistiekController;
 	public ApplicatieController(GebruikerController gebruikerController) {
 		this.gebruikerController = gebruikerController;
 		ingelogdeGebruiker= gebruikerController.getIngelogdeGebruiker();
@@ -33,6 +35,7 @@ public class ApplicatieController extends HBox{
 		aankondigingController = new AankondigingController(ingelogdeGebruiker, sessierepo);
 		inschrijvingController = new InschrijvingController(ingelogdeGebruiker,sessierepo);
 		feedbackController = new FeedbackController(ingelogdeGebruiker, sessierepo);
+		statistiekController = new StatistiekController(ingelogdeGebruiker, sessierepo);
 		buildGui(1);
 	}
 
@@ -78,6 +81,10 @@ public class ApplicatieController extends HBox{
 
 	public Gebruiker getIngelogdeGebruiker() {
 		return ingelogdeGebruiker;
+	}
+
+	public StatistiekController getStatistiekController() {
+		return statistiekController;
 	}
 	
 	
