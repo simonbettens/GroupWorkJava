@@ -65,7 +65,7 @@ public class LoginSchermGridPaneController extends GridPane {
 	
 	public LoginSchermGridPaneController() {
 		this.gebruikerController = new GebruikerController();
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginSchermTest.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LoginSchermTest.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
 		

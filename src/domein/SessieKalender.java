@@ -89,7 +89,7 @@ public class SessieKalender implements Serializable{
 
 	@Override
 	public String toString() {
-		return DatumEnTijdFormater.dateFormat(getStartDatum()) + " - " + DatumEnTijdFormater.dateFormat(getEindDatum());
+		return DatumEnTijdHelper.dateFormat(getStartDatum()) + " - " + DatumEnTijdHelper.dateFormat(getEindDatum());
 	} 
 	
 	

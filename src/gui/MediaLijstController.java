@@ -23,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.TableView;
 
@@ -64,7 +65,7 @@ public class MediaLijstController extends VBox implements DeelScherm<SessieKalen
 		mc.vulLijstMedia();
 		gekozenType = null;
 		zoekWaarde = "";
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("MediaLijst.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MediaLijst.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
 
@@ -85,6 +86,7 @@ public class MediaLijstController extends VBox implements DeelScherm<SessieKalen
 		mediaTable.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
 			mc.setGeselecteerdeMedia(newV);
 		});
+		this.setVgrow(mediaTable, Priority.SOMETIMES);
 	}
 
 	// Event Listener on TextField[#txfZoek].onKeyReleased

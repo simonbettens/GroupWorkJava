@@ -11,9 +11,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <fx:root id="light-background" alignment="CENTER" minHeight="750.0" minWidth="600.0" prefHeight="750.0" prefWidth="600.0" stylesheets="@../styles/styles.css" type="VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <Label text="Inschrijving details :" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
       <VBox id="grey-background" alignment="CENTER" prefHeight="250.0" prefWidth="534.0">
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

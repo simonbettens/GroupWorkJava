@@ -26,7 +26,7 @@ public class MenuDeelSchermController extends VBox {
 	public MenuDeelSchermController(ApplicatieController parent) {
 		this.parent = parent;
 		this.getStyleClass().add("rightBorder");
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("MenuDeelScherm.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MenuDeelScherm.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
 

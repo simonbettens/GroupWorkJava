@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.TableView;
 
@@ -54,7 +55,7 @@ public class InschrijvingLijstController extends VBox implements DeelScherm<Sess
 		this.sc = parent.getSessieController();
 		this.ic = parent.getInschrijvingController();
 		ic.setGekozenSessie(sc.getSessie());
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("InschrijvingLijst.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/InschrijvingLijst.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
 		
@@ -76,6 +77,7 @@ public class InschrijvingLijstController extends VBox implements DeelScherm<Sess
 		tableInschrijvingen.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
 			ic.setGeselecteerdeSessieGebruiker(newV);
 		});
+		this.setVgrow(tableInschrijvingen, Priority.SOMETIMES);
 	}
 	// Event Listener on Button[#btnGaTerug].onAction
 	@FXML

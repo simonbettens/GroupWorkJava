@@ -111,7 +111,7 @@ public class Media implements Serializable{
 		return naam;
 	}
 	public LocalDateTime getTijdToegevoegd() {
-		typeProperty.setValue(DatumEnTijdFormater.dateTimeFormat(tijdToegevoegd));
+		typeProperty.setValue(DatumEnTijdHelper.dateTimeFormat(tijdToegevoegd));
 		return tijdToegevoegd;
 	}
 	public MediaType getMediaType() {
@@ -129,7 +129,7 @@ public class Media implements Serializable{
 	}
 
 	public SimpleStringProperty getTijdToegevoegdProperty() {
-		tijdToegevoegdProperty.setValue(DatumEnTijdFormater.dateTimeFormat(tijdToegevoegd));
+		tijdToegevoegdProperty.setValue(DatumEnTijdHelper.dateTimeFormat(tijdToegevoegd));
 		return tijdToegevoegdProperty;
 	}
 
@@ -155,7 +155,7 @@ public class Media implements Serializable{
 		if(tijdToegevoegd.isBefore(LocalDateTime.now())) {
 			throw new IllegalArgumentException("je kan geen media toevoegen waarvan de tijd in het verleden ligt");
 		}
-		typeProperty.setValue(DatumEnTijdFormater.dateTimeFormat(tijdToegevoegd));
+		typeProperty.setValue(DatumEnTijdHelper.dateTimeFormat(tijdToegevoegd));
 		this.tijdToegevoegd = tijdToegevoegd;
 	}
 	private void setMediaType(MediaType mediaType) {
@@ -165,6 +165,7 @@ public class Media implements Serializable{
 	private void setSpecifiekeKlasse(TypeMedia specifiekeKlasse) {
 		this.specifiekeKlasse = specifiekeKlasse;
 	}
+	
 	public int pasMediaAan(String adress, String naam, LocalDateTime tijdToegevoegd, MediaType mediaType) {
 		int verandering = 0;
 		if(adress != this.adress) {

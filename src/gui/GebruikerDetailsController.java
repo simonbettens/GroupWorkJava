@@ -68,7 +68,7 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 		this.parent = parent;
 		this.gc = parent.getGebruikerController();
 		isEdit = true;
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("GebruikerDetails.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GebruikerDetails.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
 		try {

@@ -1,6 +1,7 @@
 package gui;
 
 import controllers.AankondigingController;
+import controllers.FeedbackController;
 import controllers.GebruikerController;
 import controllers.InschrijvingController;
 import controllers.MediaController;
@@ -9,6 +10,7 @@ import domein.Gebruiker;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import repository.SessieDao;
 import repository.SessieDaoJpa;
 
@@ -20,6 +22,7 @@ public class ApplicatieController extends HBox{
 	private MediaController mediaController;
 	private AankondigingController aankondigingController;
 	private InschrijvingController inschrijvingController;
+	private FeedbackController feedbackController;
 	private Gebruiker ingelogdeGebruiker;
 	public ApplicatieController(GebruikerController gebruikerController) {
 		this.gebruikerController = gebruikerController;
@@ -29,6 +32,7 @@ public class ApplicatieController extends HBox{
 		mediaController = new MediaController(ingelogdeGebruiker, sessierepo);
 		aankondigingController = new AankondigingController(ingelogdeGebruiker, sessierepo);
 		inschrijvingController = new InschrijvingController(ingelogdeGebruiker,sessierepo);
+		feedbackController = new FeedbackController(ingelogdeGebruiker, sessierepo);
 		buildGui(1);
 	}
 
@@ -38,6 +42,7 @@ public class ApplicatieController extends HBox{
 		this.deelScherm.buildGui(this);
 		this.getChildren().add(menu);
 		this.getChildren().add((Node) deelScherm);
+		this.setHgrow((Node)deelScherm, Priority.ALWAYS);
 		this.setAlignment(Pos.CENTER_LEFT);
 		this.setId("background");
 		
@@ -65,6 +70,10 @@ public class ApplicatieController extends HBox{
 
 	public InschrijvingController getInschrijvingController() {
 		return inschrijvingController;
+	}
+	
+	public FeedbackController getFeedbackController() {
+		return feedbackController;
 	}
 
 	public Gebruiker getIngelogdeGebruiker() {

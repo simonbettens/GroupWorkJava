@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import controllers.MediaController;
 import controllers.SessieController;
+import domein.DatumEnTijdHelper;
 import domein.Media;
 import domein.MediaType;
 import domein.Sessie;
@@ -41,6 +42,8 @@ public class MediaDetailsController extends VBox
 	@FXML
 	private Label lblEind;
 	@FXML
+	private Label lblError;
+	@FXML
 	private TextField txtNaam;
 	@FXML
 	private ComboBox<String> cbType;
@@ -55,7 +58,6 @@ public class MediaDetailsController extends VBox
 	private SessieController sc;
 	private MediaController mc;
 	private SessieKalenderDeelScherm parent;
-	private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy 'om' hh:mm");
 	private boolean isEdit;
 
 	@Override
@@ -67,7 +69,7 @@ public class MediaDetailsController extends VBox
 		isEdit = false;
 		Sessie sessie = mc.getGekozenSessie();
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("MediaDetails.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MediaDetails.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
 		try {
@@ -75,14 +77,15 @@ public class MediaDetailsController extends VBox
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		lblError.setText("");
 		List<String> mediaLijst = Arrays.asList(MediaType.values()).stream().sorted()
 				.map(m -> MediaType.MediaTypeToString(m)).collect(Collectors.toList());
 		cbType.setItems(FXCollections.observableArrayList(mediaLijst));
 		btnOpslaan.setText("Maak nieuwe media");
 		btnVerwijder.setDisable(true);
 		lblNaam.setText(sessie.getNaam());
-		lblStart.setText(dtf.format(sessie.getStartDatum()));
-		lblEind.setText(dtf.format(sessie.getEindDatum()));
+		lblStart.setText(DatumEnTijdHelper.dateTimeFormat(sessie.getStartDatum()));
+		lblEind.setText(DatumEnTijdHelper.dateTimeFormat(sessie.getEindDatum()));
 	}
 
 	// Event Listener on Button[#btnVerwijder].onAction
@@ -115,10 +118,16 @@ public class MediaDetailsController extends VBox
 		MediaType type = MediaType.StringToMediaType(cbType.getSelectionModel().getSelectedItem());
 		if (type != null) {
 			String bestandNaam = veranderVanBestandNaam(txfBestandNaam.getText(), type);
-			if (isEdit) {
-				mc.pasMedia(naam, bestandNaam, type);
-			} else {
-				mc.maakMedia(naam, bestandNaam, type);
+			try {
+				if (isEdit) {
+					mc.pasMedia(naam, bestandNaam, type);
+				} else {
+					mc.maakMedia(naam, bestandNaam, type);
+				}
+				lblError.setText("");
+			} catch (IllegalArgumentException e) {
+				lblError.setText(e.getMessage());
+
 			}
 		}
 	}

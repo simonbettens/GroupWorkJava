@@ -22,6 +22,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.TableView;
 
@@ -57,7 +58,7 @@ public class SessieAankondigingLijstController extends VBox implements DeelScher
 		this.sc= parent.getSessieController();
 		this.ac = parent.getAankondigingController();
 		ac.setGekozenSessie(sc.getSessie());
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("SessieAankondigingLijst.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SessieAankondigingLijst.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
 		
@@ -78,6 +79,7 @@ public class SessieAankondigingLijstController extends VBox implements DeelScher
 		aankondigingenTable.getSelectionModel().selectedItemProperty().addListener((obs,oldV,newV)->{
 			ac.setGeselecteerdeSessieAankondiging(newV);
         });
+		this.setVgrow(aankondigingenTable, Priority.SOMETIMES);
 	}
 	
 	// Event Listener on Button[#btnGaTerug].onAction

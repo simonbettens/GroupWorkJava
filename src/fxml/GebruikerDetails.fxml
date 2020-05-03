@@ -19,6 +19,11 @@
    <children>
       <VBox id="grey-background" alignment="CENTER" prefHeight="630.0" prefWidth="580.0" stylesheets="@../styles/styles.css" VBox.vgrow="SOMETIMES">
          <children>
+            <Label text="Gebruiker Details :" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/personIcon.png" />

@@ -120,7 +120,7 @@ public class SessieGebruiker implements Serializable {
 		return aanwezigProperty;
 	}
 	public SimpleStringProperty getTijdProperty() {
-		tijdProperty.setValue(DatumEnTijdFormater.dateTimeFormat(tijdIngeschreven));
+		tijdProperty.setValue(DatumEnTijdHelper.dateTimeFormat(tijdIngeschreven));
 		return tijdProperty;
 	}
 	private void setTijdIngeschreven(LocalDateTime tijdIngeschreven) {

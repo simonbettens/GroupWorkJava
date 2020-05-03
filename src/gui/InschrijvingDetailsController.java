@@ -14,6 +14,8 @@ import java.io.IOException;
 import controllers.InschrijvingController;
 import controllers.SessieController;
 import domein.AankondigingPrioriteit;
+import domein.DatumEnTijdHelper;
+import domein.Sessie;
 import domein.SessieAankondiging;
 import domein.SessieGebruiker;
 import javafx.event.ActionEvent;
@@ -58,7 +60,7 @@ public class InschrijvingDetailsController extends VBox
 		this.ic = parent.getInschrijvingController();
 
 		ic.addPropertyChangeListenerSessie(this, "inschrijving");
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("InschrijvingDetails.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/InschrijvingDetails.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
 
@@ -67,7 +69,10 @@ public class InschrijvingDetailsController extends VBox
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-
+		Sessie sessie = sc.getSessie();
+		lblNaam.setText(sessie.getNaam());
+		lblStart.setText(DatumEnTijdHelper.dateTimeFormat(sessie.getStartDatum()));
+		lblEind.setText(DatumEnTijdHelper.dateTimeFormat(sessie.getEindDatum()));
 	}
 
 	// Event Listener on Button[#btnVerwijder].onAction

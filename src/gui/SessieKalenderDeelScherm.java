@@ -1,6 +1,7 @@
 package gui;
 
 import controllers.AankondigingController;
+import controllers.FeedbackController;
 import controllers.InschrijvingController;
 import controllers.MediaController;
 import controllers.SessieController;
@@ -15,6 +16,7 @@ public class SessieKalenderDeelScherm extends HBox implements DeelScherm<Applica
 	private MediaController mc;
 	private AankondigingController ac;
 	private InschrijvingController ic;
+	private FeedbackController fc;
 	private DeelScherm<SessieKalenderDeelScherm> linkerPaneel;
 	private DeelScherm<SessieKalenderDeelScherm> rechterPaneel;
 	private DeelScherm<SessieKalenderDeelScherm> vorigLinkerPaneel;
@@ -27,6 +29,7 @@ public class SessieKalenderDeelScherm extends HBox implements DeelScherm<Applica
 		this.mc = parent.getMediaController();
 		this.ac = parent.getAankondigingController();
 		this.ic= parent.getInschrijvingController();
+		this.fc = parent.getFeedbackController();
 		this.linkerPaneel = DeelSchermFactory.create(5);
 		this.rechterPaneel = DeelSchermFactory.create(6);
 		this.vorigLinkerPaneel=null;
@@ -81,6 +84,7 @@ public class SessieKalenderDeelScherm extends HBox implements DeelScherm<Applica
 	}
 
 	public void applyLayout() {
+		
 		this.setAlignment(Pos.CENTER);
 		this.setSpacing(10);
 		this.setPadding(new Insets(5, 5, 20, 5));
@@ -110,6 +114,9 @@ public class SessieKalenderDeelScherm extends HBox implements DeelScherm<Applica
 	}
 	public InschrijvingController getInschrijvingController() {
 		return ic;
+	}
+	public FeedbackController getFeedbackController() {
+		return fc;
 	}
 
 	public void changeToCreate() {

@@ -82,6 +82,10 @@ public class Sessie implements Serializable{
 	@JoinColumn(name = "SessieId", referencedColumnName = "SessieId")
 	private List<SessieAankondiging> aankondigingen;
 	
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "Sessie")
+	@JoinColumn(name = "SessieId", referencedColumnName = "SessieId")
+	private List<Feedback> feedback;
+	
 	//nodig voor jpa
 	public Sessie() {}
 	
@@ -123,6 +127,9 @@ public class Sessie implements Serializable{
 	}
 	public List<SessieAankondiging> getAankondigingen() {
 		return Collections.unmodifiableList(aankondigingen);
+	}
+	public List<Feedback> getFeedBack(){
+		return Collections.unmodifiableList(feedback);
 	}
 	public String getNaam() {
 		return naam;
@@ -204,7 +211,7 @@ public class Sessie implements Serializable{
 		if(startDatum.isBefore(LocalDateTime.now().plusDays(1)))  {
 			throw new IllegalArgumentException("Startdatum moet minstens een dag in de toekomst liggen");
 		}
-		startDatumProperty.set(DatumEnTijdFormater.dateTimeFormat(startDatum));
+		startDatumProperty.set(DatumEnTijdHelper.dateTimeFormat(startDatum));
 		this.startDatum = startDatum;
 	}
 	private void setEindDatum(LocalDateTime eindDatum) {
@@ -280,6 +287,10 @@ public class Sessie implements Serializable{
 	public void removeInschrijving(SessieGebruiker ins) {
 		this.gebruikersIngeschreven.remove(ins);
 	}
+	
+	public void removeFeedback(Feedback f) {
+		feedback.remove(f);
+	}
 	public SimpleStringProperty getTitelProperty() {
 		titelProperty.set(getNaam());
 		return titelProperty;
@@ -291,7 +302,7 @@ public class Sessie implements Serializable{
 	}
 
 	public SimpleStringProperty getStartDatumProperty() {
-		startDatumProperty.set(DatumEnTijdFormater.dateTimeFormat(getStartDatum()));
+		startDatumProperty.set(DatumEnTijdHelper.dateTimeFormat(getStartDatum()));
 		return startDatumProperty;
 	}
 
@@ -323,12 +334,13 @@ public class Sessie implements Serializable{
 			veranderingen++;
 		}
 		
-		if(!startDatum.equals(getStartDatum())) {
+		if(!DatumEnTijdHelper.vergelijk(startDatum, getStartDatum())) {
+			System.out.println("Gaat er in");
 			setStartDatum(startDatum);
 			veranderingen++;
 		}
 		
-		if(!eindDatum.equals(getEindDatum())) {
+		if(!DatumEnTijdHelper.vergelijk(eindDatum,getEindDatum())) {
 			setEindDatum(eindDatum);
 			veranderingen++;
 		}

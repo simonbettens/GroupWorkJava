@@ -152,9 +152,10 @@ public class SessieController {
 				.orElse(null);
 		veranderFilter(gekozenMaand, "");
 	}
+
 	public void changeSelectedSessie(String waarde) {
 		gekozenSessie = sessieLijst.stream().filter(s -> s.toString().equals(waarde)).findFirst().orElse(null);
-		//TODO roep functie voor gegevens?
+		// TODO roep functie voor gegevens?
 	}
 
 	public void setSessie(Sessie sessie) {
@@ -226,19 +227,45 @@ public class SessieController {
 
 	public void maakNieuweSessieKalender(LocalDate startDatum, LocalDate eindDatum) {
 		SessieKalender sk = new SessieKalender(startDatum, eindDatum);
-		insertSessieKalender(sk);
+		SessieKalender overlap = sessieKalenderLijst.stream().filter(
+				s -> sk.getStartDatum().isAfter(s.getStartDatum()) && sk.getStartDatum().isBefore(s.getEindDatum())
+						|| sk.getEindDatum().isAfter(s.getStartDatum()) && sk.getEindDatum().isBefore(sk.getEindDatum())
+						|| sk.getStartDatum().isBefore(s.getStartDatum())
+								&& sk.getEindDatum().isAfter(s.getStartDatum()))
+				.findFirst().orElse(null);
+		if (overlap == null) {
+			insertSessieKalender(sk);
+		} else {
+			String fout = String.format("Ingeven sessiekalender overlapt met %s - %s",
+					overlap.getStartDatum().toString(), overlap.getEindDatum().toString());
+			System.out.println(fout);
+			throw new IllegalArgumentException(fout);
+		}
 	}
 
 	public void pasSessieKalender(LocalDate startDatum, LocalDate eindDatum) {
 		SessieKalender sk = this.gekozenSessieKalender;
-		sessieKalenderLijst.remove(sk);
-		sessieKalenderObservableLijst.remove(sk.toString());
-		sk.setStartDatum(startDatum);
-		sk.setEindDatum(eindDatum);
-		updateSessieKalender(sk);
-		sessieKalenderLijst.add(sk);
-		sessieKalenderObservableLijst.add(sk.toString());
-		this.gekozenSessieKalender = sk;
+		SessieKalender overlap = sessieKalenderLijst.stream().filter(
+				s -> sk.getStartDatum().isAfter(s.getStartDatum()) && sk.getStartDatum().isBefore(s.getEindDatum())
+						|| sk.getEindDatum().isAfter(s.getStartDatum()) && sk.getEindDatum().isBefore(sk.getEindDatum())
+						|| sk.getStartDatum().isBefore(s.getStartDatum())
+								&& sk.getEindDatum().isAfter(s.getStartDatum()))
+				.findFirst().orElse(null);
+		if (overlap == null) {
+			sessieKalenderLijst.remove(sk);
+			sessieKalenderObservableLijst.remove(sk.toString());
+			sk.setStartDatum(startDatum);
+			sk.setEindDatum(eindDatum);
+			updateSessieKalender(sk);
+			sessieKalenderLijst.add(sk);
+			sessieKalenderObservableLijst.add(sk.toString());
+			this.gekozenSessieKalender = sk;
+		} else {
+			String fout = String.format("Ingeven sessiekalender overlapt met %s - %s",
+					overlap.getStartDatum().toString(), overlap.getEindDatum().toString());
+			System.out.println(fout);
+			throw new IllegalArgumentException(fout);
+		}
 	}
 
 	public boolean isKalenderUniek(SessieKalender kalender) {
@@ -326,6 +353,7 @@ public class SessieController {
 	public void pasSessieAan(String titel, String lokaal, String gastSpreker, String startuur, String startmin,
 			String einduur, String eindmin, String volledigeNaamVerantwoordelijke, String beschrijving, String maxCap,
 			boolean staatOpen, boolean gesloten, LocalDate start, LocalDate einde) {
+		System.out.println("pas aan");
 		if (this.gekozenSessie != null) {
 			if (start == null) {
 				System.out.println("datum is null");
@@ -386,12 +414,14 @@ public class SessieController {
 				String fout = String.format("Voer een geldig formaat in bij als %s minuten", welke);
 				throw new NumberFormatException(fout);
 			}
-			if(uurInt<=0||uurInt>24) {
-				String fout = String.format("Voer een geldig formaat in bij het %suur, het uur moet tussen 1 - 24 liggen", welke);
+			if (uurInt <= 0 || uurInt > 24) {
+				String fout = String
+						.format("Voer een geldig formaat in bij het %suur, het uur moet tussen 1 - 24 liggen", welke);
 				throw new IllegalArgumentException(fout);
 			}
-			if(uurInt<0||uurInt>59) {
-				String fout = String.format("Voer een geldig formaat in bij het %suur, de minuten moet tussen 0 - 59 liggen", welke);
+			if (uurInt < 0 || uurInt > 59) {
+				String fout = String.format(
+						"Voer een geldig formaat in bij het %suur, de minuten moet tussen 0 - 59 liggen", welke);
 				throw new IllegalArgumentException(fout);
 			}
 			LocalTime tijd = LocalTime.of(uurInt, minInt);
@@ -461,7 +491,5 @@ public class SessieController {
 	public void removePropertyChangeListenerSessie(PropertyChangeListener pcl) {
 		subject.removePropertyChangeListener(pcl);
 	}
-
-
 
 }

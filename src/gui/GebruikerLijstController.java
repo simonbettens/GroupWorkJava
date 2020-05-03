@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.TableColumn;
 
@@ -43,7 +44,7 @@ public class GebruikerLijstController extends VBox{
 		this.parent = parent;
 		this.details = details;
 		this.gc=parent.getGebruikerController();
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("GebruikerLijst.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GebruikerLijst.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
 		
@@ -61,6 +62,7 @@ public class GebruikerLijstController extends VBox{
 			details.bewerkGebruiker();
 			gc.setGeselecteerdeGebruiker(newV);
         });
+		this.setVgrow(gebruikerTable, Priority.SOMETIMES);
 	}
 
 	// Event Listener on Button[#btnToevoegen].onAction

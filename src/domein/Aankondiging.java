@@ -95,7 +95,7 @@ public class Aankondiging implements Serializable{
 		return aankondingId;
 	}
 	public LocalDateTime getGepost() {
-		tijdToegevoegdProperty.setValue(DatumEnTijdFormater.dateTimeFormat(gepost));
+		tijdToegevoegdProperty.setValue(DatumEnTijdHelper.dateTimeFormat(gepost));
 		return gepost;
 	}
 	public String getInhoud() {
@@ -124,7 +124,7 @@ public class Aankondiging implements Serializable{
 		if(gepost.isBefore(LocalDateTime.now())) {
 			throw new IllegalArgumentException("tijd gepost is in het verleden.");
 		}
-		tijdToegevoegdProperty.setValue(DatumEnTijdFormater.dateTimeFormat(gepost));
+		tijdToegevoegdProperty.setValue(DatumEnTijdHelper.dateTimeFormat(gepost));
 		this.gepost = gepost;
 	}
 	protected void setInhoud(String inhoud) {
@@ -146,7 +146,7 @@ public class Aankondiging implements Serializable{
 	}
 
 	public SimpleStringProperty getTijdToegevoegdProperty() {
-		tijdToegevoegdProperty.setValue(DatumEnTijdFormater.dateTimeFormat(gepost));
+		tijdToegevoegdProperty.setValue(DatumEnTijdHelper.dateTimeFormat(gepost));
 		return tijdToegevoegdProperty;
 	}
 

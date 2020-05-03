@@ -32,6 +32,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
@@ -70,7 +71,7 @@ public class SessieLijstController extends VBox implements DeelScherm<SessieKale
 		// TODO Auto-generated method stub
 		this.parent = parent;
 		this.sc = parent.getSessieController();
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("SessieLijst.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SessieLijst.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
 
@@ -123,6 +124,7 @@ public class SessieLijstController extends VBox implements DeelScherm<SessieKale
 		tblSessies.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
 			sc.setSessie(newV);
 		});
+		this.setVgrow(tblSessies, Priority.SOMETIMES);
 	}
 
 	// Event Listener on Button[#btnNieuweSessieKalender].onAction

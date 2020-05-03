@@ -9,6 +9,7 @@
         <class>domein.Gebruiker</class>
         <class>domein.SessieGebruiker</class>
         <class>domein.SessieKalender</class>
+        <class>domein.Feedback</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;DatabaseName=ItLabTest"/>
