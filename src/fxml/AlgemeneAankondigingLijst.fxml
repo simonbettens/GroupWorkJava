@@ -14,7 +14,7 @@
 	<children>
 		<HBox alignment="CENTER" prefHeight="31.0" prefWidth="600.0">
 			<children>
-				<Label text="Overzicht van de aankondigingen :" textFill="WHITE">
+				<Label text="Overzicht van de algemene aankondigingen :" textFill="WHITE">
 					<font>
 						<Font name="System Bold" size="14.0" />
 					</font>
@@ -29,11 +29,6 @@
             </Button>
 			</children>
 		</HBox>
-				<Label fx:id="lblSessieNaam" text="Naam Sessie" textFill="WHITE">
-					<font>
-						<Font name="System Bold Italic" size="14.0" />
-					</font>
-				</Label>
 		<HBox alignment="CENTER" prefHeight="50.0" prefWidth="600.0">
 			<children>
 				<TextField fx:id="txfZoek" alignment="CENTER" onKeyReleased="#search" prefWidth="350.0" promptText="Zoek op naam">
@@ -46,7 +41,7 @@
 		</HBox>
 		<HBox alignment="CENTER" prefHeight="50.0" prefWidth="600.0">
 			<children>
-				<Button fx:id="btnNieuw" mnemonicParsing="false" onAction="#nieuweAankondiging" styleClass="greyButton" text="Maak aankondiging item">
+				<Button fx:id="btnNieuw" mnemonicParsing="false" onAction="#nieuwAankondiging" styleClass="greyButton" text="Maak aankondiging item">
 					<HBox.margin>
 						<Insets right="10.0" />
 					</HBox.margin>

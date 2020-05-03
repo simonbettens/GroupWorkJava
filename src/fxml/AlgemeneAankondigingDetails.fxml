@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root id="light-background" alignment="CENTER" minHeight="750.0" minWidth="600.0" prefHeight="750.0" prefWidth="600.0" stylesheets="@../styles/styles.css" type="VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+      <Label text="Algemene Aankondiging details :" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+		<VBox id="grey-background" alignment="CENTER" prefHeight="355.0" prefWidth="580.0">
+			<VBox.margin>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</VBox.margin>
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+			</padding>
+			<children>
+				<HBox alignment="CENTER" prefHeight="24.0" prefWidth="568.0" />
+				<Separator prefWidth="200.0" style="-fx-background-color: black;">
+					<VBox.margin>
+						<Insets bottom="5.0" />
+					</VBox.margin>
+				</Separator>
+				<GridPane alignment="CENTER" prefHeight="179.0" prefWidth="568.0">
+					<columnConstraints>
+						<ColumnConstraints hgrow="SOMETIMES" maxWidth="276.4000244140625" minWidth="10.0" prefWidth="83.600048828125" />
+						<ColumnConstraints hgrow="SOMETIMES" maxWidth="512.3999481201172" minWidth="10.0" prefWidth="485.19995117187494" />
+					</columnConstraints>
+					<rowConstraints>
+						<RowConstraints />
+						<RowConstraints maxHeight="55.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="55.0" minHeight="10.0" prefHeight="55.0" vgrow="SOMETIMES" />
+						<RowConstraints maxHeight="25.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
+					</rowConstraints>
+					<children>
+
+						<ComboBox fx:id="cbPrioriteit" prefHeight="25.0" prefWidth="214.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+						<Label text="Inhoud :" GridPane.rowIndex="1" />
+						<Label text="Prioriteit :" GridPane.rowIndex="3" />
+                  <TextArea fx:id="txtInhoud" prefHeight="105.0" prefWidth="416.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2">
+                     <GridPane.margin>
+                        <Insets bottom="5.0" />
+                     </GridPane.margin></TextArea>
+					</children>
+					<VBox.margin>
+						<Insets bottom="5.0" />
+					</VBox.margin>
+				</GridPane>
+				<Separator prefWidth="200.0" style="-fx-background-color: black;" />
+            <Label fx:id="lblError" text="ERROR" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+				<Button fx:id="btnVerwijder" mnemonicParsing="false" onAction="#verwijder" styleClass="verwijderButton" text="Verwijder aankondiging">
+					<VBox.margin>
+						<Insets bottom="10.0" left="10.0" right="10.0" top="15.0" />
+					</VBox.margin>
+				</Button>
+			</children>
+		</VBox>
+		<HBox alignment="CENTER" prefHeight="80.0" prefWidth="200.0">
+			<children>
+				<Button fx:id="btnOpslaan" mnemonicParsing="false" onAction="#opslaan" styleClass="greyButton" text="Maak aankondiging">
+					<HBox.margin>
+						<Insets right="5.0" />
+					</HBox.margin>
+				</Button>
+				<Button fx:id="btnAnnuleer" mnemonicParsing="false" onAction="#annuleer" styleClass="greyButton" text="Annuleer" />
+			</children>
+		</HBox>
+	</children>
+</fx:root>

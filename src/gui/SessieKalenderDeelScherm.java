@@ -122,5 +122,4 @@ public class SessieKalenderDeelScherm extends HBox implements DeelScherm<Applica
 	public void changeToCreate() {
 		
 	}
-
 }

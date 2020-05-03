@@ -7,15 +7,20 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import domein.Aankondiging;
 import domein.AankondigingPrioriteit;
 import domein.Gebruiker;
+import domein.MediaType;
 import domein.Sessie;
 import domein.SessieAankondiging;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import repository.AankondigingDao;
+import repository.AankondigingDaoJpa;
 import repository.GenericDaoJpa;
 import repository.SessieAankondigingDao;
 import repository.SessieAankondigingDaoJpa;
@@ -23,6 +28,7 @@ import repository.SessieDao;
 
 public class AankondigingController {
 	private SessieAankondigingDao sessieAankondigingRepository;
+	private AankondigingDao aankondigingRepository;
 	private SessieDao sessieRepository;
 	private Gebruiker ingelogdeGebruiker;
 	private PropertyChangeSupport subject;
@@ -34,11 +40,19 @@ public class AankondigingController {
 	private ObservableList<SessieAankondiging> sessieAankondigingObservableLijst;
 	private FilteredList<SessieAankondiging> filteredSessieAankondigingenLijst;
 	private SortedList<SessieAankondiging> sortedSessieAankondigingenLijst;
+	
+	// Algemene aankondigingen
+	private Aankondiging gekozenAankondiging;
+	private List<Aankondiging> aankondigingenLijst;
+	private ObservableList<Aankondiging> aankondigingObservableLijst;
+	private FilteredList<Aankondiging> filteredAankondigingenLijst;
+	private SortedList<Aankondiging> sortedAankondigingenLijst;
 
 	public AankondigingController(Gebruiker ingelogdeGebruiker, SessieDao sessieRepository) {
 		this.sessieRepository = sessieRepository;
 		this.ingelogdeGebruiker = ingelogdeGebruiker;
 		this.sessieAankondigingRepository = new SessieAankondigingDaoJpa();
+		this.aankondigingRepository = new AankondigingDaoJpa();
 		this.subject = new PropertyChangeSupport(this);
 		this.gekozenSessie = null;
 		this.gekozenSessieAankondiging =null;
@@ -48,6 +62,9 @@ public class AankondigingController {
 	}
 	public SessieAankondiging getGekozenSessieAankondiging() {
 		return gekozenSessieAankondiging;
+	}
+	public Aankondiging getGekozenAankondiging() {
+		return gekozenAankondiging;
 	}
 	public Sessie getGekozenSessie() {
 		return gekozenSessie;
@@ -97,6 +114,78 @@ public class AankondigingController {
 			}
 		}
 	}
+	
+	public void zoekOpSessieAankondiging(String sav) {
+		this.filteredSessieAankondigingenLijst.setPredicate(sessieAankondiging -> {
+			boolean naamWaardeLeeg = sav == null || sav.isBlank();
+
+			if (naamWaardeLeeg) {
+				return true;
+			}
+			
+			boolean conditieNaam = naamWaardeLeeg ? true
+					: sessieAankondiging.getVerantwoordelijke().getVolledigeNaam().toLowerCase().contains(sav)
+							|| sessieAankondiging.getVerantwoordelijke().getVolledigeNaam().startsWith(sav);
+			return conditieNaam;
+		});
+	}
+	
+	//Aankondiging methodes
+	public void vulLijstAankondigingen() {
+		aankondigingenLijst = new ArrayList<>(aankondigingRepository.getAll().stream().filter(a -> a.getClass().getSimpleName().equalsIgnoreCase("Aankondiging")).collect(Collectors.toList()));
+		aankondigingObservableLijst = FXCollections.observableArrayList(aankondigingenLijst);
+		System.out.println(aankondigingObservableLijst.size());
+		this.filteredAankondigingenLijst = new FilteredList<>(aankondigingObservableLijst, e -> true);
+		this.sortedAankondigingenLijst = new SortedList<Aankondiging>(filteredAankondigingenLijst,
+				Comparator.comparing(Aankondiging::getPrioriteit).thenComparing(Aankondiging::getGepost));
+	}
+	
+	public ObservableList<Aankondiging> getAankondigingen() {
+		vulLijstAankondigingen();
+		return sortedAankondigingenLijst;
+	}
+	
+	public void setGeselecteerdeAankondiging(Aankondiging a) {
+		firePropertyChange("aankondiging", this.gekozenAankondiging, a);
+		this.gekozenAankondiging = a;
+	}
+
+	public void maakAankondiging(String inhoud, AankondigingPrioriteit prioriteit) {
+		Aankondiging aankondiging = new Aankondiging(ingelogdeGebruiker, LocalDateTime.now(), inhoud,
+				prioriteit);
+		aankondigingenLijst.add(aankondiging);
+		aankondigingObservableLijst.add(aankondiging);
+		insertAankondiging(aankondiging);
+	}
+	
+	public void pasAankondigingAan(String inhoud, AankondigingPrioriteit prioriteit) {
+		Aankondiging aankondiging = this.gekozenAankondiging;
+		if (aankondiging != null) {
+			int ver = aankondiging.pasAankondigingAan(inhoud, prioriteit);
+			if (ver != 0) {
+				updateAankondiging(aankondiging);
+				firePropertyChange("aankondiging", this.gekozenAankondiging, aankondiging);
+				this.gekozenAankondiging = aankondiging;
+			}
+		}
+	}
+	
+	public void zoekOpAankondiging(String av) {
+		this.filteredAankondigingenLijst.setPredicate(aankondiging -> {
+			boolean naamWaardeLeeg = av == null || av.isBlank();
+
+			if (naamWaardeLeeg) {
+				return true;
+			}
+			
+			boolean conditieNaam = naamWaardeLeeg ? true
+					: aankondiging.getVerantwoordelijke().getVolledigeNaam().toLowerCase().contains(av)
+							|| aankondiging.getVerantwoordelijke().getVolledigeNaam().startsWith(av);
+			return conditieNaam;
+		});
+	}
+	
+	
 
 	// ---SessieAankondiging databank operaties
 	public void insertSessieAankondiging(SessieAankondiging sa) {
@@ -124,6 +213,30 @@ public class AankondigingController {
 		GenericDaoJpa.commitTransaction();
 		firePropertyChange("sessieAankondiging", this.gekozenSessieAankondiging, null);
 		this.gekozenSessieAankondiging = null;
+	}
+	
+	// ---Aankondiging databank operaties
+	public void insertAankondiging(Aankondiging a) {
+		GenericDaoJpa.startTransaction();
+		aankondigingRepository.insert(a);
+		GenericDaoJpa.commitTransaction();
+	}
+
+	public void updateAankondiging(Aankondiging a) {
+		GenericDaoJpa.startTransaction();
+		aankondigingRepository.update(a);
+		GenericDaoJpa.commitTransaction();
+	}
+
+	public void deleteAankondiging() {
+		Aankondiging teVerwijderenAankondiging = this.gekozenAankondiging;
+		aankondigingenLijst.remove(teVerwijderenAankondiging);
+		aankondigingObservableLijst.remove(teVerwijderenAankondiging);
+		GenericDaoJpa.startTransaction();
+		aankondigingRepository.delete(teVerwijderenAankondiging);
+		GenericDaoJpa.commitTransaction();
+		firePropertyChange("aankondiging", this.gekozenAankondiging, null);
+		this.gekozenAankondiging = null;
 	}
 
 	// changeSupport

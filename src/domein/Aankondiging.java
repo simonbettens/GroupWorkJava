@@ -160,6 +160,20 @@ public class Aankondiging implements Serializable{
 		return inhoudProperty;
 	}
 	
+	public int pasAankondigingAan(String inhoud, AankondigingPrioriteit prioriteit) {
+		int verandering = 0;
+		if(inhoud != getInhoud()) {
+			verandering++;
+			setInhoud(inhoud);
+		}
+		if(prioriteit != this.prioriteit) {
+			verandering++;
+			setPrioriteit(prioriteit);
+		}
+		
+		return verandering;
+	}
+	
 	@Override
 	public String toString() {
 		return "Aankondiging met als id :" + aankondingId + ", gepost op :" + gepost + ", bevat deze inhoud :" + inhoud+", met prioriteit=" + prioriteit + " en is van het type aankondiging";
