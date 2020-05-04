@@ -29,6 +29,10 @@ public class GebruikerController {
 	private PropertyChangeSupport subject;
 	private GebruikerDaoJpa gebruikerRepository;
 
+	//============================================================================================================================================
+	//Constructor
+	//============================================================================================================================================
+
 	public GebruikerController() {
 		setGebruikerRepository(new GebruikerDaoJpa());
 		gebruikerLijst = new ArrayList<>();
@@ -36,6 +40,9 @@ public class GebruikerController {
 		vulLijsten();
 	}
 
+	/**
+	 * Vult gebruikerlijsten op.
+	 */
 	private void vulLijsten() {
 		gebruikerLijst = gebruikerRepository.getAll();
 		gebruikerObsLijst = FXCollections.observableArrayList(gebruikerLijst);
@@ -44,6 +51,11 @@ public class GebruikerController {
 				Comparator.comparing(Gebruiker::getVolledigeNaam).thenComparing(Gebruiker::getUserName)
 						.thenComparing(Gebruiker::getType));
 	}
+	
+	//============================================================================================================================================
+	//Getters & Setters
+	//============================================================================================================================================
+	
 	public List<Gebruiker> getVerantwoordelijkeList(){
 		return gebruikerRepository.getByDiscriminator("Verantwoordelijke");
 		
@@ -84,7 +96,14 @@ public class GebruikerController {
 	public GebruikerDaoJpa getGebruikerRepository() {
 		return gebruikerRepository;
 	}
+	
+	//============================================================================================================================================
+	//Database operations
+	//============================================================================================================================================
 
+	/**
+	 * Verwijdert de geselecteerde gebruiker.
+	 */
 	public void deleteGebruiker() {
 		Gebruiker teVerwijderenGebruiker = this.geselecteerdeGebruiker;
 		gebruikerLijst.remove(teVerwijderenGebruiker);
@@ -96,6 +115,10 @@ public class GebruikerController {
 		this.geselecteerdeGebruiker = null;
 	}
 
+	/**
+	 * Voegt een nieuwe gebruiker toe aan de databank.
+	 * @param gebruiker de toe te voegen gebruiker
+	 */
 	public void insertGebruiker(Gebruiker gebruiker) {
 		GenericDaoJpa.startTransaction();
 		gebruikerRepository.insert(gebruiker);
@@ -105,10 +128,24 @@ public class GebruikerController {
 	public void rollBack() {
 		GenericDaoJpa.rollbackTransaction();
 	}
+	
+	//============================================================================================================================================
+	//Gebruiker methods
+	//============================================================================================================================================
+	/**
+	 * Zoekt naar gebruikers per naam.
+	 * Roept {@link #veranderFilter(String) veranderFilter} op.
+	 * @param zoekwaarde de waarde die gezocht wordt bij de gebruikersnaam
+	 */
 	public void zoekOpNaam(String zoekwaarde) {
 		veranderFilter(zoekwaarde);
 		
 	}
+	
+	/**
+	 * Verandert de filter voor het opzoeken van een gebruiker.
+	 * @param naamWaarde waarde waarnaar gezocht wordt bij de gebruikersnaam
+	 */
 	private void veranderFilter( String naamWaarde) {
 		this.filteredGebruikerLijst.setPredicate(g -> {
 			boolean naamWaardeLeeg = naamWaarde == null || naamWaarde.isBlank();
@@ -122,6 +159,19 @@ public class GebruikerController {
 			return conditieNaam;
 		});
 	}
+	
+	/**
+	 * Maakt een nieuwe gebruiker en slaat deze op.
+	 * Roept {@link #insertGebruiker(Gebruiker) insertGebruiker} aan.
+	 * @param voornaam voornaam van de gebruiker
+	 * @param achternaam achternaam van de gebruiker
+	 * @param userName gebruikersnaam
+	 * @param passwoord wachtwoord van de gebruiker
+	 * @param email email van de gebruiker
+	 * @param idNummer idNummer van de gebruiker
+	 * @param type gebruikerstype
+	 * @param status status van de gebruiker
+	 */
 	public void maakGebruiker(String voornaam, String achternaam, String userName, String passwoord, String email,
 			Long idNummer, GebruikerType type, StatusType status) {
 		Gebruiker gebruiker = new Gebruiker(voornaam, achternaam, userName, passwoord, email, idNummer, type, status);
@@ -134,6 +184,17 @@ public class GebruikerController {
 		gebruikerObsLijst.add(gebruiker);
 	}
 
+	/**
+	 * Past een bestaande gebruiker aan.
+	 * @param voornaam voornaam van de gebruiker
+	 * @param achternaam achternaam van de gebruiker
+	 * @param userName gebruikersnaam
+	 * @param passwoord wachtwoord van de gebruiker
+	 * @param email email van de gebruiker
+	 * @param idNummer idNummer van de gebruiker
+	 * @param type gebruikerstype
+	 * @param status status van de gebruiker
+	 */
 	public void pasGebruikerAan(String voornaam, String achternaam, String userName, String passwoord, String email,
 			Long idNummer, GebruikerType type, StatusType status) {
 		Gebruiker gebruiker = this.geselecteerdeGebruiker;
@@ -147,6 +208,10 @@ public class GebruikerController {
 			firePropertyChange("geselecteerdeGebruiker", this.geselecteerdeGebruiker, gebruiker);
 		}
 	}
+	
+	//============================================================================================================================================
+	// changeSupport
+	//============================================================================================================================================
 
 	private void firePropertyChange(String welke, Gebruiker oude, Gebruiker nieuwe) {
 		subject.firePropertyChange(welke, oude, nieuwe);

@@ -22,20 +22,25 @@ import repository.MediaDaoJpa;
 import repository.SessieDao;
 
 public class MediaController {
-
+	
+	//Properties
 	private MediaDao mediaRepository;
 	private SessieDao sessieRepository;
 	private Gebruiker ingelogdeGebruiker;
 	private PropertyChangeSupport subject;
 	private Sessie gekozenSessie;
 
-	// media bij een gekozen Sessie;
+	//Media bij een gekozen Sessie;
 	private Media gekozenMedia;
 	private List<Media> mediaLijst;
 	private ObservableList<Media> mediaObservableLijst;
 	private FilteredList<Media> filteredMediaLijst;
 	private SortedList<Media> sortedMediaLijst;
 
+	//============================================================================================================================================
+	//Constructor
+	//============================================================================================================================================
+	
 	public MediaController(Gebruiker ingelogdeGebruiker, SessieDao repo) {
 		this.ingelogdeGebruiker = ingelogdeGebruiker;
 		this.sessieRepository = repo;
@@ -45,6 +50,10 @@ public class MediaController {
 		this.gekozenMedia = null;
 	}
 
+	//============================================================================================================================================
+	//Getters & Setters
+	//============================================================================================================================================
+	
 	public Gebruiker getIngelogdeGebruiker() {
 		return ingelogdeGebruiker;
 	}
@@ -57,14 +66,23 @@ public class MediaController {
 		return gekozenSessie;
 	}
 
+	/**
+	 * Stelt de gekozen sessie in.
+	 * roept {@link #vulLijstMedia() vulLijstMedia} aan.
+	 * @param gekozenSessie
+	 */
 	public void setGekozenSessie(Sessie gekozenSessie) {
 		this.gekozenSessie = gekozenSessie;
 		vulLijstMedia();
 	}
 
+	//============================================================================================================================================
 	// Media methods
+	//============================================================================================================================================
+	/**
+	 * vult lijsten met media uit de gekozen sessie op
+	 */
 	public void vulLijstMedia() {
-		System.out.println(gekozenSessie == null ? "null" : "notnull");
 		mediaLijst = new ArrayList<>(gekozenSessie.getMedia());
 		mediaObservableLijst = FXCollections.observableArrayList(mediaLijst);
 		this.filteredMediaLijst = new FilteredList<>(mediaObservableLijst, e -> true);
@@ -81,6 +99,13 @@ public class MediaController {
 		this.gekozenMedia = md;
 	}
 
+	/**
+	 * Maakt een nieuw media object en voegt dit toe aan de medialijsten.
+	 * Roept {@link #insertMedia() insertMedia} aan.
+	 * @param naam naam van de media
+	 * @param bestandnaam bestandsnaam van de media
+	 * @param type type media
+	 */
 	public void maakMedia(String naam, String bestandnaam, MediaType type) {
 		Media media = new Media(gekozenSessie, bestandnaam, naam, LocalDateTime.now(), type);
 		gekozenSessie.addMediaItem(media);
@@ -89,6 +114,13 @@ public class MediaController {
 		insertMedia(media);
 	}
 
+	/**
+	 * Past de geselecteerde media aan.
+	 * Roept {@link #updateMedia() updateMedia} aan.
+	 * @param naam nieuwe naam van de media
+	 * @param bestandnaam nieuwe bestandsnaam van de media
+	 * @param type nieuw type media
+	 */
 	public void pasMedia(String naam, String bestandnaam, MediaType type) {
 		Media media = this.gekozenMedia;
 		if (media != null) {
@@ -101,6 +133,11 @@ public class MediaController {
 		}
 	}
 
+	/**
+	 * Verandert de filter op de media.
+	 * @param bestandnaam filter op de bestandsnaam
+	 * @param type filter op het type
+	 */
 	public void zoekOpMedia(String bestandnaam, MediaType type) {
 		this.filteredMediaLijst.setPredicate(media -> {
 			boolean typeWaardeLeeg = type == null;
@@ -117,7 +154,14 @@ public class MediaController {
 		});
 	}
 
+	//============================================================================================================================================
 	// ---Media databank operaties
+	//============================================================================================================================================
+	
+	/**
+	 * Voegt nieuwe media toe aan de databank.
+	 * @param media toe te voegen media
+	 */
 	public void insertMedia(Media media) {
 		GenericDaoJpa.startTransaction();
 		mediaRepository.insert(media);
@@ -125,6 +169,10 @@ public class MediaController {
 		GenericDaoJpa.commitTransaction();
 	}
 
+	/**
+	 * Update gekozen media in de databank.
+	 * @param media nieuwe versie van de media
+	 */
 	public void updateMedia(Media media) {
 		GenericDaoJpa.startTransaction();
 		mediaRepository.update(media);
@@ -132,6 +180,9 @@ public class MediaController {
 		GenericDaoJpa.commitTransaction();
 	}
 
+	/**
+	 * verwijdert geselecteerde media uit de databank.
+	 */
 	public void deleteMedia() {
 		Media teVerwijderenMedia = this.gekozenMedia;
 		mediaLijst.remove(teVerwijderenMedia);
@@ -145,7 +196,10 @@ public class MediaController {
 		this.gekozenMedia = null;
 	}
 
+	//============================================================================================================================================
 	// changeSupport
+	//============================================================================================================================================
+	
 	private <T> void firePropertyChange(String welke, T oude, T nieuwe) {
 		subject.firePropertyChange(welke, oude, nieuwe);
 	}
