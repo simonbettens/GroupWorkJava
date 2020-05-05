@@ -103,7 +103,6 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 			bewerkGebruiker();
 			event.consume();
 		} else {
-			bewerkGebruiker();
 			event.consume();
 		}
 	}
@@ -111,36 +110,34 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 	// Event Listener on Button[#btnOpslaan].onAction
 	@FXML
 	public void opslaan(ActionEvent event) {
-		try {			
+		try {
 			if (isEdit) {
-				if(gc.getGeselecteerdeGebruiker() == null) {
+				if (gc.getGeselecteerdeGebruiker() == null) {
 					throw new IllegalArgumentException("Je moet een gebruiker selecteren");
 				}
 				int typeIndex = cbType.getSelectionModel().getSelectedIndex();
 				int statusIndex = cbStatus.getSelectionModel().getSelectedIndex();
-				if(statusIndex == -1) {
+				if (statusIndex == -1) {
 					throw new IllegalArgumentException("Je moet de status selecteren");
 				}
-				if(typeIndex == -1) {
+				if (typeIndex == -1) {
 					throw new IllegalArgumentException("Je moet het gebruikerstype selecteren");
 				}
 				gc.pasGebruikerAan(txfVoornaam.getText(), txfAchternaam.getText(), txfUsername.getText(),
 						txfWachtwoord.getText(), txfEmail.getText(), Long.valueOf(txfIdNummer.getText()),
-						typeList.get(typeIndex),
-						statusList.get(statusIndex));
+						typeList.get(typeIndex), statusList.get(statusIndex));
 			} else {
 				int typeIndex = cbType.getSelectionModel().getSelectedIndex();
 				int statusIndex = cbStatus.getSelectionModel().getSelectedIndex();
-				if(statusIndex == -1) {
+				if (statusIndex == -1) {
 					throw new IllegalArgumentException("Je moet de status selecteren");
 				}
-				if(typeIndex == -1) {
+				if (typeIndex == -1) {
 					throw new IllegalArgumentException("Je moet het gebruikerstype selecteren");
 				}
 				gc.maakGebruiker(txfVoornaam.getText(), txfAchternaam.getText(), txfUsername.getText(),
 						txfWachtwoord.getText(), txfEmail.getText(), Long.valueOf(txfIdNummer.getText()),
-						typeList.get(typeIndex),
-						statusList.get(statusIndex));
+						typeList.get(typeIndex), statusList.get(statusIndex));
 				bewerkGebruiker();
 			}
 		} catch (NumberFormatException e) {
@@ -160,15 +157,18 @@ public class GebruikerDetailsController extends VBox implements PropertyChangeLi
 	@FXML
 	public void annuleer(ActionEvent event) {
 		if (isEdit) {
+
 			Gebruiker gebruiker = gc.getGeselecteerdeGebruiker();
-			txfAchternaam.setText(gebruiker.getAchternaam());
-			txfVoornaam.setText(gebruiker.getVoornaam());
-			txfEmail.setText(gebruiker.getEmail());
-			txfWachtwoord.setText("");
-			txfUsername.setText(gebruiker.getUserName());
-			txfIdNummer.setText(gebruiker.getIdNumber().toString());
-			cbStatus.getSelectionModel().select(StatusType.toString(gebruiker.getStatus()));
-			cbType.getSelectionModel().select(GebruikerType.toString(gebruiker.getType()));
+			if (gebruiker != null) {
+				txfAchternaam.setText(gebruiker.getAchternaam());
+				txfVoornaam.setText(gebruiker.getVoornaam());
+				txfEmail.setText(gebruiker.getEmail());
+				txfWachtwoord.setText("");
+				txfUsername.setText(gebruiker.getUserName());
+				txfIdNummer.setText(gebruiker.getIdNumber().toString());
+				cbStatus.getSelectionModel().select(StatusType.toString(gebruiker.getStatus()));
+				cbType.getSelectionModel().select(GebruikerType.toString(gebruiker.getType()));
+			}
 		} else {
 			bewerkGebruiker();
 		}

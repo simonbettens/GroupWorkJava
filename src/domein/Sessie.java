@@ -227,6 +227,9 @@ public class Sessie implements Serializable{
 		this.eindDatum = eindDatum;
 	}
 	private void setGesloten(boolean gesloten) {
+		if(gesloten == false && LocalDateTime.now().isAfter(getEindDatum())) {
+			throw new IllegalArgumentException("Kan sessie niet opnieuw geopend worden na einddatum en tijd");
+		}
 		this.gesloten = gesloten;
 	}
 	private void setMaxCap(int maxCap) {
@@ -246,6 +249,9 @@ public class Sessie implements Serializable{
 		this.beschrijving = beschrijving;
 	}
 	private void setStaatOpen(boolean staatOpen) {
+		if(LocalDateTime.now().isAfter(getEindDatum())) {
+			throw new IllegalArgumentException("Kan sessie niet open na einddatum en tijd");
+		}
 		this.staatOpen = staatOpen;
 	}
 	private void setDuur(Duration duur) {

@@ -90,16 +90,28 @@ public class SessieAankondigingDetailsController extends VBox
 		String inhoud = txtInhoud.getText();
 		AankondigingPrioriteit prioriteit = AankondigingPrioriteit
 				.StringToAankondigingPrioriteit(cbPrioriteit.getSelectionModel().getSelectedItem());
+		Sessie sessie = ac.getGekozenSessie();
+
 		try {
-			if (isEdit) {
-				ac.pasSessieAankondigingAan(inhoud, prioriteit);
+			if (!sessie.isGesloten()) {
+				if (isEdit) {
+					ac.pasSessieAankondigingAan(inhoud, prioriteit);
+				} else {
+					ac.maakSessieAankondiging(inhoud, prioriteit);
+				}
+				lblError.setText("");
 			} else {
-				ac.maakSessieAankondiging(inhoud, prioriteit);
+				annuleer(event);
+				if (isEdit) {
+					throw new IllegalArgumentException("Sessie is gesloten kan sessie niet aanpassen");
+				} else {
+					throw new IllegalArgumentException("Sessie is gesloten kan sessie niet toevoegen");
+				}
 			}
-			lblError.setText("");
 		} catch (IllegalArgumentException e) {
 			lblError.setText(e.getMessage());
 		}
+
 	}
 
 	// Event Listener on Button[#btnAnnuleer].onAction
@@ -110,7 +122,8 @@ public class SessieAankondigingDetailsController extends VBox
 			SessieAankondiging sa = ac.getGekozenSessieAankondiging();
 			if (ac != null) {
 				txtInhoud.setText(sa.getInhoud());
-				cbPrioriteit.getSelectionModel().select(AankondigingPrioriteit.AankondigingPrioriteitToString(sa.getPrioriteit()));
+				cbPrioriteit.getSelectionModel()
+						.select(AankondigingPrioriteit.AankondigingPrioriteitToString(sa.getPrioriteit()));
 			} else {
 				txtInhoud.setText("");
 				cbPrioriteit.getSelectionModel().select("");

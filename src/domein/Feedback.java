@@ -96,6 +96,10 @@ public class Feedback implements Serializable {
 	public LocalDateTime getTijdToegevoegd() {
 		return tijdToegevoegd;
 	}
+	
+	public Sessie getSessie() {
+		return sessie;
+	}
 
 	private void setId(int id) {
 		this.id = id;

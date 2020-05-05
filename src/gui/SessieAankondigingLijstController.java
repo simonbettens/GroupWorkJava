@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import controllers.AankondigingController;
 import controllers.SessieController;
 import domein.AankondigingPrioriteit;
+import domein.Sessie;
 import domein.SessieAankondiging;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,7 +59,8 @@ public class SessieAankondigingLijstController extends VBox implements DeelScher
 		this.parent = parent;
 		this.sc= parent.getSessieController();
 		this.ac = parent.getAankondigingController();
-		ac.setGekozenSessie(sc.getSessie());
+		Sessie gSessie = sc.getSessie();
+		ac.setGekozenSessie(gSessie);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SessieAankondigingLijst.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
@@ -68,7 +70,7 @@ public class SessieAankondigingLijstController extends VBox implements DeelScher
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-		
+		btnNieuw.setDisable(gSessie.isGesloten());
 		lblSessieNaam.setText(sc.getSessie().getNaam());
 		//List<String> sessieAankondigingLijst = Arrays.asList(AankondigingPrioriteit.values()).stream().sorted().map(sa->AankondigingPrioriteit.AankondigingPrioriteitToString(sa)).collect(Collectors.toList());
 		ObservableList<SessieAankondiging> testje = ac.getSessieAankondigingen();

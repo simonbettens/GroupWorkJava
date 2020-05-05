@@ -6,6 +6,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import domein.Feedback;
 import domein.Gebruiker;
@@ -22,7 +23,7 @@ import repository.SessieAankondigingDao;
 import repository.SessieDao;
 
 public class FeedbackController {
-	private FeedbackDao feedbackRepository;
+	private FeedbackDaoJpa feedbackRepository;
 	private SessieDao sessieRepository;
 	private Gebruiker ingelogdeGebruiker;
 	private PropertyChangeSupport subject;
@@ -73,7 +74,7 @@ public class FeedbackController {
 	private void vulLijstFeedback() {
 		// TODO Auto-generated method stub
 		if (gekozenSessie != null) {
-			feedbackLijst = new ArrayList<>(gekozenSessie.getFeedBack());
+			feedbackLijst =feedbackRepository.getAll().stream().filter(f->f.getSessie().getSessieId()==gekozenSessie.getSessieId()).collect(Collectors.toList());
 			feedbackObservableLijst = FXCollections.observableArrayList(feedbackLijst);
 			this.filteredFeedbackLijst = new FilteredList<>(feedbackObservableLijst, e -> true);
 			this.sortedFeedbackLijst = new SortedList<Feedback>(filteredFeedbackLijst,

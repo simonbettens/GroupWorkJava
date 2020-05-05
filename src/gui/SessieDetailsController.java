@@ -165,7 +165,7 @@ public class SessieDetailsController extends VBox
 			bewerkSessie();
 			event.consume();
 		}
-		
+
 	}
 
 	// Event Listener on Button[#btnOpslaan].onAction
@@ -201,13 +201,29 @@ public class SessieDetailsController extends VBox
 				bewerkSessie();
 				lblError.setText("");
 			}
-			
+
 		} catch (NumberFormatException e) {
 			lblError.setText(e.getMessage());
 			System.out.println(e.getMessage());
 		} catch (IllegalArgumentException e) {
 			lblError.setText(e.getMessage());
 			System.out.println(e.getMessage());
+		}finally {
+			Sessie gSessie = sc.getSessie();
+			chbStaatOpen.setSelected(gSessie.isStaatOpen());
+			chbStaatOpen.setDisable(false);
+			if (gSessie.isBezig() || gSessie.isStaatOpen()) {
+				System.out.println(gSessie.isBezig() + " " + gSessie.isStaatOpen());
+				chbGesloten.setDisable(true);
+			} else {
+				chbGesloten.setDisable(false);
+				gesloten = gSessie.isGesloten();
+				chbGesloten.setSelected(gesloten);
+				if(gesloten) {
+					System.out.println(gesloten);
+					chbStaatOpen.setDisable(true);
+				}
+			}
 		}
 	}
 
@@ -232,16 +248,25 @@ public class SessieDetailsController extends VBox
 				txfEindmin.setText(String.format("%d", gSessie.getEindDatum().getMinute()));
 				txaBeschrijving.setText(gSessie.getBeschrijving());
 				chbStaatOpen.setSelected(gSessie.isStaatOpen());
+				chbStaatOpen.setDisable(false);
 				if (gSessie.isBezig() || gSessie.isStaatOpen()) {
+					System.out.println(gSessie.isBezig() + " " + gSessie.isStaatOpen());
 					chbGesloten.setDisable(true);
 				} else {
-					chbGesloten.setSelected(gSessie.isGesloten());
+					chbGesloten.setDisable(false);
+					boolean gesloten = gSessie.isGesloten();
+					chbGesloten.setSelected(gesloten);
+					if(gesloten) {
+						System.out.println(gesloten);
+						chbStaatOpen.setDisable(true);
+					}
 				}
 			}
 		} else {
 			bewerkSessie();
 		}
 	}
+
 	public void bewerkSessie() {
 		dtStart.setValue(LocalDate.now());
 		dtEind.setValue(LocalDate.now());
@@ -259,12 +284,13 @@ public class SessieDetailsController extends VBox
 		chbStaatOpen.setSelected(false);
 		chbGesloten.setDisable(true);
 	}
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		// TODO Auto-generated method stub
 		if (evt.getPropertyName().equals("sessie")) {
 			Sessie gSessie = (Sessie) evt.getNewValue();
-
+			lblError.setText("");
 			if (gSessie != null) {
 				if (!isEdit) {
 					this.isEdit = true;
@@ -288,10 +314,18 @@ public class SessieDetailsController extends VBox
 				txfEindmin.setText(String.format("%d", gSessie.getEindDatum().getMinute()));
 				txaBeschrijving.setText(gSessie.getBeschrijving());
 				chbStaatOpen.setSelected(gSessie.isStaatOpen());
+				chbStaatOpen.setDisable(false);
 				if (gSessie.isBezig() || gSessie.isStaatOpen()) {
+					System.out.println(gSessie.isBezig() + " " + gSessie.isStaatOpen());
 					chbGesloten.setDisable(true);
 				} else {
-					chbGesloten.setSelected(gSessie.isGesloten());
+					chbGesloten.setDisable(false);
+					boolean gesloten = gSessie.isGesloten();
+					chbGesloten.setSelected(gesloten);
+					if(gesloten) {
+						System.out.println(gesloten);
+						chbStaatOpen.setDisable(true);
+					}
 				}
 			}
 		}

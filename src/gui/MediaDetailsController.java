@@ -68,7 +68,7 @@ public class MediaDetailsController extends VBox
 		this.mc.addPropertyChangeListenerSessie(this, "media");
 		isEdit = false;
 		Sessie sessie = mc.getGekozenSessie();
-
+		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MediaDetails.fxml"));
 		loader.setController(this);
 		loader.setRoot(this);
