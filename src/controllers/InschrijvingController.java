@@ -6,6 +6,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import domein.Gebruiker;
 import domein.Media;
@@ -22,7 +23,7 @@ import repository.SessieGebruikerDao;
 import repository.SessieGebruikerDaoJpa;
 
 public class InschrijvingController {
-	private SessieGebruikerDao sessieGebruikerRepository;
+	private SessieGebruikerDaoJpa sessieGebruikerRepository;
 	private SessieDao sessieRepository;
 	private Gebruiker ingelogdeGebruiker;
 	private PropertyChangeSupport subject;
@@ -63,7 +64,7 @@ public class InschrijvingController {
 	// Inschrijvingen
 	public void vulLijstSessieGebruikers() {
 		System.out.println(gekozenSessie == null ? "null" : "notnull");
-		inschrijvingenLijst = new ArrayList<>(gekozenSessie.getGebruikersIngeschreven());
+		inschrijvingenLijst = sessieGebruikerRepository.getAll().stream().filter(i->i.getSessie().getSessieId()==gekozenSessie.getSessieId()).collect(Collectors.toList());
 		inschrijvingenObservableLijst = FXCollections.observableArrayList(inschrijvingenLijst);
 		this.filteredInschrijvingenLijst = new FilteredList<>(inschrijvingenObservableLijst, e -> true);
 		this.sortedInschrijvingenLijst = new SortedList<SessieGebruiker>(filteredInschrijvingenLijst,

@@ -59,6 +59,11 @@ public class GenericDaoJpa<T> implements GenericDao<T> {
     public <U> boolean exists(U id) {
         T entity = em.find(type, id);
         return entity != null;
-    } 
+    }
+	@Override
+	public void reload() {
+		em.refresh(emf);
+		
+	} 
     
 }

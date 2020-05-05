@@ -74,6 +74,7 @@ public class FeedbackController {
 	private void vulLijstFeedback() {
 		// TODO Auto-generated method stub
 		if (gekozenSessie != null) {
+			feedbackRepository.reload();
 			feedbackLijst =feedbackRepository.getAll().stream().filter(f->f.getSessie().getSessieId()==gekozenSessie.getSessieId()).collect(Collectors.toList());
 			feedbackObservableLijst = FXCollections.observableArrayList(feedbackLijst);
 			this.filteredFeedbackLijst = new FilteredList<>(feedbackObservableLijst, e -> true);
@@ -94,7 +95,7 @@ public class FeedbackController {
 			return conditieNaam;
 		});
 	}
-	public void deleteSessieAankondiging() {
+	public void deleteFeedback() {
 		Feedback teVerwijderenFeedback= this.gekozenFeedback;
 		feedbackLijst.remove(teVerwijderenFeedback);
 		gekozenSessie.removeFeedback(teVerwijderenFeedback);
