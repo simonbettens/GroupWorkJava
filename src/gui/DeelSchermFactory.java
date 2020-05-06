@@ -30,7 +30,11 @@ public class DeelSchermFactory {
 		
 		case 17: deelScherm = new AlgemeneAankondigingLijstController(); break;
 		case 18: deelScherm = new AlgemeneAankondigingDetailsController(); break;
+		
 		case 19: deelScherm = new StatistiekDetailsController();break;
+		case 20 : deelScherm = new GebruikerStatistiekLijstController();break;
+		case 21 : deelScherm = new SessieStatistiekLijstController();break;
+		case 22 :deelScherm = new GebruikerStatistiekController();break;
 		default: 
 			System.out.println("Fout bij het laden van het juiste component :"+welke+" bestaat niet");
 			deelScherm = new SessieKalenderDeelScherm();

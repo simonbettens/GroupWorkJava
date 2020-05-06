@@ -5,6 +5,7 @@ import gui.LoginSchermGridPaneController;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import repository.GebruikerDaoJpa;
@@ -26,6 +27,7 @@ public class StartUpUI extends Application {
 		// Parent root = FXMLLoader.load(getClass().getResource("LoginScherm.fxml"));
 		Scene scene = new Scene(root);
 		scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
+		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/itLabIcon.jpg")));
 		primaryStage.setTitle("Login");
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);

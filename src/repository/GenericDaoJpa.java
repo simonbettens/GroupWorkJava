@@ -62,7 +62,7 @@ public class GenericDaoJpa<T> implements GenericDao<T> {
     }
 	@Override
 	public void reload() {
-		em.refresh(emf);
+		//em.refresh(emf);
 		
 	} 
     

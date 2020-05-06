@@ -32,44 +32,55 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class StatistiekScherm extends HBox implements DeelScherm<ApplicatieController>{
-	    
-	    private StatistiekController statC;
-		private DeelScherm<StatistiekScherm> linkerPaneel;
-		private DeelScherm<StatistiekScherm> rechterPaneel;
-		private InschrijvingController ic;
-		private SessieController sc;
-	   
+public class StatistiekScherm extends HBox implements DeelScherm<ApplicatieController> {
 
-			@Override
-			public void buildGui(ApplicatieController parent) {
-				// TODO Auto-generated method stub
-				this.statC = parent.getStatistiekController();
-				//this.linkerPaneel = DeelschermFactory()
-				this.rechterPaneel = DeelSchermFactory.create(19);
-				rechterPaneel.buildGui(this);
-				this.getChildren().add((Node) rechterPaneel);
-				applyLayout();
-			}
-			public void applyLayout() {
-				
-				this.setAlignment(Pos.CENTER);
-				this.setSpacing(10);
-				this.setPadding(new Insets(5, 5, 20, 5));
-			}
-			public SessieController getSessieController() {
-				return sc;
-			}
-			public InschrijvingController getInschrijvingController() {
-				return ic;
-			}
-			public StatistiekController getStatistiekController() {
-				// TODO Auto-generated method stub
-				return statC;
-			}
+	private StatistiekController statC;
+	private DeelScherm<StatistiekScherm> linkerPaneel;
+	private DeelScherm<StatistiekScherm> rechterPaneel;
+	private InschrijvingController ic;
+	private SessieController sc;
 
+	@Override
+	public void buildGui(ApplicatieController parent) {
+		// TODO Auto-generated method stub
+		this.statC = parent.getStatistiekController();
+		this.linkerPaneel = DeelSchermFactory.create(21);
+		this.rechterPaneel = DeelSchermFactory.create(19);
+		linkerPaneel.buildGui(this);
+		rechterPaneel.buildGui(this);
+		this.getChildren().add((Node) linkerPaneel);
+		this.getChildren().add((Node) rechterPaneel);
+		applyLayout();
+	}
 
-		
-	    
-	    
+	public void applyLayout() {
+
+		this.setAlignment(Pos.CENTER);
+		this.setSpacing(10);
+		this.setPadding(new Insets(5, 5, 20, 5));
+	}
+	public void reload(int linker, int rechter) {
+		this.getChildren().remove((Node) linkerPaneel);
+		this.getChildren().remove((Node) rechterPaneel);
+		this.linkerPaneel = DeelSchermFactory.create(linker);
+		this.rechterPaneel = DeelSchermFactory.create(rechter);
+		linkerPaneel.buildGui(this);
+		rechterPaneel.buildGui(this);
+		this.getChildren().add((Node) linkerPaneel);
+		this.getChildren().add((Node) rechterPaneel);
+		applyLayout();
+	}
+	public SessieController getSessieController() {
+		return sc;
+	}
+
+	public InschrijvingController getInschrijvingController() {
+		return ic;
+	}
+
+	public StatistiekController getStatistiekController() {
+		// TODO Auto-generated method stub
+		return statC;
+	}
+
 }

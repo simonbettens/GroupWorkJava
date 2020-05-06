@@ -22,18 +22,22 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 public class StatistiekDetailsController extends VBox implements Initializable, DeelScherm<StatistiekScherm>{
 	@FXML
-    private ComboBox<String> cbAcademiejaar; //linkse cb
-
-    @FXML
-    private ComboBox<String> cbMaand; //middel cb
-
-    @FXML
-    private ComboBox<String> cbSessie; //laatste cb
-
+	private TextField txfJaar1;
+	@FXML
+	private TextField txfJaar2;
+	@FXML
+	private TextField txfJaar3;
+	@FXML
+	private TextField txfMaand1;
+	@FXML
+	private TextField txfMaand2;
+	@FXML
+	private TextField txfMaand3;
     @FXML
     private BarChart<?, ?> aanwezighedenChart;
 
