@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import repository.SessieDao;
 import repository.SessieDaoJpa;
+import repository.SessieGebruikerDaoJpa;
 
 public class ApplicatieController extends HBox{
 	private MenuDeelSchermController menu;
@@ -33,9 +34,11 @@ public class ApplicatieController extends HBox{
 		sessieController = new SessieController(this.ingelogdeGebruiker,gebruikerController.getGebruikerRepository(),sessierepo);
 		mediaController = new MediaController(ingelogdeGebruiker, sessierepo);
 		aankondigingController = new AankondigingController(ingelogdeGebruiker, sessierepo);
-		inschrijvingController = new InschrijvingController(ingelogdeGebruiker,sessierepo);
+		SessieGebruikerDaoJpa inschrijvingrepo = new SessieGebruikerDaoJpa();
+		inschrijvingController = new InschrijvingController(ingelogdeGebruiker,sessierepo,inschrijvingrepo);
 		feedbackController = new FeedbackController(ingelogdeGebruiker, sessierepo);
-		statistiekController = new StatistiekController(ingelogdeGebruiker, sessierepo);
+		statistiekController = new StatistiekController(ingelogdeGebruiker, sessierepo,inschrijvingrepo,
+				gebruikerController.getGebruikerRepository(),sessieController.getSessiekalenderRepository());
 		buildGui(1);
 	}
 

@@ -225,6 +225,13 @@ public class SessieController {
 	public List<SessieKalender> getSessieKalenderLijst() {
 		return sessieKalenderLijst;
 	}
+	/**
+	 * 
+	 * @return sessieKalender repository
+	 */
+	public SessieKalenderDao getSessiekalenderRepository() {
+		return sessiekalenderRepository;
+	}
 
 	/**
 	 * @return de gekozen sessiekalender

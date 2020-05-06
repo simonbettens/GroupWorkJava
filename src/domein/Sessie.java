@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -164,6 +165,7 @@ public class Sessie implements Serializable{
 		}
 		return duur;
 	}
+	
 	public boolean isBezig() {
 		//telkens als je kijkt naar de attribut moet je zien of de waarde veranderd moet worden (wordt dynamish aangepast)
 		boolean vernieuwBezig = (LocalDateTime.now().isAfter(startDatum)&&LocalDateTime.now().isBefore(eindDatum))|| LocalDateTime.now().isEqual(startDatum) ;
@@ -174,8 +176,12 @@ public class Sessie implements Serializable{
 	public String getGastspreker() {
 		return gastspreker;
 	}
-
-	
+	public int getAantalInschrijvingen() {
+		return  gebruikersIngeschreven.size();
+	}
+	public int getAantalAanwezige() {
+		return gebruikersIngeschreven.stream().filter(sg->sg.isAanwezigheidBevestigd()==true).collect(Collectors.toList()).size();
+	}
 
 	// ------- setters
 	private void setGastspreker(String gastspreker) {

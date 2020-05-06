@@ -46,6 +46,7 @@ public class GebruikerStatistiekLijstController extends VBox implements DeelSche
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		
 	}
 	// Event Listener on Button[#btnSessies].onAction
 	@FXML

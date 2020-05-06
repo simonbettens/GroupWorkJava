@@ -23,7 +23,7 @@ import repository.SessieGebruikerDao;
 import repository.SessieGebruikerDaoJpa;
 
 public class InschrijvingController {
-	private SessieGebruikerDaoJpa sessieGebruikerRepository;
+	private SessieGebruikerDao sessieGebruikerRepository;
 	private SessieDao sessieRepository;
 	private Gebruiker ingelogdeGebruiker;
 	private PropertyChangeSupport subject;
@@ -35,8 +35,8 @@ public class InschrijvingController {
 	private FilteredList<SessieGebruiker> filteredInschrijvingenLijst;
 	private SortedList<SessieGebruiker> sortedInschrijvingenLijst;
 
-	public InschrijvingController(Gebruiker ingelogdeGebruiker, SessieDao sessieRepository) {
-		this.sessieGebruikerRepository = new SessieGebruikerDaoJpa();
+	public InschrijvingController(Gebruiker ingelogdeGebruiker, SessieDao sessieRepository,SessieGebruikerDao sessieGebruikerRepository) {
+		this.sessieGebruikerRepository = sessieGebruikerRepository;
 		this.sessieRepository = sessieRepository;
 		this.ingelogdeGebruiker = ingelogdeGebruiker;
 		this.subject = new PropertyChangeSupport(this);

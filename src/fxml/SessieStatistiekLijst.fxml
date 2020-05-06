@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root id="light-background" prefHeight="750.0" prefWidth="600.0" stylesheets="@../styles/styles.css" type="VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root id="light-background" alignment="CENTER" prefHeight="750.0" prefWidth="600.0" stylesheets="@../styles/styles.css" type="VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label alignment="CENTER" prefHeight="20.0" prefWidth="758.0" text="Statistieken voor Sessies" textFill="WHITE">
          <font>
@@ -45,6 +45,11 @@
             </ComboBox>
          </children>
       </HBox>
+      <Button fx:id="btnSelecteer" mnemonicParsing="false" onAction="#selecteer" styleClass="greyButton" text="Selecteer">
+         <VBox.margin>
+            <Insets bottom="5.0" />
+         </VBox.margin>
+      </Button>
       <TableView fx:id="tbSessies" prefHeight="661.0" prefWidth="600.0">
         <columns>
           <TableColumn fx:id="colStart" prefWidth="75.0" text="Startdatum" />

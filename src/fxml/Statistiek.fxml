@@ -75,16 +75,12 @@
                </children>
             </GridPane>
             <Separator prefWidth="578.0" style="-fx-background-color: black;" />
-            <BarChart fx:id="aanwezighedenChart" prefHeight="465.0" prefWidth="578.0" title="Aanwezigheden Sessie">
+            <BarChart fx:id="aanwezighedenChart" legendVisible="false" prefHeight="580.0" prefWidth="578.0" title="Aanwezigheden Sessie">
               <xAxis>
-                <CategoryAxis label="Sessie" side="BOTTOM" fx:id="xAs">
-                     <tickLabelFont>
-                        <Font name="Verdana" size="15.0" />
-                     </tickLabelFont>
-                  </CategoryAxis>
+                <CategoryAxis label="Sessie" fx:id="xAs" />
               </xAxis>
               <yAxis>
-                <NumberAxis fx:id="yAs" autoRanging="false" label="Aanwezigheden" prefWidth="61.0" side="LEFT" upperBound="50.0">
+                <NumberAxis fx:id="yAs" autoRanging="false" label="Aanwezigheden" prefWidth="61.0" side="LEFT" upperBound="20.0">
                      <tickLabelFont>
                         <Font size="15.0" />
                      </tickLabelFont>
