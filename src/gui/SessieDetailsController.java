@@ -315,6 +315,7 @@ public class SessieDetailsController extends VBox
 				txaBeschrijving.setText(gSessie.getBeschrijving());
 				chbStaatOpen.setSelected(gSessie.isStaatOpen());
 				chbStaatOpen.setDisable(false);
+				chbGesloten.setSelected(false);
 				if (gSessie.isBezig() || gSessie.isStaatOpen()) {
 					System.out.println(gSessie.isBezig() + " " + gSessie.isStaatOpen());
 					chbGesloten.setDisable(true);

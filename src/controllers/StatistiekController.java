@@ -17,6 +17,7 @@ import domein.GebruikerType;
 import domein.Maand;
 import domein.Sessie;
 import domein.SessieAankondiging;
+import domein.SessieGebruiker;
 import domein.SessieKalender;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -60,11 +61,21 @@ public class StatistiekController {
 	// ===================
 	// Gebruikers
 	// ===================
-
+	private Gebruiker gekozenGebruiker;
 	private List<Gebruiker> gebruikerLijst;
 	private ObservableList<Gebruiker> gebruikerObsLijst;
 	private FilteredList<Gebruiker> filteredGebruikerLijst;
 	private SortedList<Gebruiker> sortedGebruikerLijst;
+	// ====================
+	// Lijsten bij de gebruikers
+	// ====================
+	private List<SessieGebruiker> inschrijvingenGebruiker;
+	private List<Sessie> ingeschrevenSessies;
+	private ObservableList<SessieGebruiker> ingeschrevenSessiesObs;
+	private int aantalInschrijvingen;
+	private int aantalAanwezig;
+	private double percentage;
+	private boolean isOK;
 
 	public StatistiekController(Gebruiker ingelogdeGebruiker, SessieDao sessieRepository,
 			SessieGebruikerDao inschrijvingrepo, GebruikerDao gebruikerrepo, SessieKalenderDao sessieKalenderDao) {
@@ -75,6 +86,7 @@ public class StatistiekController {
 		this.ingelogdeGebruiker = ingelogdeGebruiker;
 		this.subject = new PropertyChangeSupport(this);
 		this.gekozenSessies = null;
+		this.gekozenGebruiker = null;
 		setSessieKalender("0");
 		vulLijsten();
 	}
@@ -86,7 +98,7 @@ public class StatistiekController {
 	 * aan.
 	 */
 
-	private void vulLijsten() {
+	public void vulLijsten() {
 		this.sessieKalenderLijst = sessiekalenderRepository.getAll();
 		this.sessieKalenderObservableLijst = FXCollections.observableArrayList(
 				sessieKalenderLijst.stream().sorted(Comparator.comparing(SessieKalender::getStartDatum).reversed())
@@ -170,6 +182,51 @@ public class StatistiekController {
 		}
 	}
 
+	public void vulGebruikerInfo() {
+		List<Sessie> afgelopenSessiesLijst;
+		isOK = true;
+
+		this.inschrijvingenGebruiker = new ArrayList<>();
+		this.ingeschrevenSessies = new ArrayList<>();
+		this.ingeschrevenSessiesObs = null;
+		if (gekozenSessieKalender != null && gekozenGebruiker != null) {
+			afgelopenSessiesLijst = this.gekozenSessieKalender.getSessies();
+			afgelopenSessiesLijst = afgelopenSessiesLijst.stream()
+					.filter(s -> s.getEindDatum().isBefore(LocalDateTime.now()) && s.isGesloten() == true)
+					.collect(Collectors.toList());
+			if (gekozenMaand != null) {
+				afgelopenSessiesLijst = afgelopenSessiesLijst.stream()
+						.filter(s -> s.getStartDatum().getMonth().getValue() == gekozenMaand.getWaarde())
+						.collect(Collectors.toList());
+			}
+			afgelopenSessiesLijst.stream().forEach(s -> {
+				SessieGebruiker sg = s.geefInschrijvingVanGebruiker(gekozenGebruiker);
+				if (sg != null) {
+					this.inschrijvingenGebruiker.add(sg);
+					this.ingeschrevenSessies.add(s);
+				}
+			});
+			if (ingeschrevenSessies.size() != 0) {
+				this.ingeschrevenSessiesObs = FXCollections.observableArrayList(inschrijvingenGebruiker);
+				aantalInschrijvingen = inschrijvingenGebruiker.size();
+				
+				aantalAanwezig = inschrijvingenGebruiker.stream().filter(sg -> sg.isAanwezigheidBevestigd() == true)
+						.collect(Collectors.toList()).size();
+				percentage = (double) ((double) aantalAanwezig / (double) aantalInschrijvingen) *100;
+				System.out.println((aantalAanwezig / aantalInschrijvingen) *100);
+				System.out.println(percentage);
+				isOK = (aantalInschrijvingen - aantalAanwezig) <= 3;
+			}else {
+				aantalInschrijvingen = 0;
+				aantalAanwezig = 0;
+				percentage = 0;
+				isOK = true;
+			}
+		} else {
+			System.out.println("Sessiekalender is null");
+		}
+	}
+
 	private void veranderFilter(Maand maandWaarde) {
 		this.filteredAfgelopenSessiesLijst.setPredicate(sessie -> {
 			boolean maandWaardeLeeg = maandWaarde == null;
@@ -183,12 +240,15 @@ public class StatistiekController {
 	}
 
 	public void setGekozenSessies(List<Sessie> gekozenSessies) {
-		System.out.println(gekozenSessies.size());
-		System.out.println(subject.hasListeners("sessies"));
-		firePropertyChange("sessies", this.gekozenSessies, gekozenSessies);
+		firePropertyChange("sessies", null, gekozenSessies);
 		this.gekozenSessies = gekozenSessies;
-		System.out.println("gedaan \n");
 
+	}
+
+	public void setGekozenebruiker(Gebruiker gb) {
+		this.gekozenGebruiker = gb;
+		vulGebruikerInfo();
+		firePropertyChange("gebruiker", null, gb);
 	}
 	// ==================================== getters
 
@@ -213,6 +273,30 @@ public class StatistiekController {
 		return sortedGebruikerLijst;
 	}
 
+	public Gebruiker getGekozenGebruiker() {
+		return gekozenGebruiker;
+	}
+
+	public ObservableList<SessieGebruiker> getIngeschrevenSessiesObs() {
+		return ingeschrevenSessiesObs;
+	}
+
+	public int getAantalInschrijvingen() {
+		return aantalInschrijvingen;
+	}
+
+	public int getAantalAanwezig() {
+		return aantalAanwezig;
+	}
+
+	public double getPercentage() {
+		return percentage;
+	}
+
+	public boolean isOK() {
+		return isOK;
+	}
+
 	public List<Sessie> getBesteSessiesJaar() {
 		return besteSessiesJaar;
 	}
@@ -232,14 +316,20 @@ public class StatistiekController {
 	 * vulSessieLijsten} aan.
 	 * 
 	 * @param waarde het academiejaar van de sessiekalender
+	 * @param sherm  toont van welk scherm het komt
 	 */
-	public void changeSelectedSessieKalender(String waarde) {
-		SessieKalender oudKalender= gekozenSessieKalender;
+	public void changeSelectedSessieKalender(String waarde, int scherm) {
+		SessieKalender oudKalender = gekozenSessieKalender;
 		gekozenSessieKalender = sessieKalenderLijst.stream().filter(sk -> sk.toString().equals(waarde)).findFirst()
 				.orElse(null);
 		vulSessieLijst();
-		vulBesteSessieLijsten();
+		if (scherm == 1) {
+			vulBesteSessieLijsten();
+		} else {
+			vulGebruikerInfo();
+		}
 		firePropertyChange("kalender", oudKalender, gekozenSessieKalender);
+
 	}
 
 	/**
@@ -247,18 +337,22 @@ public class StatistiekController {
 	 * veranderFilter} aan.
 	 * 
 	 * @param waarde de geselecteerde maand
+	 * @param sherm  toont van welk scherm het komt
 	 */
-	public void changeSelectedMaand(String waarde) {
+	public void changeSelectedMaand(String waarde, int scherm) {
 		Maand oudeMaand = gekozenMaand;
-		if (waarde == null ||waarde.equals("--Alles--")) {
+		if (waarde == null || waarde.equals("--Alles--")) {
 			gekozenMaand = null;
 		} else {
 			gekozenMaand = Arrays.asList(Maand.values()).stream().filter(sk -> sk.toString().equals(waarde)).findFirst()
 					.orElse(null);
 		}
-		
 		veranderFilter(gekozenMaand);
-		vulBesteSessieLijsten();
+		if (scherm == 1) {
+			vulBesteSessieLijsten();
+		} else {
+			vulGebruikerInfo();
+		}
 		firePropertyChange("maand", oudeMaand, gekozenMaand);
 	}
 
@@ -288,10 +382,9 @@ public class StatistiekController {
 			// e.printStackTrace();
 		}
 	}
-	// =======================Property support
+	// ======================= Property support
 
 	private <T> void firePropertyChange(String welke, T oude, T nieuwe) {
-		System.out.println("fire : " + welke);
 		subject.firePropertyChange(welke, oude, nieuwe);
 	}
 

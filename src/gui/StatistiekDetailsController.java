@@ -23,6 +23,10 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -31,6 +35,8 @@ import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class StatistiekDetailsController extends VBox
 		implements Initializable, DeelScherm<StatistiekScherm>, PropertyChangeListener {
@@ -105,30 +111,52 @@ public class StatistiekDetailsController extends VBox
 	}
 
 	public void vulChart(List<Sessie> lijstSessies) {
-		System.out.println("verander");
+		aanwezighedenChart.getData().clear();
+		int listSize = lijstSessies.size();
+		int fontSize = kiesFontSize(listSize);
+
 		XYChart.Series<String, Number> dataSet = new XYChart.Series<>();
 		dataSet.setName("Sessies");
 		max = 20;
+
 		if (lijstSessies.size() != 0) {
 
 			lijstSessies.stream().forEach(s -> {
 				max = Math.max(max, (double) s.getMaxCap());
-				dataSet.getData().add(new XYChart.Data<String, Number>(s.getNaam(), s.getAantalAanwezige()));
+				XYChart.Data data = new XYChart.Data<String, Number>(s.getNaam(), s.getAantalAanwezige());
+				dataSet.getData().add(data);
+
 			});
-			System.out.println("vernieuw");
 			aanwezighedenChart.layout();
 			aanwezighedenChart.getData().setAll(dataSet);
 		}
+		xAs.setTickLabelFont(new Font(fontSize));
 		yAs.setUpperBound(max);
 	}
 
-	public void clearChart() {
-		aanwezighedenChart.getData().clear();
+	private int kiesFontSize(int lijstgrote) {
+		int fontSize = 25;
+		switch (lijstgrote) {
+		case 1:
+			fontSize = 15;
+			break;
+		case 2:
+			fontSize = 12;
+			break;
+		case 3:
+			fontSize = 9;
+			break;
+		case 4:
+			fontSize = 7;
+			break;
+		default:
+			break;
+		}
+		return fontSize;
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		System.out.println("propchange");
 		if (evt.getPropertyName().equals("maand") || evt.getPropertyName().equals("kalender")) {
 			List<Sessie> jaar = statC.getBesteSessiesJaar();
 			List<Sessie> maand = statC.getBesteSessieMaand();
@@ -148,12 +176,8 @@ public class StatistiekDetailsController extends VBox
 			}
 		}
 		if (evt.getPropertyName().equals("sessies")) {
-			System.out.println("propchange sessies");
-
-			clearChart();
-
 			List<Sessie> sessies = (List<Sessie>) evt.getNewValue();
-			System.out.println(sessies.toString());
+			sessies.forEach(s -> System.out.println(s.toString()));
 			vulChart(sessies);
 
 		}

@@ -50,7 +50,12 @@
             <Insets bottom="5.0" />
          </VBox.margin>
       </Button>
-      <TableView fx:id="tbSessies" prefHeight="661.0" prefWidth="600.0">
+      <Label fx:id="lblError" text="ERROR" textFill="RED">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tbSessies" prefHeight="619.0" prefWidth="600.0">
         <columns>
           <TableColumn fx:id="colStart" prefWidth="75.0" text="Startdatum" />
           <TableColumn fx:id="colTitel" prefWidth="75.0" text="Titel" />

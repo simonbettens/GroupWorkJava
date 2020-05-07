@@ -2,8 +2,9 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -55,11 +56,15 @@
                </children>
             </GridPane>
             <Separator prefWidth="200.0" style="-fx-background-color: black;" />
-            <ListView fx:id="lvSessies" prefHeight="300.0" prefWidth="200.0">
-               <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </VBox.margin>
-            </ListView>
+            <TableView fx:id="tbSessies" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="colNaam" prefWidth="75.0" text="Naam" />
+                <TableColumn fx:id="colAanwezigheid" prefWidth="75.0" text="Aanwezigheid" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
             <Separator prefWidth="200.0" style="-fx-background-color: black;" />
             <GridPane prefHeight="106.0" prefWidth="578.0">
               <columnConstraints>
@@ -75,34 +80,37 @@
                   <Label text="Aantal keer ingeschreven : " />
                   <Label text="Aantal keer aanwezig : " GridPane.rowIndex="1" />
                   <Label text="Aanwezigheid percentage : " GridPane.rowIndex="2" />
-                  <TextField fx:id="txfInschrijving" prefWidth="10.0" GridPane.columnIndex="1">
+                  <TextField fx:id="txfInschrijving" editable="false" prefWidth="10.0" GridPane.columnIndex="1">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="175.0" top="5.0" />
+                        <Insets bottom="5.0" left="5.0" right="250.0" top="5.0" />
                      </GridPane.margin>
                   </TextField>
-                  <TextField fx:id="txfAanwezig" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <TextField fx:id="txfAanwezig" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="175.0" top="5.0" />
+                        <Insets bottom="5.0" left="5.0" right="250.0" top="5.0" />
                      </GridPane.margin>
                   </TextField>
-                  <TextField fx:id="txfRatio" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                  <TextField fx:id="txfRatio" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                      <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="175.0" top="5.0" />
+                        <Insets bottom="5.0" left="5.0" right="250.0" top="5.0" />
                      </GridPane.margin>
                   </TextField>
                   <Label fx:id="lblOk" text="OK" textFill="#1da318" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
                   </Label>
                </children>
             </GridPane>

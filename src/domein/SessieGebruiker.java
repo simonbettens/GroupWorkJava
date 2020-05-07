@@ -61,6 +61,8 @@ public class SessieGebruiker implements Serializable {
 	private final SimpleStringProperty aanwezigProperty = new SimpleStringProperty();
 	@Transient
 	private final SimpleStringProperty tijdProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty naamProperty = new SimpleStringProperty();
 	
 	//voor jpa
 	public SessieGebruiker() {}
@@ -122,6 +124,11 @@ public class SessieGebruiker implements Serializable {
 	public SimpleStringProperty getTijdProperty() {
 		tijdProperty.setValue(DatumEnTijdHelper.dateTimeFormat(tijdIngeschreven));
 		return tijdProperty;
+	}
+	
+	public SimpleStringProperty getNaamProperty() {
+		naamProperty.setValue(sessie.getNaam());
+		return naamProperty;
 	}
 	private void setTijdIngeschreven(LocalDateTime tijdIngeschreven) {
 		this.tijdIngeschreven = tijdIngeschreven;

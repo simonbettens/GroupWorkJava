@@ -255,7 +255,7 @@ public class Sessie implements Serializable{
 		this.beschrijving = beschrijving;
 	}
 	private void setStaatOpen(boolean staatOpen) {
-		if(LocalDateTime.now().isAfter(getEindDatum())) {
+		if(staatOpen == true && LocalDateTime.now().isAfter(getEindDatum())) {
 			throw new IllegalArgumentException("Kan sessie niet open na einddatum en tijd");
 		}
 		this.staatOpen = staatOpen;
@@ -387,6 +387,14 @@ public class Sessie implements Serializable{
 		}
 		
 		return veranderingen;
+	}
+	/**
+	 * geeft de inschrijving van de gebruiker terug als die bestaat
+	 * @param gb de gebruiker
+	 * @return geeft de inschrijving terug indien hij ingeschreven is anders null
+	 */
+	public SessieGebruiker geefInschrijvingVanGebruiker(Gebruiker gb) {
+		return gebruikersIngeschreven.stream().filter(sg->sg.getGebruiker().getId()==gb.getId()).findFirst().orElse(null);
 	}
 
 	@Override
