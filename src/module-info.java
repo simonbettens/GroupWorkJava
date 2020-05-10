@@ -13,6 +13,8 @@ open module JpaEnJavaFXEnTesten {
 	requires org.mockito;
 	requires org.junit.jupiter.params;
 	requires java.desktop;
+	requires org.simplejavamail;
+	requires java.mail;
 	
 	exports ui;
 	exports main;

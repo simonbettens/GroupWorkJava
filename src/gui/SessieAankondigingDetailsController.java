@@ -11,6 +11,7 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import controllers.AankondigingController;
@@ -25,7 +26,7 @@ import javafx.event.ActionEvent;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ComboBox;
 
 public class SessieAankondigingDetailsController extends VBox
@@ -100,6 +101,18 @@ public class SessieAankondigingDetailsController extends VBox
 					ac.maakSessieAankondiging(inhoud, prioriteit);
 				}
 				lblError.setText("");
+				
+				TextInputDialog dialog = new TextInputDialog("");
+				 
+				dialog.setTitle("Wens je de aankondiging te versturen?");
+				dialog.setHeaderText("Zo ja, geef je passwoord in om je mail te kunnen versturen:");
+				dialog.setContentText("Passwoord:");
+				 
+				Optional<String> result = dialog.showAndWait();
+				 
+				result.ifPresent(pass -> {
+					ac.verstuurMailSessieAankondiging(pass);
+				});
 			} else {
 				annuleer(event);
 				if (isEdit) {

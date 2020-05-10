@@ -14,9 +14,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.simplejavamail.mailer.MailerBuilder;
+
 import controllers.AankondigingController;
 import domein.Aankondiging;
 import domein.AankondigingPrioriteit;
+import domein.MailHelper;
 import domein.SessieAankondiging;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -26,6 +29,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -106,6 +110,17 @@ implements DeelScherm<AankondigingenDeelScherm>, PropertyChangeListener {
 				ac.maakAankondiging(inhoud, prioriteit);
 			}
 			lblError.setText("");
+			TextInputDialog dialog = new TextInputDialog("");
+			 
+			dialog.setTitle("Wens je de aankondiging te versturen?");
+			dialog.setHeaderText("Zo ja, geef je passwoord in om je mail te versturen:");
+			dialog.setContentText("Passwoord:");
+			 
+			Optional<String> result = dialog.showAndWait();
+			 
+			result.ifPresent(pass -> {
+				ac.verstuurMailAankondiging(pass);
+			});
 		} catch (IllegalArgumentException e) {
 			lblError.setText(e.getMessage());
 		}

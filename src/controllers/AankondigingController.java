@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import domein.Aankondiging;
 import domein.AankondigingPrioriteit;
 import domein.Gebruiker;
+import domein.MailHelper;
 import domein.MediaType;
 import domein.Sessie;
 import domein.SessieAankondiging;
@@ -21,6 +22,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import repository.AankondigingDao;
 import repository.AankondigingDaoJpa;
+import repository.GebruikerDao;
 import repository.GenericDaoJpa;
 import repository.SessieAankondigingDao;
 import repository.SessieAankondigingDaoJpa;
@@ -30,6 +32,7 @@ public class AankondigingController {
 	private SessieAankondigingDao sessieAankondigingRepository;
 	private AankondigingDao aankondigingRepository;
 	private SessieDao sessieRepository;
+	private GebruikerDao gebruikerDao;
 	private Gebruiker ingelogdeGebruiker;
 	private PropertyChangeSupport subject;
 	private Sessie gekozenSessie;
@@ -48,9 +51,10 @@ public class AankondigingController {
 	private FilteredList<Aankondiging> filteredAankondigingenLijst;
 	private SortedList<Aankondiging> sortedAankondigingenLijst;
 
-	public AankondigingController(Gebruiker ingelogdeGebruiker, SessieDao sessieRepository) {
+	public AankondigingController(Gebruiker ingelogdeGebruiker, SessieDao sessieRepository,GebruikerDao gebruikerDao) {
 		this.sessieRepository = sessieRepository;
 		this.ingelogdeGebruiker = ingelogdeGebruiker;
+		this.gebruikerDao = gebruikerDao;
 		this.sessieAankondigingRepository = new SessieAankondigingDaoJpa();
 		this.aankondigingRepository = new AankondigingDaoJpa();
 		this.subject = new PropertyChangeSupport(this);
@@ -156,6 +160,8 @@ public class AankondigingController {
 		aankondigingenLijst.add(aankondiging);
 		aankondigingObservableLijst.add(aankondiging);
 		insertAankondiging(aankondiging);
+		this.gekozenAankondiging = aankondiging;
+		firePropertyChange("aankondiging", null, aankondiging);
 	}
 	
 	public void pasAankondigingAan(String inhoud, AankondigingPrioriteit prioriteit) {
@@ -185,7 +191,20 @@ public class AankondigingController {
 		});
 	}
 	
-	
+	//--- email operaties 
+	public void verstuurMailAankondiging(String pass) {
+		List<String> emails = new ArrayList<String>();
+		List<Gebruiker> gebruikers = gebruikerDao.getAll();
+		gebruikers.stream().forEach(g->emails.add(g.getEmail()));
+	    MailHelper.verstuurMailAankondiging(gekozenAankondiging.getVerantwoordelijke().getEmail(), pass, emails,gekozenAankondiging);
+	}
+	public void verstuurMailSessieAankondiging(String pass) {
+		List<String> emails = new ArrayList<>();
+		List<Gebruiker> gebruikers = new ArrayList<>();
+		gekozenSessieAankondiging.getSessie().getGebruikersIngeschreven().stream().forEach(in->gebruikers.add(in.getGebruiker()));
+		gebruikers.stream().forEach(g->emails.add(g.getEmail()));
+	    MailHelper.verstuurMailSessieAankondiging(gekozenSessieAankondiging.getVerantwoordelijke().getEmail(), pass, emails,gekozenSessieAankondiging);
+	}
 
 	// ---SessieAankondiging databank operaties
 	public void insertSessieAankondiging(SessieAankondiging sa) {
@@ -252,5 +271,6 @@ public class AankondigingController {
 	public void removePropertyChangeListenerSessie(PropertyChangeListener pcl) {
 		subject.removePropertyChangeListener(pcl);
 	}
+	
 
 }

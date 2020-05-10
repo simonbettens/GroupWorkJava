@@ -33,7 +33,7 @@ public class ApplicatieController extends HBox{
 		SessieDao sessierepo = new SessieDaoJpa();
 		sessieController = new SessieController(this.ingelogdeGebruiker,gebruikerController.getGebruikerRepository(),sessierepo);
 		mediaController = new MediaController(ingelogdeGebruiker, sessierepo);
-		aankondigingController = new AankondigingController(ingelogdeGebruiker, sessierepo);
+		aankondigingController = new AankondigingController(ingelogdeGebruiker, sessierepo,gebruikerController.getGebruikerRepository());
 		SessieGebruikerDaoJpa inschrijvingrepo = new SessieGebruikerDaoJpa();
 		inschrijvingController = new InschrijvingController(ingelogdeGebruiker,sessierepo,inschrijvingrepo);
 		feedbackController = new FeedbackController(ingelogdeGebruiker, sessierepo);
