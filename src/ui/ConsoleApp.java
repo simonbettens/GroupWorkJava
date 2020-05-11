@@ -38,7 +38,7 @@ public class ConsoleApp {
 		mailAdressen.add("simon.bettens@live.be");
 		
 		
-		MailHelper.verstuurMailAankondiging("simon.bettens@student.hogent.be","HOgent/00",mailAdressen ,aankondiging);
+		MailHelper.verstuurMailAankondiging("simon.bettens@student.hogent.be","...",mailAdressen ,aankondiging);
 		System.out.println("Na mail verstuurd");
 	}
 	
