@@ -55,12 +55,12 @@ public class SessieAankondiging extends Aankondiging {
 	public int pasSessieAankondigingAan(String inhoud, AankondigingPrioriteit prioriteit) {
 		int verandering = 0;
 		if(inhoud != getInhoud()) {
-			verandering++;
 			setInhoud(inhoud);
+			verandering++;
 		}
 		if(prioriteit != this.prioriteit) {
-			verandering++;
 			setPrioriteit(prioriteit);
+			verandering++;
 		}
 		
 		return verandering;

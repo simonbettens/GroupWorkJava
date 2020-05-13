@@ -124,7 +124,7 @@ public class MediaController {
 	public void pasMedia(String naam, String bestandnaam, MediaType type) {
 		Media media = this.gekozenMedia;
 		if (media != null) {
-			int ver = media.pasMediaAan(bestandnaam, naam, LocalDateTime.now(), type);
+			int ver = media.pasMediaAan(bestandnaam, naam, type);
 			if (ver != 0) {
 				updateMedia(media);
 				firePropertyChange("media", this.gekozenMedia, media);

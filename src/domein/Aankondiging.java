@@ -107,7 +107,6 @@ public class Aankondiging implements Serializable{
 		return prioriteit;
 	}
 	
-	
 	public int getPrioriteitValue() {
 		return prioriteitValue;
 	}
@@ -121,14 +120,11 @@ public class Aankondiging implements Serializable{
 		this.verantwoordelijke = verantwoordelijke;
 	}
 	private void setGepost(LocalDateTime gepost) {
-		if(gepost.isBefore(LocalDateTime.now())) {
-			throw new IllegalArgumentException("tijd gepost is in het verleden.");
-		}
 		tijdToegevoegdProperty.setValue(DatumEnTijdHelper.dateTimeFormat(gepost));
 		this.gepost = gepost;
 	}
 	protected void setInhoud(String inhoud) {
-		if(inhoud.isEmpty() || inhoud.isBlank()) {
+		if(inhoud == null || inhoud.isEmpty() || inhoud.isBlank()) {
 			throw new IllegalArgumentException("Inhoud van de aankondiging moet ingevuld zijn");
 		}
 		inhoudProperty.setValue(inhoud);
@@ -163,12 +159,12 @@ public class Aankondiging implements Serializable{
 	public int pasAankondigingAan(String inhoud, AankondigingPrioriteit prioriteit) {
 		int verandering = 0;
 		if(inhoud != getInhoud()) {
-			verandering++;
 			setInhoud(inhoud);
+			verandering++;
 		}
 		if(prioriteit != this.prioriteit) {
-			verandering++;
 			setPrioriteit(prioriteit);
+			verandering++;
 		}
 		
 		return verandering;

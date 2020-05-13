@@ -33,12 +33,13 @@ public class ConsoleApp {
 	public static void main(String[] args) {
 		System.out.println("Voor mail verstuurd");
 		Gebruiker gebruiker = new Gebruiker("Bettens", "Simon", "sb123456", "test", "simon.bettens@student.hogent.be", 1103720666030L, GebruikerType.VERANTWOORDELIJKE, StatusType.ACTIEF);
+		Gebruiker pieter = new Gebruiker("Pieter", "Carlier", "pc123456", "koekjes", "pieter.carlier@student.hogent.be", 1125302310790L, GebruikerType.GEBRUIKER, StatusType.ACTIEF);
 		Aankondiging aankondiging = new Aankondiging(gebruiker, LocalDateTime.now().plusMinutes(2), "Test aankondiging", AankondigingPrioriteit.LAAG);
 		List<String> mailAdressen = new ArrayList<String>();
-		mailAdressen.add("simon.bettens@live.be");
+		mailAdressen.add("carlierpieter@gmail.com");
 		
 		
-		MailHelper.verstuurMailAankondiging("simon.bettens@student.hogent.be","...",mailAdressen ,aankondiging);
+		MailHelper.verstuurMailAankondiging("pieter.carlier@student.hogent.be", "...", mailAdressen , aankondiging);
 		System.out.println("Na mail verstuurd");
 	}
 	

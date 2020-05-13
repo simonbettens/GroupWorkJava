@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.simplejavamail.mailer.MailerBuilder;
-
 import controllers.AankondigingController;
 import domein.Aankondiging;
 import domein.AankondigingPrioriteit;

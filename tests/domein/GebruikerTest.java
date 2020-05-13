@@ -1,8 +1,5 @@
 package domein;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.time.LocalDate;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Assertions;
