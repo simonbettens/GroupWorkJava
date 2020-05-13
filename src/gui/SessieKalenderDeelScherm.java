@@ -30,8 +30,8 @@ public class SessieKalenderDeelScherm extends HBox implements DeelScherm<Applica
 		this.ac = parent.getAankondigingController();
 		this.ic= parent.getInschrijvingController();
 		this.fc = parent.getFeedbackController();
-		this.linkerPaneel = DeelSchermFactory.create(5);
-		this.rechterPaneel = DeelSchermFactory.create(6);
+		this.linkerPaneel = DeelSchermFactory.create(GuiConstant.SessieLijstController);
+		this.rechterPaneel = DeelSchermFactory.create(GuiConstant.SessieDetailsController);
 		this.vorigLinkerPaneel=null;
 		this.vorigRechterPaneel=null;
 		linkerPaneel.buildGui(this);
@@ -91,8 +91,8 @@ public class SessieKalenderDeelScherm extends HBox implements DeelScherm<Applica
 	}
 	public void rebuildGui() {
 		this.getChildren().removeAll((Node) this.linkerPaneel, (Node) this.rechterPaneel);
-		this.linkerPaneel = DeelSchermFactory.create(5);
-		this.rechterPaneel = DeelSchermFactory.create(6);
+		this.linkerPaneel = DeelSchermFactory.create(GuiConstant.SessieLijstController);
+		this.rechterPaneel = DeelSchermFactory.create(GuiConstant.SessieDetailsController);
 		this.vorigLinkerPaneel=null;
 		this.vorigRechterPaneel=null;
 		linkerPaneel.buildGui(this);

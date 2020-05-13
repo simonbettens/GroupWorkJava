@@ -16,8 +16,8 @@ public class AankondigingenDeelScherm extends HBox implements DeelScherm<Applica
 	public void buildGui(ApplicatieController parent) {
 		// TODO Auto-generated method stub
 		this.ac = parent.getAankondigingController();
-		this.linkerPaneel = DeelSchermFactory.create(17);
-		this.rechterPaneel = DeelSchermFactory.create(18);
+		this.linkerPaneel = DeelSchermFactory.create(GuiConstant.AlgemeneAankondigingLijstController);
+		this.rechterPaneel = DeelSchermFactory.create(GuiConstant.AlgemeneAankondigingDetailsController);
 		linkerPaneel.buildGui(this);
 		rechterPaneel.buildGui(this);
 		this.getChildren().add((Node) linkerPaneel);
@@ -27,9 +27,9 @@ public class AankondigingenDeelScherm extends HBox implements DeelScherm<Applica
 	
 	public void changeBack() {
 		this.getChildren().removeAll((Node) this.linkerPaneel, (Node) this.rechterPaneel);
-		this.linkerPaneel = DeelSchermFactory.create(17);
+		this.linkerPaneel = DeelSchermFactory.create(GuiConstant.AlgemeneAankondigingLijstController);
 		this.linkerPaneel.buildGui(this);
-		this.rechterPaneel = DeelSchermFactory.create(18);
+		this.rechterPaneel = DeelSchermFactory.create(GuiConstant.AlgemeneAankondigingDetailsController);
 		this.rechterPaneel.buildGui(this);
 		this.getChildren().add((Node) linkerPaneel);
 		this.getChildren().add((Node) rechterPaneel);
@@ -44,8 +44,8 @@ public class AankondigingenDeelScherm extends HBox implements DeelScherm<Applica
 	
 	public void rebuildGui() {
 		this.getChildren().removeAll((Node) this.linkerPaneel, (Node) this.rechterPaneel);
-		this.linkerPaneel = DeelSchermFactory.create(17);
-		this.rechterPaneel = DeelSchermFactory.create(18);
+		this.linkerPaneel = DeelSchermFactory.create(GuiConstant.AlgemeneAankondigingLijstController);
+		this.rechterPaneel = DeelSchermFactory.create(GuiConstant.AlgemeneAankondigingDetailsController);
 		linkerPaneel.buildGui(this);
 		rechterPaneel.buildGui(this);
 		this.getChildren().add((Node) linkerPaneel);

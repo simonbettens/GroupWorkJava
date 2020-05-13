@@ -44,8 +44,8 @@ public class StatistiekScherm extends HBox implements DeelScherm<ApplicatieContr
 	public void buildGui(ApplicatieController parent) {
 		// TODO Auto-generated method stub
 		this.statC = parent.getStatistiekController();
-		this.linkerPaneel = DeelSchermFactory.create(21);
-		this.rechterPaneel = DeelSchermFactory.create(19);
+		this.linkerPaneel = DeelSchermFactory.create(GuiConstant.SessieStatistiekLijstController);
+		this.rechterPaneel = DeelSchermFactory.create(GuiConstant.StatistiekDetailsController);
 		linkerPaneel.buildGui(this);
 		rechterPaneel.buildGui(this);
 		this.getChildren().add((Node) linkerPaneel);

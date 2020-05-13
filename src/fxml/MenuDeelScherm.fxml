@@ -13,7 +13,7 @@
             <Image url="@../images/itLab.jpg" />
          </image>
       </ImageView>
-      <Button fx:id="btnSessieKalender" minHeight="30.0" minWidth="135.0" mnemonicParsing="false" onAction="#switchSessieKalender" styleClass="rich-blue" text="SessieKalender">
+      <Button fx:id="btnSessieKalender" minHeight="70.0" minWidth="160.0" mnemonicParsing="false" onAction="#switchSessieKalender" styleClass="rich-blue" text="SessieKalender">
          <VBox.margin>
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
          </VBox.margin>
@@ -21,7 +21,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </Button>
-      <Button id="-" fx:id="btnRaadPleegStat" minHeight="30.0" minWidth="135.0" mnemonicParsing="false" onAction="#switchRaadPleegStat" styleClass="rich-blue" text="Statistieken">
+      <Button id="-" fx:id="btnRaadPleegStat" minHeight="70.0" minWidth="160.0" mnemonicParsing="false" onAction="#switchRaadPleegStat" styleClass="rich-blue" text="Statistieken">
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
@@ -29,7 +29,7 @@
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
          </VBox.margin>
       </Button>
-      <Button fx:id="btnBeheerGebruiker" minHeight="30.0" minWidth="135.0" mnemonicParsing="false" onAction="#switchGebruikers" styleClass="rich-blue" text="Gebruikers">
+      <Button fx:id="btnBeheerGebruiker" minHeight="70.0" minWidth="160.0" mnemonicParsing="false" onAction="#switchGebruikers" styleClass="rich-blue" text="Gebruikers">
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
@@ -37,12 +37,12 @@
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
          </VBox.margin>
       </Button>
-      <Button fx:id="btnAankondiging" alignment="CENTER" contentDisplay="CENTER" minHeight="30.0" minWidth="135.0" mnemonicParsing="false" onAction="#switchAankondiging" styleClass="rich-blue" text="Aankondigingen">
+      <Button fx:id="btnAankondiging" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" minHeight="70.0" minWidth="160.0" mnemonicParsing="false" onAction="#switchAankondiging" styleClass="rich-blue" text="Algemene Aankondigingen" textAlignment="CENTER" textOverrun="LEADING_ELLIPSIS" wrapText="true">
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
          <VBox.margin>
-            <Insets bottom="7.0" left="7.0" right="7.0" top="80.0" />
+            <Insets bottom="30.0" left="30.0" right="30.0" top="80.0" />
          </VBox.margin>
       </Button>
    </children>
