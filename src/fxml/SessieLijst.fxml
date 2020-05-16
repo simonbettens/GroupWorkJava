@@ -26,22 +26,22 @@
 						<Insets right="10.0" />
 					</HBox.margin>
 				</TextField>
-				<Button fx:id="btnMaakLeeg" disable="true" mnemonicParsing="false" onAction="#maakLeeg" text="Maak leeg" />
+				<Button fx:id="btnMaakLeeg" disable="true" mnemonicParsing="false" onAction="#maakLeeg" styleClass="greyButton" text="Maak leeg" />
 			</children>
 		</HBox>
 		<HBox alignment="CENTER" prefHeight="47.0" prefWidth="600.0">
 			<children>
-				<Button fx:id="btnNieuweSessieKalender" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#maakNieuweSessiekalender" text="Nieuwe Sessiekalender">
+				<Button fx:id="btnNieuweSessieKalender" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#maakNieuweSessiekalender" styleClass="greyButton" text="Nieuwe Sessiekalender">
 					<HBox.margin>
 						<Insets />
 					</HBox.margin>
 				</Button>
-				<Button fx:id="btnPasSessieKalender" mnemonicParsing="false" onAction="#pasSessieKalender" text="Pas Sessiekalender Aan">
+				<Button fx:id="btnPasSessieKalender" mnemonicParsing="false" onAction="#pasSessieKalender" styleClass="greyButton" text="Pas Sessiekalender Aan">
 					<HBox.margin>
 						<Insets left="5.0" right="50.0" />
 					</HBox.margin>
 				</Button>
-				<Button fx:id="btnNieuweSessie" mnemonicParsing="false" onAction="#maakSessie" text="Nieuwe Sessie">
+				<Button fx:id="btnNieuweSessie" mnemonicParsing="false" onAction="#maakSessie" styleClass="greyButton" text="Nieuwe Sessie">
 					<HBox.margin>
 						<Insets left="10.0" />
 					</HBox.margin>
