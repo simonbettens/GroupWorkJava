@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.mail.MessagingException;
+
 import controllers.GebruikerController;
 import controllers.SessieController;
 import domein.Aankondiging;
@@ -36,10 +38,15 @@ public class ConsoleApp {
 		Gebruiker pieter = new Gebruiker("Pieter", "Carlier", "pc123456", "koekjes", "pieter.carlier@student.hogent.be", 1125302310790L, GebruikerType.GEBRUIKER, StatusType.ACTIEF);
 		Aankondiging aankondiging = new Aankondiging(gebruiker, LocalDateTime.now().plusMinutes(2), "Test aankondiging", AankondigingPrioriteit.LAAG);
 		List<String> mailAdressen = new ArrayList<String>();
-		mailAdressen.add("carlierpieter@gmail.com");
+		mailAdressen.add("simon.bettens@live.be");
 		
 		
-		MailHelper.verstuurMailAankondiging("pieter.carlier@student.hogent.be", "...", mailAdressen , aankondiging);
+		try {
+			MailHelper.verstuurMailAankondiging("simon.bettens@student.hogent.be", "...", mailAdressen , aankondiging);
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			System.err.println("fout bij verzenden mail");
+		}
 		System.out.println("Na mail verstuurd");
 	}
 	

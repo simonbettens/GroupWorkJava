@@ -105,8 +105,6 @@ public class StatistiekDetailsController extends VBox
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
-		System.out.println("initialize");
 		vulChart(statC.getBesteSessieMaand());
 	}
 
@@ -177,7 +175,6 @@ public class StatistiekDetailsController extends VBox
 		}
 		if (evt.getPropertyName().equals("sessies")) {
 			List<Sessie> sessies = (List<Sessie>) evt.getNewValue();
-			sessies.forEach(s -> System.out.println(s.toString()));
 			vulChart(sessies);
 
 		}

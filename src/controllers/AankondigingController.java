@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.mail.MessagingException;
+
 import domein.Aankondiging;
 import domein.AankondigingPrioriteit;
 import domein.Gebruiker;
@@ -192,13 +194,13 @@ public class AankondigingController {
 	}
 	
 	//--- email operaties 
-	public void verstuurMailAankondiging(String pass) {
+	public void verstuurMailAankondiging(String pass) throws MessagingException {
 		List<String> emails = new ArrayList<String>();
 		List<Gebruiker> gebruikers = gebruikerDao.getAll();
 		gebruikers.stream().forEach(g->emails.add(g.getEmail()));
 	    MailHelper.verstuurMailAankondiging(gekozenAankondiging.getVerantwoordelijke().getEmail(), pass, emails,gekozenAankondiging);
 	}
-	public void verstuurMailSessieAankondiging(String pass) {
+	public void verstuurMailSessieAankondiging(String pass) throws MessagingException {
 		List<String> emails = new ArrayList<>();
 		List<Gebruiker> gebruikers = new ArrayList<>();
 		gekozenSessieAankondiging.getSessie().getGebruikersIngeschreven().stream().forEach(in->gebruikers.add(in.getGebruiker()));

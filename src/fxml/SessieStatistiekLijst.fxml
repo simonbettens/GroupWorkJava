@@ -60,6 +60,7 @@
           <TableColumn fx:id="colStart" prefWidth="75.0" text="Startdatum" />
           <TableColumn fx:id="colTitel" prefWidth="75.0" text="Titel" />
             <TableColumn fx:id="colVerantwoordelijke" prefWidth="75.0" text="Verantwoordelijke" />
+            <TableColumn fx:id="colAanwezigen" prefWidth="75.0" text="Aanwezigen" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

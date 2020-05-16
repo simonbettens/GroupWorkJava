@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.mail.MessagingException;
+
 import controllers.AankondigingController;
 import domein.Aankondiging;
 import domein.AankondigingPrioriteit;
@@ -117,11 +119,16 @@ implements DeelScherm<AankondigingenDeelScherm>, PropertyChangeListener {
 			Optional<String> result = dialog.showAndWait();
 			 
 			result.ifPresent(pass -> {
-				ac.verstuurMailAankondiging(pass);
+				try {
+					ac.verstuurMailAankondiging(pass);
+				} catch (MessagingException e) {
+					lblError.setText("Mail kon niet verzonden worden");
+					System.out.println(e.getMessage());
+				}
 			});
 		} catch (IllegalArgumentException e) {
 			lblError.setText(e.getMessage());
-		}
+		} 
 	}
 	
 	// Event Listener on Button[#btnAnnuleer].onAction

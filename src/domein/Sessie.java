@@ -67,6 +67,8 @@ public class Sessie implements Serializable{
 	private final SimpleStringProperty startDatumProperty = new SimpleStringProperty();
 	@Transient
 	private final SimpleStringProperty duurProperty = new SimpleStringProperty();
+	@Transient
+	private final SimpleStringProperty aanwezigenProperty = new SimpleStringProperty();
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "VerantwoordelijkeId",referencedColumnName = "Id")
@@ -331,6 +333,12 @@ public class Sessie implements Serializable{
 		return duurProperty;
 	}
 	
+	
+	public SimpleStringProperty getAanwezigenProperty() {
+		aanwezigenProperty.set(String.format("%d", getAantalAanwezige()));
+		return aanwezigenProperty;
+	}
+
 	public int pasSessieAan(Gebruiker verantwoordelijke, String naam, LocalDateTime startDatum, LocalDateTime eindDatum, 
 			boolean staatOpen, boolean gesloten, int maxCap,String lokaal, String beschrijving,String gastspreker) {
 		

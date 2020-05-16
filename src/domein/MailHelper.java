@@ -16,7 +16,7 @@ import javax.mail.internet.MimeMessage;
 public class MailHelper {
 	
 	public static void verstuurMailSessieAankondiging(String van, String vanPasswoord, List<String> naar,
-			SessieAankondiging sa) {
+			SessieAankondiging sa) throws MessagingException {
 		String title = "", inhoud = "";
 		if (sa != null) {
 			title = String.format("Aankondiging bij de sessie : %s", sa.getSessie().getNaam());
@@ -28,7 +28,7 @@ public class MailHelper {
 	}
 	
 	public static void verstuurMailAankondiging(String van, String vanPasswoord, List<String> naar,
-			Aankondiging a) {
+			Aankondiging a) throws MessagingException {
 		String title = "", inhoud = "";
 		if (a != null) {
 			title = String.format("Algemene aankonding ivm het It-Lab");
@@ -41,7 +41,7 @@ public class MailHelper {
 	
 	
 	
-	private static void verstuurMail(String van, String vanPasswoord, List<String> naar, String title, String inhoud) {
+	private static void verstuurMail(String van, String vanPasswoord, List<String> naar, String title, String inhoud) throws MessagingException {
 		Properties prop = System.getProperties();
 
 		prop.put("mail.smtp.auth", "true");
@@ -54,7 +54,7 @@ public class MailHelper {
 				return new PasswordAuthentication(van, vanPasswoord);
 			}
 		});
-		try {
+		
 			// Create a default MimeMessage object.
 			MimeMessage message = new MimeMessage(session);
 
@@ -78,8 +78,6 @@ public class MailHelper {
 
 			// Send message
 			Transport.send(message);
-		} catch (MessagingException mex) {
-			mex.printStackTrace();
-		}
+		
 	}
 }

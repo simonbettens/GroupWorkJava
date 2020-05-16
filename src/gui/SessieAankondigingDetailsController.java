@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.mail.MessagingException;
+
 import controllers.AankondigingController;
 import controllers.SessieController;
 import domein.AankondigingPrioriteit;
@@ -111,7 +113,12 @@ public class SessieAankondigingDetailsController extends VBox
 				Optional<String> result = dialog.showAndWait();
 				 
 				result.ifPresent(pass -> {
-					ac.verstuurMailSessieAankondiging(pass);
+					try {
+						ac.verstuurMailSessieAankondiging(pass);
+					} catch (MessagingException e) {
+						lblError.setText("Mail kon niet verzonden worden");
+						System.out.println(e.getMessage());
+					}
 				});
 			} else {
 				annuleer(event);

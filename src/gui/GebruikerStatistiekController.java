@@ -80,7 +80,7 @@ public class GebruikerStatistiekController extends VBox
 			
 			txfInschrijving.setText(String.format("%d", sc.getAantalInschrijvingen()));
 			txfAanwezig.setText(String.format("%d", sc.getAantalAanwezig()));
-			txfRatio.setText(String.format("%.2f%%", sc.getPercentage()));
+			txfRatio.setText(String.format("%d%%", (int)sc.getPercentage()));
 			
 			if(!sc.isOK()) {
 				lblOk.setText("NIET OK");

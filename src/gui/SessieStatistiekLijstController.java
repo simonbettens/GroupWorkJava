@@ -45,6 +45,8 @@ public class SessieStatistiekLijstController extends VBox implements DeelScherm<
 	@FXML
 	private TableColumn<Sessie, String> colTitel;
 	@FXML
+	private TableColumn<Sessie, String> colAanwezigen;
+	@FXML
 	private TableColumn<Sessie, String> colVerantwoordelijke;
 	private StatistiekScherm parent;
 	private StatistiekController sc;
@@ -83,6 +85,7 @@ public class SessieStatistiekLijstController extends VBox implements DeelScherm<
 		colTitel.setCellValueFactory(cel -> cel.getValue().getTitelProperty());
 		colVerantwoordelijke.setCellValueFactory(cel -> cel.getValue().getVerantwoordelijkeNaamProperty());
 		colStart.setCellValueFactory(cel -> cel.getValue().getStartDatumProperty());
+		colAanwezigen.setCellValueFactory(cel -> cel.getValue().getAanwezigenProperty());
 		this.setVgrow(tbSessies, Priority.SOMETIMES);
 
 	}
