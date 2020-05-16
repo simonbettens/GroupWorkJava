@@ -27,7 +27,10 @@ public class GenericDaoJpa<T> implements GenericDao<T> {
     public static void rollbackTransaction() {
         em.getTransaction().rollback();
     }
-
+    
+	public static void reload() {
+		em.getEntityManagerFactory().getCache().evictAll();
+	} 
     @Override
     public List<T> getAll() {
         //return em.createNamedQuery(type.getName()+".findAll", type).getResultList();
@@ -60,9 +63,6 @@ public class GenericDaoJpa<T> implements GenericDao<T> {
         T entity = em.find(type, id);
         return entity != null;
     }
-	@Override
-	public void reload() {
-		em.getEntityManagerFactory().getCache().evictAll();
-	} 
+	
     
 }

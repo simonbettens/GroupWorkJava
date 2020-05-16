@@ -63,7 +63,7 @@ public class InschrijvingController {
 
 	// Inschrijvingen
 	public void vulLijstSessieGebruikers() {
-		System.out.println(gekozenSessie == null ? "null" : "notnull");
+		GenericDaoJpa.reload();
 		inschrijvingenLijst = sessieGebruikerRepository.getAll().stream().filter(i->i.getSessie().getSessieId()==gekozenSessie.getSessieId()).collect(Collectors.toList());
 		inschrijvingenObservableLijst = FXCollections.observableArrayList(inschrijvingenLijst);
 		this.filteredInschrijvingenLijst = new FilteredList<>(inschrijvingenObservableLijst, e -> true);

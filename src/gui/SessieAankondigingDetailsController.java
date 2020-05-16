@@ -115,7 +115,8 @@ public class SessieAankondigingDetailsController extends VBox
 				result.ifPresent(pass -> {
 					try {
 						ac.verstuurMailSessieAankondiging(pass);
-					} catch (MessagingException e) {
+					}
+					catch (NullPointerException | MessagingException e) {
 						lblError.setText("Mail kon niet verzonden worden");
 						System.out.println(e.getMessage());
 					}

@@ -1,17 +1,12 @@
 package main;
 
-import controllers.GebruikerController;
 import gui.LoginSchermGridPaneController;
 import javafx.application.Application;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import repository.GebruikerDaoJpa;
+import repository.GenericDaoJpa;
 import repository.InitData;
-import ui.ConsoleApp;
-
 /*public class StartUpUI {
 	public static void main(String[] args) {
 		
@@ -21,7 +16,7 @@ import ui.ConsoleApp;
 public class StartUpUI extends Application {
 	@Override
 	public void start(Stage primaryStage) {
-		InitData invoerdata = new InitData();
+		new InitData();
 		// LoginSchermController root = new LoginSchermController();
 		LoginSchermGridPaneController root = new LoginSchermGridPaneController();
 		// Parent root = FXMLLoader.load(getClass().getResource("LoginScherm.fxml"));
@@ -32,6 +27,10 @@ public class StartUpUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setResizable(false);
 		primaryStage.show();
+		
+		primaryStage.setOnCloseRequest(event -> {
+			GenericDaoJpa.closePersistency();
+		});
 	}
 
 	public static void main(String[] args) {

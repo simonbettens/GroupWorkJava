@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -45,7 +46,17 @@
             </ComboBox>
          </children>
       </HBox>
-      <TableView fx:id="tbGebruikers" prefHeight="661.0" prefWidth="600.0">
+      <HBox alignment="CENTER" prefHeight="65.0" prefWidth="600.0">
+         <children>
+            <TextField fx:id="txfZoek" alignment="CENTER" onKeyReleased="#search" prefWidth="350.0" promptText="Zoek op naam van de Gebruiker">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </TextField>
+            <Button fx:id="btnMaakLeeg" disable="true" mnemonicParsing="false" onAction="#maakLeeg" text="Maak Leeg" />
+         </children>
+      </HBox>
+      <TableView fx:id="tbGebruikers" prefHeight="620.0" prefWidth="600.0">
          <columns>
             <TableColumn fx:id="colNaam" prefWidth="75.0" text="Naam" />
             <TableColumn fx:id="colUsername" prefWidth="75.0" text="Gebruikersnaam" />

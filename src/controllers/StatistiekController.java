@@ -26,6 +26,7 @@ import javafx.collections.transformation.SortedList;
 import repository.AankondigingDao;
 import repository.AankondigingDaoJpa;
 import repository.GebruikerDao;
+import repository.GenericDaoJpa;
 import repository.SessieAankondigingDao;
 import repository.SessieAankondigingDaoJpa;
 import repository.SessieDao;
@@ -99,6 +100,7 @@ public class StatistiekController {
 	 */
 
 	public void vulLijsten() {
+		GenericDaoJpa.reload();
 		this.sessieKalenderLijst = sessiekalenderRepository.getAll();
 		this.sessieKalenderObservableLijst = FXCollections.observableArrayList(
 				sessieKalenderLijst.stream().sorted(Comparator.comparing(SessieKalender::getStartDatum).reversed())
@@ -238,7 +240,20 @@ public class StatistiekController {
 			return conditieMaand;
 		});
 	}
+	public void zoekOpNaam(String zoekwaarde) {
+		// TODO Auto-generated method stub
+		this.filteredGebruikerLijst.setPredicate(g -> {
+			boolean naamWaardeLeeg = zoekwaarde == null || zoekwaarde.isBlank();
+			if (naamWaardeLeeg) {
+				return true;
+			}
+			boolean conditieNaam = naamWaardeLeeg ? true
+					: g.getVolledigeNaam().toLowerCase().contains(zoekwaarde)
+							|| g.getVolledigeNaam().toLowerCase().startsWith(zoekwaarde);
 
+			return conditieNaam;
+		});
+	}
 	public void setGekozenSessies(List<Sessie> gekozenSessies) {
 		firePropertyChange("sessies", null, gekozenSessies);
 		this.gekozenSessies = gekozenSessies;
@@ -396,5 +411,7 @@ public class StatistiekController {
 	public void removePropertyChangeListenerSessie(PropertyChangeListener pcl) {
 		subject.removePropertyChangeListener(pcl);
 	}
+
+	
 
 }

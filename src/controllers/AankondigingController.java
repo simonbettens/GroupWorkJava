@@ -203,7 +203,10 @@ public class AankondigingController {
 	public void verstuurMailSessieAankondiging(String pass) throws MessagingException {
 		List<String> emails = new ArrayList<>();
 		List<Gebruiker> gebruikers = new ArrayList<>();
-		gekozenSessieAankondiging.getSessie().getGebruikersIngeschreven().stream().forEach(in->gebruikers.add(in.getGebruiker()));
+		gekozenSessieAankondiging.getSessie()
+		.getGebruikersIngeschreven()
+		.stream()
+		.forEach(in->gebruikers.add(in.getGebruiker()));
 		gebruikers.stream().forEach(g->emails.add(g.getEmail()));
 	    MailHelper.verstuurMailSessieAankondiging(gekozenSessieAankondiging.getVerantwoordelijke().getEmail(), pass, emails,gekozenSessieAankondiging);
 	}

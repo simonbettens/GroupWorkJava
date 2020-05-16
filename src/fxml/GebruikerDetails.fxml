@@ -31,8 +31,8 @@
             </ImageView>
             <GridPane alignment="CENTER">
               <columnConstraints>
-                <ColumnConstraints hgrow="ALWAYS" maxWidth="279.5999755859375" minWidth="10.0" prefWidth="132.40003967285156" />
-                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="435.59996032714844" minWidth="10.0" prefWidth="435.59996032714844" />
+                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="279.5999755859375" minWidth="10.0" prefWidth="147.20001220703125" />
+                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="460.3999877929688" minWidth="10.0" prefWidth="460.3999877929688" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints minHeight="15.0" prefHeight="40.0" vgrow="ALWAYS" />
@@ -51,27 +51,27 @@
                   <TextField fx:id="txfUsername" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <TextField fx:id="txfIdNummer" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <TextField fx:id="txfWachtwoord" promptText="Vul nieuw wachtwoord in" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <Label text="Achternaam :">
+                  <Label text="Achternaam : ">
                      <GridPane.margin>
                         <Insets left="15.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Voornaam :" GridPane.rowIndex="1">
+                  <Label text="Voornaam : " GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="15.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Wachtwoord : " GridPane.rowIndex="5">
+                  <Label text="Wachtwoord :  " GridPane.rowIndex="5">
                      <GridPane.margin>
                         <Insets left="15.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Email :" GridPane.rowIndex="2">
+                  <Label text="Email : " GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="15.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Status :" GridPane.rowIndex="6">
+                  <Label text="Status : " GridPane.rowIndex="6">
                      <GridPane.margin>
                         <Insets left="15.0" />
                      </GridPane.margin>
@@ -87,12 +87,12 @@
                         <Insets />
                      </GridPane.margin></ChoiceBox>
                   
-                  <Label text="Gebruikersnaam :" GridPane.rowIndex="3">
+                  <Label text="Gebruikersnaam : " GridPane.rowIndex="3">
                      <GridPane.margin>
                         <Insets left="15.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Idnummer :" GridPane.rowIndex="4">
+                  <Label text="Idnummer : " GridPane.rowIndex="4">
                      <padding>
                         <Insets left="15.0" />
                      </padding>
