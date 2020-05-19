@@ -20,7 +20,7 @@ public class StartUpUI extends Application {
 		// LoginSchermController root = new LoginSchermController();
 		LoginSchermGridPaneController root = new LoginSchermGridPaneController();
 		// Parent root = FXMLLoader.load(getClass().getResource("LoginScherm.fxml"));
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(root, 700, 500);
 		scene.getStylesheets().add(getClass().getResource("/styles/styles.css").toExternalForm());
 		primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/itLabIcon.jpg")));
 		primaryStage.setTitle("Login");
